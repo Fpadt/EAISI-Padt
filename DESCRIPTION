@@ -1,0 +1,31 @@
+Type: Package
+Package: padt
+Title: Pythia's Advice
+Version: 0.1.0
+Authors@R: 
+    person("Floris", "Padt", , "floris@smart-r.nl", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0006-4729-1783"))
+Description: This package provides functions for the EAISI Pythia's Advice
+    project.  The project focuses on time series forecasting using
+    exported data.  Special functions are included to process SAP data
+    exported via SAP Open Hub.  The package leverages the DuckDB package
+    for data ingestion (reading large CSV files), transformation (adding
+    or removing fields and applying simple transformations), and access
+    (reading Parquet files with filters).
+License: MIT + file LICENSE
+URL: https://github.com/Fpadt/EAISI-Padt
+BugReports: https://github.com/Fpadt/EAISI-Padt/issues
+Imports: 
+    crayon,
+    data.table,
+    DBI,
+    duckdb,
+    fs,
+    glue,
+    lubridate,
+    magrittr,
+    purrr
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+RoxygenNote: 7.3.2

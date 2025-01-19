@@ -1,0 +1,100 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/",
+  out.width = "100%"
+)
+```
+
+# padt <a href="https://www.smart-r.net" target="_blank" rel="noopener noreferrer"><img src="man/figures/padt_wtxt.png.png" align="right" height="138" /></a>
+
+*Under Development*
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/tidyverse/ggplot2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidyverse/ggplot2/actions/workflows/R-CMD-check.yaml)
+[![codecov](https://codecov.io/gh/Fpadt/padt/branch/main/graph/badge.svg?token=8FXGGC2M8C)](https://codecov.io/gh/Fpadt/padt)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/padt)](https://cran.r-project.org/package=padt)
+<!-- badges: end -->
+
+## Overview
+
+
+
+```{r, echo=FALSE}
+#| label      = 'padt',
+#| fig.align  = 'left',
+#| fig.cap    = 'padt - Pythia's Advice Data science Tooling',
+#| fig.link   = 'https://raw.githubusercontent.com/Fpadt/sapyr/main/man/figures/sapyr_apps.png?token=GHSAT0AAAAAACBTLHAXU2VU2NCHXCTHJGA2ZCQ6XGQ',
+#| out.width  = '80%'
+
+knitr::include_graphics("man/figures/sapyr_apps.png")
+
+```
+
+### RSAP
+
+The SAPYR package fills the gap for R version > 3.5.2, which resulted after Piers Harding's decision to stop maintaining his great [RSAP package - An R interface to SAP NetWeaver R/3 systems using the RFC protocol][RSAP] which can still be used for R <= 3.5.2. 
+
+### pyRFC
+
+SAPYR wouldn't be possbile without [Srdjan Boskovic's][bsrdjan] great python package [pyRFC - Asynchronous, non-blocking SAP NetWeawer RFC SDK bindings for Python][pyRFC].  
+
+### Reticulate
+
+The python bindings to SAP can be leveraged in R using [Reticulate - calling python from R][reticulate], another great package from [Posit | The Open-Source Data Science Company][POSIT].
+
+### SAP 
+
+The SAP NetWeaver RFC SDK 7.50 provides RFC communication with SAP systems of Release 4.6C and higher. This Software Development Kit is maintained by SAP.  
+
+Information on where to download can be found here [SAP NetWeaver Remote Function Call (RFC)
+Software Development Kit (SDK)][nwrfcsdk] or on [me.sap.com/notes/2573790][2573790] (requires a SAP account).
+
+The relevant ABAP modules can be found in SAP using transaction code ```SE16``` for table TFDIR filtered for TFDIR-FMODE = ```R```.
+A typical SAP system has about 18K+ remote enabled function modules. 
+
+## Installation
+
+You can install the development version of SAPYR from GitHub using:
+
+``` r
+# not released on CRAN yet!!
+
+# the development version from GitHub:
+remotes::install_github("fpadt/padt")
+```
+
+### prerequisites
+
+The following software needs to be installed as prerequisite 
+(preferably the lastest version):
+
+1. [The R Project for Statistical Computing][CRAN]
+2. 
+
+
+## Example
+
+This is a basic example which shows you how to read data from a SAP table:
+
+```{r example, eval=FALSE}
+library(padt)
+
+```
+
+```{r GitHub actions, echo=FALSE}
+#  <https://github.com/r-lib/actions/tree/v1/examples>.
+```
+
+[reticulate]: https://rstudio.github.io/reticulate/
+[POSIT]: https://posit.co/
+[CRAN]: https://cran.r-project.org/
+[Python]: https://www.python.org/downloads/
+
