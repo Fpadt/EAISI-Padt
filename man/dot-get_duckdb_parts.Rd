@@ -31,17 +31,18 @@ no salesorg-based filter is applied (beyond scope constraints).}
 the provided sales organization scope (if \code{.salesorg} is not \code{NULL}).}
 
 \item{.cm_min}{Character. Minimum YYYYMM to apply in date-based filtering. Defaults to
-'202101'.}
+\code{NULL}.}
 
 \item{.cm_max}{Character. Maximum YYYYMM to apply in date-based filtering. Defaults to
-'202512'.}
+\code{NULL}.}
 
-\item{.step_min}{Numeric. Minimum step filter. Defaults to -999.}
+\item{.step_min}{Numeric. Minimum step filter. Defaults to \code{NULL}.}
 
-\item{.step_max}{Numeric. Maximum step filter. Defaults to 999.}
+\item{.step_max}{Numeric. Maximum step filter. Defaults to \code{NULL}.}
 
-\item{.n}{Numeric or Inf. The maximum number of materials to return (if that logic
-is implemented in the underlying queries). Defaults to \code{Inf}.}
+\item{.lagg_min}{Numeric. Minimum lag filter. Defaults to \code{NULL}.}
+
+\item{.lagg_max}{Numeric. Maximum lag filter. Defaults to \code{NULL}.}
 }
 \value{
 A named \code{list} with three elements:

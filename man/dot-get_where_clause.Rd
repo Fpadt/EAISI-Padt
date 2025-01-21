@@ -2,7 +2,7 @@
 % Please edit documentation in R/pa_functions.R
 \name{.get_where_clause}
 \alias{.get_where_clause}
-\title{Build a list of WHERE Clauses}
+\title{Build a WHERE Clause}
 \usage{
 .get_where_clause(
   .clauses = list(),
@@ -20,45 +20,68 @@
 )
 }
 \arguments{
-\item{clauses}{A list of existing WHERE clauses (character strings).}
+\item{.clauses}{A list of existing WHERE clauses (character strings). If no
+clauses exist, "TRUE" will be added as the initial condition.}
 
-\item{what}{A character string specifying which WHERE clause type to add.
-For example, "material" may add a condition on the MATERIAL column.}
+\item{.material}{A character vector of materials to filter on. If \code{NULL},
+no material-based filter is applied.}
 
-\item{apply_scope}{Logical. If `TRUE`, the function will add a scope-based
-WHERE clause (e.g., filtering on MATERIAL) to `clauses`.}
+\item{.salesorg}{A character vector of sales organizations to filter on. If
+\code{NULL}, no salesorg-based filter is applied.}
 
-\item{con}{An optional database connection object, used for safe
-parameterization with \code{\link[glue]{glue_sql}}. Required if `apply_scope`
-is \code{TRUE} and the `what` switch requires building an SQL clause.}
+\item{.scope_matl}{Logical. If \code{TRUE}, filters on materials within the
+scope definition by appending a condition on the \code{MATERIAL} column.}
+
+\item{.scope_sorg}{Logical. If \code{TRUE}, filters on sales organizations
+within the scope definition by appending a condition on the \code{SALESORG} column.}
+
+\item{.cm_min}{Character. Minimum calendar month (format: \code{YYYYMM}) to
+include in the filter. If \code{NULL}, no lower bound is applied.}
+
+\item{.cm_max}{Character. Maximum calendar month (format: \code{YYYYMM}) to
+include in the filter. If \code{NULL}, no upper bound is applied.}
+
+\item{.step_min}{Numeric. Minimum step value to include in the filter. If
+\code{NULL}, defaults to a package-defined constant \code{STEP_MIN}.}
+
+\item{.step_max}{Numeric. Maximum step value to include in the filter. If
+\code{NULL}, defaults to a package-defined constant \code{STEP_MAX}.}
+
+\item{.lagg_min}{Numeric. Minimum lag value to include in the filter. If
+\code{NULL}, defaults to a package-defined constant \code{LAGG_MIN}.}
+
+\item{.lagg_max}{Numeric. Maximum lag value to include in the filter. If
+\code{NULL}, defaults to a package-defined constant \code{LAGG_MAX}.}
+
+\item{.con}{A database connection object. Required for safely parameterizing
+SQL queries with \code{glue::glue_sql}.}
 }
 \value{
-A (possibly modified) list of character strings representing WHERE
-  clauses for a SQL query.
+A single character string containing the complete WHERE clause.
 }
 \description{
-This internal helper function ensures that the first element in a list
-of WHERE clauses is "TRUE" (which acts as a no-op condition) and then
-optionally adds further constraints based on the `what` parameter.
+This internal helper function builds a SQL WHERE clause by appending
+conditions based on the provided parameters. It ensures that the final
+WHERE clause starts with "TRUE" (a no-op condition) to simplify concatenation
+with other clauses.
 }
 \details{
+The function constructs a SQL WHERE clause based on the following logic:
 \enumerate{
-  \item The first WHERE clause is always "TRUE". If the provided \code{clauses}
-        list does not have it, it will be appended automatically.
-  \item Depending on the value of \code{what}, additional constraints can be
-        appended to \code{clauses} using a \code{switch()} statement.
-  \item For "material", if \code{apply_scope = TRUE}, a clause such as
-        \code{"MATERIAL IN (SELECT MATERIAL FROM SCOPE_MATL)"} is appended.
+  \item Ensures the initial condition is "TRUE" if no clauses exist in
+        \code{.clauses}.
+  \item Appends conditions for \code{MATERIAL}, \code{SALESORG}, and scope
+        definitions (\code{.scope_matl}, \code{.scope_sorg}) if specified.
+  \item Appends calendar month conditions using \code{.cm_min} and \code{.cm_max}.
+  \item Adds step and lag filters using \code{.step_min}, \code{.step_max},
+        \code{.lagg_min}, and \code{.lagg_max}.
 }
 
-You can extend the \code{switch()} statement to handle more cases, e.g.,
-filtering on organizational data or other columns, if needed.
+Missing parameters default to pre-defined constants (e.g., \code{STEP_MIN}
+or \code{LAGG_MIN}) when appropriate.
 }
 \examples{
-# Minimal example (pseudo-code, no real DB connection):
-my_clauses <- fGet_Where_Clause(clauses = list(), what = "material",
-                                apply_scope = TRUE, con = NULL)
-my_clauses
+# Minimal example with pseudo-code (no real DB connection):
 
 }
 \keyword{internal}

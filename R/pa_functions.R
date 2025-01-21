@@ -29,23 +29,23 @@ SCOPE_PRDH <- c(
   '53',  # TANOSHI
   '65'   # NATURELA
 )
-SCOPE_MATL <- 
+SCOPE_MATL <-
   "WITH SCOPE_MATL AS (
-     SELECT DISTINCT 
+     SELECT DISTINCT
        MATERIAL
-     FROM 
+     FROM
        read_parquet({`FN_MATL`})
-     WHERE 
+     WHERE
        PRDH1 IN ({SCOPE_PRDH*})
      )
   "
-SCOPE_PLNT <- 
+SCOPE_PLNT <-
   "WITH SCOPE_PLNT AS (
-     SELECT DISTINCT 
+     SELECT DISTINCT
        PLANT
-     FROM 
-       read_parquet([{`FN_FRPR1`}, {`FN_FRPR3`}]) 
-     WHERE 
+     FROM
+       read_parquet([{`FN_FRPR1`}, {`FN_FRPR3`}])
+     WHERE
        SALESORG IN ({SCOPE_SORG*})
      )
   "
@@ -59,13 +59,13 @@ fVerbose <- function(
   if (isTRUE(verbose)) {
     cat("Function name:\n")
     cat("  ", function_name, "\n\n")
-    
+
     if (!is.null(function_args)) {
       cat("Function arguments:\n")
       print(function_args)
       cat("\n")
     }
-    
+
     if (!is.null(function_return)) {
       cat("Function return value:\n")
       print(function_return)
@@ -74,28 +74,28 @@ fVerbose <- function(
   }
 }
 
-fDescribe_Parquet <- 
+fDescribe_Parquet <-
   function(
     .fn = NULL
   ){
-    
+
     # Establish a connection to DuckDB
     con <- .get_duckdb_conn()
-    
-    # construct Query 
-    query <- 
+
+    # construct Query
+    query <-
       glue_sql("
-        DESCRIBE 
-        SELECT 
+        DESCRIBE
+        SELECT
           *
-        FROM 
+        FROM
           read_parquet({`.fn`})
       ", .con = con)
-    
+
     # Execute and fetch results
     dbGetQuery(con, query) %>%
       print()
-    
+
   }
 
 #' Retrieve DuckDB Config Parts
@@ -118,13 +118,13 @@ fDescribe_Parquet <-
 #' @param .scope_sorg Logical. If \code{TRUE}, where clauses will restrict to
 #'   the provided sales organization scope (if \code{.salesorg} is not \code{NULL}).
 #' @param .cm_min Character. Minimum YYYYMM to apply in date-based filtering. Defaults to
-#'   '202101'.
+#'   \code{NULL}.
 #' @param .cm_max Character. Maximum YYYYMM to apply in date-based filtering. Defaults to
-#'   '202512'.
-#' @param .step_min Numeric. Minimum step filter. Defaults to -999.
-#' @param .step_max Numeric. Maximum step filter. Defaults to 999.
-#' @param .n Numeric or Inf. The maximum number of materials to return (if that logic
-#'   is implemented in the underlying queries). Defaults to \code{Inf}.
+#'   \code{NULL}.
+#' @param .step_min Numeric. Minimum step filter. Defaults to \code{NULL}.
+#' @param .step_max Numeric. Maximum step filter. Defaults to \code{NULL}.
+#' @param .lagg_min Numeric. Minimum lag filter. Defaults to \code{NULL}.
+#' @param .lagg_max Numeric. Maximum lag filter. Defaults to \code{NULL}.
 #'
 #' @return A named \code{list} with three elements:
 #'   \itemize{
@@ -149,20 +149,19 @@ fDescribe_Parquet <-
     .cm_max      = NULL,
     .step_min    = NULL,
     .step_max    = NULL,
-    .lagg_min    = NULL, 
+    .lagg_min    = NULL,
     .lagg_max    = NULL
-    
 ) {
-  
+
   # -- 1) Get or create a DuckDB connection --
-  con <- .get_duckdb_conn()   
-  
+  con <- .get_duckdb_conn()
+
   # -- 2) Build the CTE snippet for scope materials --
   cte_scope_materials <- .get_cte_scope_materials(
     .scope_matl = .scope_matl,
     .con        = con
   )
-  
+
   # -- 3) Build the WHERE clause according to the given parameters --
   where_clause <- .get_where_clause(
     .material   = .material,
@@ -173,11 +172,11 @@ fDescribe_Parquet <-
     .cm_max     = .cm_max,
     .step_min   = .step_min,
     .step_max   = .step_max,
-    .lagg_min   = .lagg_min, 
-    .lagg_max   = .lagg_max,    
+    .lagg_min   = .lagg_min,
+    .lagg_max   = .lagg_max,
     .con        = con
   )
-  
+
   # Return as a named list
   list(
     duckdb_con          = con,
@@ -189,26 +188,29 @@ fDescribe_Parquet <-
 
 #' Construct a Scope Materials CTE Clause
 #'
-#' Internal helper function that returns a SQL snippet (CTE) for scope materials 
-#' if \code{.apply_scope} is \code{TRUE}, otherwise returns an empty string.
+#' Internal helper function that returns a SQL snippet (CTE) for scope materials
+#' if \code{.scope_matl} is \code{TRUE}, otherwise returns an empty string.
 #'
-#' @param .con A database connection object.
-#' @param .apply_scope Logical. If \code{TRUE}, returns the scope materials snippet;
-#'   otherwise, returns an empty string.
+#' @param .scope_matl Logical. If \code{TRUE}, the function constructs the scope
+#'   materials snippet; otherwise, it returns an empty string.
+#' @param .con A database connection object. Used for safely constructing the
+#'   SQL snippet using \code{glue::glue_sql}.
 #'
-#' @return A character string containing the SQL snippet for scope materials.
+#' @return A character string containing the SQL snippet for scope materials if
+#'   \code{.scope_matl} is \code{TRUE}, otherwise an empty string.
 #'
 #' @keywords internal
 #' @noMd
-.get_cte_scope_materials <- 
+.get_cte_scope_materials <-
   function(.scope_matl, .con) {
     cte_scope_materials <- ""
     if (isTRUE(.scope_matl)) {
-      cte_scope_materials <- 
+      cte_scope_materials <-
         glue::glue_sql(SCOPE_MATL, .con = .con)
     }
     return(cte_scope_materials)
   }
+
 
 #' Get (or create) a DuckDB connection
 #'
@@ -220,7 +222,7 @@ fDescribe_Parquet <-
 #'
 #' @return A `DBIConnection` object to DuckDB.
 #'
-#' @details 
+#' @details
 #' This internal helper function checks if there is an existing DuckDB connection in
 #' the environment `.duckdb_env$conn`. If none is found, it initializes a new one and
 #' caches it. Subsequent calls will reuse the same connection.
@@ -263,170 +265,186 @@ fDescribe_Parquet <-
   }
 }
 
-#' Build a list of WHERE Clauses
+#' Build a WHERE Clause
 #'
-#' This internal helper function ensures that the first element in a list
-#' of WHERE clauses is "TRUE" (which acts as a no-op condition) and then
-#' optionally adds further constraints based on the `what` parameter.
+#' This internal helper function builds a SQL WHERE clause by appending
+#' conditions based on the provided parameters. It ensures that the final
+#' WHERE clause starts with "TRUE" (a no-op condition) to simplify concatenation
+#' with other clauses.
 #'
-#' @param clauses A list of existing WHERE clauses (character strings).
-#' @param what A character string specifying which WHERE clause type to add.
-#'   For example, "material" may add a condition on the MATERIAL column.
-#' @param apply_scope Logical. If `TRUE`, the function will add a scope-based
-#'   WHERE clause (e.g., filtering on MATERIAL) to `clauses`.
-#' @param con An optional database connection object, used for safe
-#'   parameterization with \code{\link[glue]{glue_sql}}. Required if `apply_scope`
-#'   is \code{TRUE} and the `what` switch requires building an SQL clause.
+#' @param .clauses A list of existing WHERE clauses (character strings). If no
+#'   clauses exist, "TRUE" will be added as the initial condition.
+#' @param .material A character vector of materials to filter on. If \code{NULL},
+#'   no material-based filter is applied.
+#' @param .salesorg A character vector of sales organizations to filter on. If
+#'   \code{NULL}, no salesorg-based filter is applied.
+#' @param .scope_matl Logical. If \code{TRUE}, filters on materials within the
+#'   scope definition by appending a condition on the \code{MATERIAL} column.
+#' @param .scope_sorg Logical. If \code{TRUE}, filters on sales organizations
+#'   within the scope definition by appending a condition on the \code{SALESORG} column.
+#' @param .cm_min Character. Minimum calendar month (format: \code{YYYYMM}) to
+#'   include in the filter. If \code{NULL}, no lower bound is applied.
+#' @param .cm_max Character. Maximum calendar month (format: \code{YYYYMM}) to
+#'   include in the filter. If \code{NULL}, no upper bound is applied.
+#' @param .step_min Numeric. Minimum step value to include in the filter. If
+#'   \code{NULL}, defaults to a package-defined constant \code{STEP_MIN}.
+#' @param .step_max Numeric. Maximum step value to include in the filter. If
+#'   \code{NULL}, defaults to a package-defined constant \code{STEP_MAX}.
+#' @param .lagg_min Numeric. Minimum lag value to include in the filter. If
+#'   \code{NULL}, defaults to a package-defined constant \code{LAGG_MIN}.
+#' @param .lagg_max Numeric. Maximum lag value to include in the filter. If
+#'   \code{NULL}, defaults to a package-defined constant \code{LAGG_MAX}.
+#' @param .con A database connection object. Required for safely parameterizing
+#'   SQL queries with \code{glue::glue_sql}.
 #'
 #' @details
+#' The function constructs a SQL WHERE clause based on the following logic:
 #' \enumerate{
-#'   \item The first WHERE clause is always "TRUE". If the provided \code{clauses}
-#'         list does not have it, it will be appended automatically.
-#'   \item Depending on the value of \code{what}, additional constraints can be
-#'         appended to \code{clauses} using a \code{switch()} statement.
-#'   \item For "material", if \code{apply_scope = TRUE}, a clause such as
-#'         \code{"MATERIAL IN (SELECT MATERIAL FROM SCOPE_MATL)"} is appended.
+#'   \item Ensures the initial condition is "TRUE" if no clauses exist in
+#'         \code{.clauses}.
+#'   \item Appends conditions for \code{MATERIAL}, \code{SALESORG}, and scope
+#'         definitions (\code{.scope_matl}, \code{.scope_sorg}) if specified.
+#'   \item Appends calendar month conditions using \code{.cm_min} and \code{.cm_max}.
+#'   \item Adds step and lag filters using \code{.step_min}, \code{.step_max},
+#'         \code{.lagg_min}, and \code{.lagg_max}.
 #' }
 #'
-#' You can extend the \code{switch()} statement to handle more cases, e.g.,
-#' filtering on organizational data or other columns, if needed.
+#' Missing parameters default to pre-defined constants (e.g., \code{STEP_MIN}
+#' or \code{LAGG_MIN}) when appropriate.
 #'
-#' @return A (possibly modified) list of character strings representing WHERE
-#'   clauses for a SQL query.
+#' @return A single character string containing the complete WHERE clause.
 #'
 #' @examples
-#' # Minimal example (pseudo-code, no real DB connection):
-#' my_clauses <- fGet_Where_Clause(clauses = list(), what = "material",
-#'                                 apply_scope = TRUE, con = NULL)
-#' my_clauses
+#' # Minimal example with pseudo-code (no real DB connection):
 #'
 #' @keywords internal
 .get_where_clause <- function(
-    .clauses     = list()  , # Existing WHERE clauses
-    .material    = NULL    , # NULL wont apply any filter
-    .salesorg    = NULL    , # NULL wont apply any filter      
-    .scope_matl  = FALSE   , # FALSE wont apply any filter
-    .scope_sorg  = FALSE   , # FALSE wont apply any filter
-    .cm_min      = NULL    , # NULL wont apply any filter
-    .cm_max      = NULL    , # NULL wont apply any filter
-    .step_min    = NULL    , # NULL wont apply any filter
-    .step_max    = NULL    , # NULL wont apply any filter
-    .lagg_min    = NULL    , # NULL wont apply any filter
-    .lagg_max    = NULL    , # NULL wont apply any filter
-    .con         = NULL) {
-  
-    # Ensure the list has "TRUE" in case no other where clauses exist.
-    if (!any(
-          vapply(.clauses, function(x) identical(x, "TRUE"), logical(1))
-          )
-        ){
-      .clauses <- c(.clauses, "TRUE")
-    }
-  
-    # If .material is given, filter on MATERIAL
-    # leading zero's are added by function MATN1
-    if (!is.null(.material) && length(.material) > 0) {
-      .clauses <- c(
-        .clauses,
-        glue_sql(
-          "MATERIAL IN ({vals*})", vals = MATN1(.material), 
-          .con = .con)
-      )
-    }
-    
-    # If .salesorg is given, filter on SALESORG
-    if (!is.null(.salesorg) && length(.salesorg) > 0) {
-      .clauses <- c(
-        .clauses,
-        glue_sql(
-          "SALESORG IN ({vals*})", vals = .salesorg, 
-          .con = .con)
-      )
-    }
-    
-    # If .scope_matl is given, filter on MATERIALs in Scope
-    if (isTRUE(.scope_matl)) {
-      .clauses <- c(
-        .clauses,
-        glue::glue_sql(
-          "MATERIAL IN (SELECT MATERIAL FROM SCOPE_MATL)", 
-          .con = .con)
-      )
-    }
-    
-    # If .scope_sorg is given, filter on SALESORGs in Scope
-    if (isTRUE(.scope_sorg)) {
-      .clauses <- c(
-        .clauses,
-        glue::glue_sql(
-          "SALESORG IN ({vals*})", vals = SCOPE_SORG, 
-          .con = .con)
-      )
-    }
-    
-    # If .cm_min or .cm_max are given, filter on CALMONTH
-    if(!is.null(.cm_min) || !is.null(.cm_max)){
+    .clauses     = list(),  # Existing WHERE clauses
+    .material    = NULL,    # Materials to filter on
+    .salesorg    = NULL,    # Sales organizations to filter on
+    .scope_matl  = FALSE,   # Scope-based material filter
+    .scope_sorg  = FALSE,   # Scope-based salesorg filter
+    .cm_min      = NULL,    # Minimum calendar month filter
+    .cm_max      = NULL,    # Maximum calendar month filter
+    .step_min    = NULL,    # Minimum step filter
+    .step_max    = NULL,    # Maximum step filter
+    .lagg_min    = NULL,    # Minimum lag filter
+    .lagg_max    = NULL,    # Maximum lag filter
+    .con         = NULL     # Database connection
+) {
 
-      # If only .cm_max is given, set .cm_min 
-      if (is.null(.cm_min) || length(.cm_min) == 0) {
-        .cm_min <- CM_MIN
-      }
-      
-      # If only .cm_min is given, set .cm_max 
-      if (is.null(.cm_max) || length(.cm_max) == 0) {
-        .cm_max <- CM_MAX
-      }
-      
-      .clauses <- c(
-        .clauses,
-        glue::glue_sql(
-          "CALMONTH BETWEEN {.cm_min} AND {.cm_max}",  
-          .con = .con)
-      )
+  # Ensure the list has "TRUE" in case no other where clauses exist.
+  if (!any(
+    vapply(.clauses, function(x) identical(x, "TRUE"), logical(1))
+  )
+  ){
+    .clauses <- c(.clauses, "TRUE")
+  }
+
+  # If .material is given, filter on MATERIAL
+  # leading zero's are added by function MATN1
+  if (!is.null(.material) && length(.material) > 0) {
+    .clauses <- c(
+      .clauses,
+      glue_sql(
+        "MATERIAL IN ({vals*})", vals = MATN1(.material),
+        .con = .con)
+    )
+  }
+
+  # If .salesorg is given, filter on SALESORG
+  if (!is.null(.salesorg) && length(.salesorg) > 0) {
+    .clauses <- c(
+      .clauses,
+      glue_sql(
+        "SALESORG IN ({vals*})", vals = .salesorg,
+        .con = .con)
+    )
+  }
+
+  # If .scope_matl is given, filter on MATERIALs in Scope
+  if (isTRUE(.scope_matl)) {
+    .clauses <- c(
+      .clauses,
+      glue::glue_sql(
+        "MATERIAL IN (SELECT MATERIAL FROM SCOPE_MATL)",
+        .con = .con)
+    )
+  }
+
+  # If .scope_sorg is given, filter on SALESORGs in Scope
+  if (isTRUE(.scope_sorg)) {
+    .clauses <- c(
+      .clauses,
+      glue::glue_sql(
+        "SALESORG IN ({vals*})", vals = SCOPE_SORG,
+        .con = .con)
+    )
+  }
+
+  # If .cm_min or .cm_max are given, filter on CALMONTH
+  if(!is.null(.cm_min) || !is.null(.cm_max)){
+
+    # If only .cm_max is given, set .cm_min
+    if (is.null(.cm_min) || length(.cm_min) == 0) {
+      .cm_min <- CM_MIN
     }
-    
-    # If  one of the variables is not NULL add a filter
-    if(!all(
-      vapply(
-        list(.step_min, .step_min, .lagg_min, .lagg_max), 
-        is.null, logical(1)))){
-    
-      # set .step_min if NULL
-      if (is.null(.step_min) || length(.step_min) == 0) {
-        .step_min <- STEP_MIN
-      }
-    
-      # set .step_max if NULL
-      if (is.null(.step_max) || length(.step_max) == 0) {
-        .step_max <- STEP_MAX
-      }
-      
-      # set .lagg_min if NULL
-      if (is.null(.lagg_min) || length(.lagg_min) == 0) {
-        .lagg_min <- LAGG_MIN
-      }
-      
-      # set .lagg_max if NULL
-      if (is.null(.lagg_max) || length(.lagg_max) == 0) {
-        .lagg_max <- LAGG_MAX
-      }
-      
-      .clauses <- c(
-        .clauses,
-        glue::glue_sql(
-          "((VTYPE = '060' AND 
+
+    # If only .cm_min is given, set .cm_max
+    if (is.null(.cm_max) || length(.cm_max) == 0) {
+      .cm_max <- CM_MAX
+    }
+
+    .clauses <- c(
+      .clauses,
+      glue::glue_sql(
+        "CALMONTH BETWEEN {.cm_min} AND {.cm_max}",
+        .con = .con)
+    )
+  }
+
+  # If  one of the variables is not NULL add a filter
+  if(!all(
+    vapply(
+      list(.step_min, .step_min, .lagg_min, .lagg_max),
+      is.null, logical(1)))){
+
+    # set .step_min if NULL
+    if (is.null(.step_min) || length(.step_min) == 0) {
+      .step_min <- STEP_MIN
+    }
+
+    # set .step_max if NULL
+    if (is.null(.step_max) || length(.step_max) == 0) {
+      .step_max <- STEP_MAX
+    }
+
+    # set .lagg_min if NULL
+    if (is.null(.lagg_min) || length(.lagg_min) == 0) {
+      .lagg_min <- LAGG_MIN
+    }
+
+    # set .lagg_max if NULL
+    if (is.null(.lagg_max) || length(.lagg_max) == 0) {
+      .lagg_max <- LAGG_MAX
+    }
+
+    .clauses <- c(
+      .clauses,
+      glue::glue_sql(
+        "((VTYPE = '060' AND
             STEP BETWEEN {.step_min} AND {.step_max}
            ) OR
-           (VTYPE = '010' AND 
+           (VTYPE = '010' AND
             STEP BETWEEN {.lagg_min} AND {.lagg_max}
-           ))",  
-          .con = .con)
-      )
-    }
+           ))",
+        .con = .con)
+    )
+  }
 
-    # collapse list of where_clasues to 1 clause with AND
-    where_clause <- paste(.clauses, collapse = " AND ")
-    
+  # collapse list of where_clasues to 1 clause with AND
+  where_clause <- paste(.clauses, collapse = " AND ")
+
   # Return the updated list
   return(where_clause)
 }
@@ -442,33 +460,33 @@ fDescribe_Parquet <-
 #' @return A character vector of parquet paths corresponding to all
 #'   \code{(.vtype, .ftype)} pairs in the lookup.
 #' @keywords internal
-.get_parquet_paths <- 
+.get_parquet_paths <-
   function(
-    .vtype = c("010", "060"), 
+    .vtype = c("010", "060"),
     .ftype = c(1, 2)) {
-    
-  if(is.null(.vtype)){ .vtype <- c("010", "060")}  
-  if(is.null(.ftype)){ .ftype <- c(1    , 2    )}    
 
-  # Filter using data.table syntax
-  # %chin% is for character matching, %in% for numeric
-  result <- paths_parquet_files[
-    vtype %chin% .vtype &
-      ftype %in% .ftype,
-    path
-  ]
-  
-  # Return the matching paths
-  return(result)
-}
+    if(is.null(.vtype)){ .vtype <- c("010", "060")}
+    if(is.null(.ftype)){ .ftype <- c(1    , 2    )}
+
+    # Filter using data.table syntax
+    # %chin% is for character matching, %in% for numeric
+    result <- paths_parquet_files[
+      vtype %chin% .vtype &
+        ftype %in% .ftype,
+      path
+    ]
+
+    # Return the matching paths
+    return(result)
+  }
 
 
-.make_sql_query_dyn <- 
+.make_sql_query_dyn <-
   function(
     .vtype       = NULL    , # NULL will get both 010 and 060
     .ftype       = NULL    , # NULL will get all ftypes
     .material    = NULL    , # NULL wont apply any filter
-    .salesorg    = NULL    , # NULL wont apply any filter      
+    .salesorg    = NULL    , # NULL wont apply any filter
     .scope_matl  = FALSE   , # FALSE wont apply any filter
     .scope_sorg  = FALSE   ,  # FALSE wont apply any filter
     .cm_min      = '202101', # minimal Cal Month
@@ -476,35 +494,35 @@ fDescribe_Parquet <-
     .step_min    = NULL    , # minimal forecast step ahead
     .step_max    = NULL    , # maximal forecast step ahead
     .lagg_min    = NULL    , # minimal diff. between VERSMON & MONTH
-    .lagg_max    = NULL      # maximal diff. between VERSMON & MONTH      
-    ) {
-    
-  # Get Centralized config
-  config <- .get_duckdb_parts(
-    .material    = .material,
-    .salesorg    = .salesorg,
-    .scope_matl  = .scope_matl,
-    .scope_sorg  = .scope_sorg,
-    .cm_min      = .cm_min,
-    .cm_max      = .cm_max,
-    .step_min    = .step_min,
-    .step_max    = .step_max,
-    .lagg_min    = .lagg_min,
-    .lagg_max    = .lagg_max 
-  )  
-  
-  # Determine Files to read
-  file_list <- 
-    paste0(
-      "'", .get_parquet_paths(.vtype = .vtype, .ftype = .ftype), "'", 
-      collapse = ", "
+    .lagg_max    = NULL      # maximal diff. between VERSMON & MONTH
+  ) {
+
+    # Get Centralized config
+    config <- .get_duckdb_parts(
+      .material    = .material,
+      .salesorg    = .salesorg,
+      .scope_matl  = .scope_matl,
+      .scope_sorg  = .scope_sorg,
+      .cm_min      = .cm_min,
+      .cm_max      = .cm_max,
+      .step_min    = .step_min,
+      .step_max    = .step_max,
+      .lagg_min    = .lagg_min,
+      .lagg_max    = .lagg_max
     )
-  
-  # Construct the query using glue_sql()
-  query <- glue::glue_sql("
+
+    # Determine Files to read
+    file_list <-
+      paste0(
+        "'", .get_parquet_paths(.vtype = .vtype, .ftype = .ftype), "'",
+        collapse = ", "
+      )
+
+    # Construct the query using glue_sql()
+    query <- glue::glue_sql("
     {DBI::SQL(config$cte_scope_materials)}
-    
-    SELECT 
+
+    SELECT
       SALESORG,
       PLANT,
       MATERIAL,
@@ -519,20 +537,20 @@ fDescribe_Parquet <-
       VERSMON,
       FTYPE,
       VTYPE,
-      BASE_UOM, 
+      BASE_UOM,
       SUM(DEMND_QTY) AS Q
-    FROM 
+    FROM
       read_parquet([{DBI::SQL(file_list)}])
-    WHERE 
+    WHERE
       {DBI::SQL(config$where_clause)}
-    GROUP BY 
+    GROUP BY
       ALL
-    ORDER BY 
+    ORDER BY
       ALL
   ", .con = config$duckdb_con)
-  
-  return(query)
-}
+
+    return(query)
+  }
 
 # Master data Functions ####
 fGet_MATL <-
@@ -540,8 +558,8 @@ fGet_MATL <-
     .material    = NULL, # Optional user-supplied material
     .scope_matl  = TRUE, # restrict to Pythia Scope
     .n           = Inf   # number of materials to return
-    ){
-  
+  ){
+
     # Get Centralized config
     config <- .get_duckdb_parts(
       .material   = .material,
@@ -549,21 +567,21 @@ fGet_MATL <-
     )
 
     # construct Query using glue package
-    query <- 
+    query <-
       glue_sql("
           {DBI::SQL(config$cte_scope_materials)}
-          SELECT 
+          SELECT
             *
-          FROM 
+          FROM
             read_parquet({`FN_MATL`})
-                  WHERE 
-          {DBI::SQL(config$where_clause)} 
+                  WHERE
+          {DBI::SQL(config$where_clause)}
         ", .con = config$duckdb_con)
-    
-    # fetch .n results and return as data.table 
+
+    # fetch .n results and return as data.table
     dbGetQuery(config$duckdb_con, query, n = .n) %>%
       setDT()
-    
+
   }
 
 fGet_MATS <-
@@ -574,7 +592,7 @@ fGet_MATS <-
     .scope_sorg  = TRUE, # restrict to Pythia Scope
     .n           = Inf   # number of materials to return
   ){
-    
+
     # Get Centralized config
     config <- .get_duckdb_parts(
       .material    = .material,
@@ -582,54 +600,54 @@ fGet_MATS <-
       .scope_matl  = .scope_matl,
       .scope_sorg  = .scope_sorg
     )
-    
-    # construct Query using glue package 
-    query <- 
+
+    # construct Query using glue package
+    query <-
       glue_sql("
           {DBI::SQL(config$cte_scope_materials)}
-          SELECT 
+          SELECT
             *
-          FROM 
+          FROM
             read_parquet({`FN_MATS`})
-          WHERE 
+          WHERE
             {DBI::SQL(config$where_clause)}
         ", .con = config$duckdb_con)
-    
-    # fetch .n results and return as data.table 
+
+    # fetch .n results and return as data.table
     dbGetQuery(config$duckdb_con, query, n = .n) %>%
       setDT()
-    
+
   }
 
-fGet_MATP <- 
+fGet_MATP <-
   function(
     .material    = NULL, # Optional user-supplied material
     .scope_matl  = TRUE, # restrict to Pythia Scope
     .n           = Inf   # number of materials to return
   ){
-    
+
     # Get Centralized config
     config <- .get_duckdb_parts(
       .material   = .material,
       .scope_matl = .scope_matl
     )
-    
+
     # construct Query using glue package
-    query <- 
+    query <-
       glue_sql("
           {DBI::SQL(config$cte_scope_materials)}
-          SELECT 
+          SELECT
             *
-          FROM 
+          FROM
             read_parquet({`FN_MATP`})
-          WHERE 
+          WHERE
             {DBI::SQL(config$where_clause)}
         ", .con = config$duckdb_con)
-    
-    # fetch .n results and return as data.table 
+
+    # fetch .n results and return as data.table
     dbGetQuery(config$duckdb_con, query, n = .n) %>%
       setDT()
-    
+
   }
 
 
@@ -637,9 +655,9 @@ fGet_MATP <-
 # Transaction Data Functions ####
 
 ## DYN from Dynasys ####
-# fGet_DYN_Actuals <- 
+# fGet_DYN_Actuals <-
 #   function(
-#     .material    = NULL    , # Optional user-supplied material
+    #     .material    = NULL    , # Optional user-supplied material
 #     .salesorg    = NULL    , # Optional user-supplied salesorg
 #     .scope_matl  = TRUE    , # restrict to Pythia Scope
 #     .scope_sorg  = TRUE    , # restrict to Pythia Scope
@@ -649,23 +667,23 @@ fGet_MATP <-
 #     .step_max   = 999     , # no data available before this step
 #     .n           = Inf       # number of materials to return
 #   ){
-#     
+#
 #     # construct Query
 #     query <- .make_sql_query_dyn(
-#       .vtype       = '010', 
+#       .vtype       = '010',
 #       .material    = .material,
 #       .salesorg    = .salesorg,
 #       .scope_matl  = .scope_matl,
 #       .scope_sorg  = .scope_sorg
 #     )
-# 
-#     # fetch .n results and return as data.table 
+#
+#     # fetch .n results and return as data.table
 #     dbGetQuery(.get_duckdb_conn(), query, n = .n) %>%
 #       setDT()
-#     
+#
 #   }
 
-fGet_DYN <- 
+fGet_DYN <-
   function(
     .vtype       = NULL    , # NULL will get all vtypes
     .ftype       = NULL    , # NULL will get all ftypes
@@ -678,13 +696,13 @@ fGet_DYN <-
     .step_min    = NULL    , # minimal forecast step ahead
     .step_max    = NULL    , # maximal forecast step ahead
     .lagg_min    = NULL    , # minimal diff. between VERSMON & MONTH
-    .lagg_max    = NULL    , # maximal diff. between VERSMON & MONTH      
+    .lagg_max    = NULL    , # maximal diff. between VERSMON & MONTH
     .n           = Inf       # number of materials to return
   ){
-  
+
     # construct Query
     query <- .make_sql_query_dyn(
-      .vtype       = .vtype, 
+      .vtype       = .vtype,
       .ftype       = .ftype,
       .material    = .material,
       .salesorg    = .salesorg,
@@ -695,18 +713,18 @@ fGet_DYN <-
       .step_min    = .step_min,
       .step_max    = .step_max,
       .lagg_min    = .lagg_min,
-      .lagg_max    = .lagg_max    
+      .lagg_max    = .lagg_max
     )
-    
-    # fetch .n results and return as data.table 
+
+    # fetch .n results and return as data.table
     dbGetQuery(.get_duckdb_conn(), query, n = .n) %>%
       setDT()
-    
+
   }
 
-# fGet_DYN_Forecast <- 
+# fGet_DYN_Forecast <-
 #   function(
-#     .material    = NULL    , # Optional user-supplied material
+    #     .material    = NULL    , # Optional user-supplied material
 #     .salesorg    = NULL    , # Optional user-supplied salesorg
 #     .scope_matl  = TRUE    , # restrict to Pythia Scope
 #     .scope_sorg  = TRUE    , # restrict to Pythia Scope
@@ -716,24 +734,24 @@ fGet_DYN <-
 #     .step_max   = 999     , # no data available before this step
 #     .n           = Inf       # number of materials to return
 #   ){
-#     
+#
 #     # construct Query
 #     query <- .make_sql_query_dyn(
-#       .vtype       = '060', 
+#       .vtype       = '060',
 #       .material    = .material,
 #       .salesorg    = .salesorg,
 #       .scope_matl  = .scope_matl,
 #       .scope_sorg  = .scope_sorg
 #     )
-#     
-#     # fetch .n results and return as data.table 
+#
+#     # fetch .n results and return as data.table
 #     dbGetQuery(.get_duckdb_conn(), query, n = .n) %>%
 #       setDT()
-#     
+#
 #   }
 
 ## RTP to Dynasys  ####
-fGet_RTP_Actuals <- 
+fGet_RTP_Actuals <-
   function(
     .material    = NULL    , # Optional user-supplied material
     .salesorg    = NULL    , # Optional user-supplied salesorg
@@ -745,69 +763,69 @@ fGet_RTP_Actuals <-
     .step_max   = 999     , # no data available before this step
     .n           = Inf       # number of materials to return
   ){
-    
+
     # Get Centralized config
     config <- .get_duckdb_parts(
       .material   = .material,
       .scope_matl = .scope_matl
     )
-    
-    # construct Query  
-    query <- 
+
+    # construct Query
+    query <-
       glue_sql("
         {DBI::SQL(config$cte_scope_materials)}
-        
-        SELECT 
+
+        SELECT
           SALESORG,
           PLANT,
           MATERIAL,
           0 AS STEP,
           CALMONTH,
           sum(SLS_QT_SO + SLS_QT_FOC) as Q
-        FROM 
-          read_parquet([{`FN_IRTP`}]) 
-        WHERE 
+        FROM
+          read_parquet([{`FN_IRTP`}])
+        WHERE
           {DBI::SQL(config$where_clause)}
-        GROUP BY 
+        GROUP BY
           ALL
-        ORDER BY 
+        ORDER BY
           ALL
       ", .con = config$duckdb_con)
-    
-    # fetch .n results and return as data.table 
+
+    # fetch .n results and return as data.table
     dbGetQuery(config$duckdb_con, query, n = .n) %>%
       setDT()
-    
+
   }
 
 # R Functions ####
 
 # Open Folder ####
-fOpen_Folder <- 
+fOpen_Folder <-
   function(path){
     # Open the folder in Windows Explorer
     shell.exec(normalizePath(path))
   }
 
-fHeader_PQT <- 
+fHeader_PQT <-
   function(.fn, .n = 1000){
-    
+
     con <- .get_duckdb_conn()
-    
+
     on.exit( .close_duckdb_conn())
-    
+
     query <- glue_sql("
-    SELECT 
+    SELECT
       *
-    FROM 
+    FROM
       read_parquet([{`.fn`}])
     LIMIT {.n}
    ", .con = con)
-    
+
     dt <-
       dbGetQuery(con, query) %>%
       setDT()
-    
+
     return(dt)
-    
+
   }

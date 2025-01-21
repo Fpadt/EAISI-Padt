@@ -39,8 +39,10 @@
     # 1. Filter out empty rows based on filter_col
     .[get(filter_col) != ""] %>%
 
-    # 2. Calculate spacing for alignment
-    .[, no_spc := max(nchar(get(alignment_col))) - nchar(get(alignment_col)) + 3] %>%
+    # # 2. Calculate spacing for alignment
+    .[, `:=`(no_spc = max(nchar(get(alignment_col))) - nchar(get(alignment_col)) + 3)] %>%
+    # # 2. Calculate spacing for alignment
+    # .[, .no_spc := max(nchar(get(alignment_col))) - nchar(get(alignment_col)) + 3] %>%
 
     # 3. Generate the formatted strings via glue_data
     .[, glue_data(.SD, glue_template)] %>%
@@ -126,7 +128,7 @@
 .gen_where_clause <- function(pipe_line) {
 
 
-  if(nrow(pipe_line[WHERE_CLAUSE != ""]) == 0){
+  if(nrow(pipe_line[get("WHERE_CLAUSE") != ""]) == 0){
     return("TRUE")
   } else {
     .gen_fields_generic(
@@ -298,10 +300,13 @@
 #'
 #' @export
 fGetPipeLines <- function() {
+
   rbind(
-    fread(file = file.path(PS01, SYS, "B4", "B4_PIPELINE_ORG.csv")) %>%
+    fread(file = file.path(
+      get_environment_path(), "config", "B4_PIPELINE_ORG.csv")) %>%
       .[, `:=`(SRC = "O", WHERE_CLAUSE = "")],
-    fread(file = file.path(PS01, SYS, "B4", "B4_PIPELINE_MOD.csv")) %>%
+    fread(file = file.path(
+      get_environment_path(), "config", "B4_PIPELINE_MOD.csv")) %>%
       .[, `:=`(SRC = "C")]
   ) %T>%
     setorder(SRC, OHDEST, POSIT) %>%

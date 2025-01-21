@@ -7,16 +7,18 @@
 .get_cte_scope_materials(.scope_matl, .con)
 }
 \arguments{
-\item{.con}{A database connection object.}
+\item{.scope_matl}{Logical. If \code{TRUE}, the function constructs the scope
+materials snippet; otherwise, it returns an empty string.}
 
-\item{.apply_scope}{Logical. If \code{TRUE}, returns the scope materials snippet;
-otherwise, returns an empty string.}
+\item{.con}{A database connection object. Used for safely constructing the
+SQL snippet using \code{glue::glue_sql}.}
 }
 \value{
-A character string containing the SQL snippet for scope materials.
+A character string containing the SQL snippet for scope materials if
+  \code{.scope_matl} is \code{TRUE}, otherwise an empty string.
 }
 \description{
-Internal helper function that returns a SQL snippet (CTE) for scope materials 
-if \code{.apply_scope} is \code{TRUE}, otherwise returns an empty string.
+Internal helper function that returns a SQL snippet (CTE) for scope materials
+if \code{.scope_matl} is \code{TRUE}, otherwise returns an empty string.
 }
 \keyword{internal}

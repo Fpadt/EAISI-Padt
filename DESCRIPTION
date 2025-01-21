@@ -24,7 +24,8 @@ Imports:
     glue,
     lubridate,
     magrittr,
-    purrr
+    purrr,
+    yaml
 Encoding: UTF-8
 Language: en-US
 LazyData: true
