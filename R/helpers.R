@@ -423,7 +423,7 @@
   }
 
   # Construct LAG filter clause for Actuals
-  if(!is.null(.vtype) && any(.vtype %in% '060')){
+  if(!is.null(.vtype) && any(.vtype %in% '010')){
     if (!is.null(.lagg_min) || !is.null(.lagg_max)) {
       .lagg_min <- .lagg_min %||% LAGG_MIN
       .lagg_max <- .lagg_max %||% LAGG_MAX
