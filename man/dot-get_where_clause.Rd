@@ -6,6 +6,8 @@
 \usage{
 .get_where_clause(
   .clauses = list(),
+  .vtype = NULL,
+  .ftype = NULL,
   .material = NULL,
   .salesorg = NULL,
   .scope_matl = FALSE,

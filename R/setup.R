@@ -51,6 +51,11 @@ setup_project_structure <- function(
     stop("Invalid root directory path: ", root_dir, "\n", e$message)
   })
 
+  # check if root dir already exists
+  if (dir_exists(root_dir)) {
+    stop(silver("Root directory already exists!: "), green(root_dir))
+  }
+
   # Determine the value to store for root_dir in the YAML
   yaml_root_dir <- if (path_has_parent(root_dir, onedrive_consumer)) {
     rel_path <- path_rel(root_dir, start = onedrive_consumer)

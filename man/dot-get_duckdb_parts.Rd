@@ -5,6 +5,8 @@
 \title{Retrieve DuckDB Config Parts}
 \usage{
 .get_duckdb_parts(
+  .vtype = NULL,
+  .ftype = NULL,
   .material = NULL,
   .salesorg = NULL,
   .scope_matl = NULL,

@@ -434,6 +434,15 @@
     }
   }
 
+  # Construct FTYPE filter pre[=1] and post [=2] DR
+  # Actuals for Accuracy = [1,2], latest to forecast is [3,4]
+  if(!is.null(.ftype) ){
+    .clauses <- c(
+      .clauses,
+      glue_sql("FTYPE IN ({vals*})", vals = .ftype, .con = .con)
+    )
+  }
+
   # Combine STEP and LAG clauses with OR
   .comb_cls <- NULL
   if (!is.null(.step_cls) && !is.null(.lagg_cls)) {
