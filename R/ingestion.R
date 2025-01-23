@@ -185,7 +185,7 @@
     )
 
     # Check if the file extension is "csv"
-    if (fs::path_ext(input_csv_file) != "csv") {
+    if (tolower(fs::path_ext(input_csv_file)) != "csv") {
       stop(
         cat(white$bgRed$bold(
           glue("Error: The file is not a CSV file!: {input_csv_file}")
