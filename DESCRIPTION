@@ -25,6 +25,8 @@ Imports:
     lubridate,
     magrittr,
     purrr,
+    stringr,
+    utils,
     yaml
 Encoding: UTF-8
 Language: en-US

@@ -13,3 +13,4 @@
 
 # Enable data.table awareness for package use
 .datatable.aware <- TRUE
+
