@@ -412,26 +412,22 @@
 
   # Construct STEP filter clause for Forecasts
   if(!is.null(.vtype) && any(.vtype %in% '060')){
-    if (!is.null(.step_min) || !is.null(.step_max)) {
-      .step_min <- .step_min %||% STEP_MIN
-      .step_max <- .step_max %||% STEP_MAX
-      .step_cls <- glue_sql(
-        "VTYPE = {.vtype} AND STEP BETWEEN {.step_min} AND {.step_max}",
-        .con = .con
-      )
-    }
+    .step_min <- .step_min %||% STEP_MIN
+    .step_max <- .step_max %||% STEP_MAX
+    .step_cls <- glue_sql(
+      "VTYPE = '060' AND STEP BETWEEN {.step_min} AND {.step_max}",
+      .con = .con
+    )
   }
 
   # Construct LAG filter clause for Actuals
   if(!is.null(.vtype) && any(.vtype %in% '010')){
-    if (!is.null(.lagg_min) || !is.null(.lagg_max)) {
-      .lagg_min <- .lagg_min %||% LAGG_MIN
-      .lagg_max <- .lagg_max %||% LAGG_MAX
-      .lagg_cls <- glue_sql(
-        "VTYPE = {.vtype} AND STEP BETWEEN {.lagg_min} AND {.lagg_max}",
-        .con = .con
-      )
-    }
+    .lagg_min <- .lagg_min %||% LAGG_MIN
+    .lagg_max <- .lagg_max %||% LAGG_MAX
+    .lagg_cls <- glue_sql(
+      "VTYPE = '010' AND STEP BETWEEN {.lagg_min} AND {.lagg_max}",
+      .con = .con
+    )
   }
 
   # Construct FTYPE filter pre[=1] and post [=2] DR
@@ -446,7 +442,7 @@
   # Combine STEP and LAG clauses with OR
   .comb_cls <- NULL
   if (!is.null(.step_cls) && !is.null(.lagg_cls)) {
-    .comb_cls <- glue_sql("{.lagg_cls} OR {.step_cls}", .con = .con)
+    .comb_cls <- glue_sql("({.lagg_cls} OR {.step_cls})", .con = .con)
   } else if (!is.null(.step_cls)) {
     .comb_cls <- .step_cls
   } else if (!is.null(.lagg_cls)) {
