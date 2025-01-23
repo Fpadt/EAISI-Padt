@@ -17,3 +17,31 @@
 MATN1 <- function(x) {
   .LP0(x, 18)
 }
+
+#' Remove Leading Zeros
+#'
+#' This function removes leading zeros from a string, but only if the string is purely numeric.
+#' If the string contains non-numeric characters, it will be returned unchanged.
+#'
+#' @param x A character vector. Each element will be checked to see if it is purely numeric.
+#'
+#' @return A character vector with leading zeros removed for numeric strings.
+#'         Non-numeric strings will be returned unchanged.
+#'
+#' @examples
+#' RL0("00123") # Returns "123"
+#' RL0("abc123") # Returns "abc123"
+#' RL0(c("00123", "abc123", "000045")) # Returns c("123", "abc123", "45")
+#'
+#' @export
+RL0 <-
+  function(x){
+    # like CONVERSION_EXIT_MATN1_INPUT
+    # only remove leading zero's in case it is a number
+    is_num <- grepl("^[0-9]+$", x)
+    ifelse(
+      is_num,
+      sub("^0*", "", x, perl = TRUE),
+      x
+    )
+  }
