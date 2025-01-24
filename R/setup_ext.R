@@ -1,4 +1,4 @@
-#' Set Up a Project Directory Structure
+#' set up a project directory structure
 #'
 #' Creates a directory structure for different pa_DTAP environments, pa_BSGP stages,
 #' and functional pa_AREAs, and saves the root directory location in `.config.yaml`.
@@ -96,7 +96,7 @@ pa_setup_project_structure <- function(
   return(invisible(root_dir))
 }
 
-#' Set the Current pa_DTAP Environment
+#' set the current DTAP environment
 #'
 #' Updates the `.config.yaml` file to indicate which pa_DTAP environment
 #' (Development, Test, Acceptance, Production) is currently active.
@@ -129,7 +129,7 @@ pa_set_environment <- function(
     .project_dir = .project_dir
   )
 
-  .copy_config_folder(pa_getwd())
+  .copy_config_folder(pa_get_wd())
 
 }
 

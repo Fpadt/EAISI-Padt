@@ -1,4 +1,4 @@
-#' Get Working Directory
+#' get working directory
 #'
 #' Determines the working directory based on the project directory and the configuration file.
 #' resolves placeholders such as `"OneDriveConsumer"` or `"OneDriveBusiness"`
@@ -7,7 +7,7 @@
 #' @param project_dir Character. The path to the project directory containing the `.config.yaml` file.
 #' @return Character. The absolute path to the working directory.
 #' @export
-pa_getwd <- function(
+pa_get_wd <- function(
     project_dir = ".") {
 
   # Check if the project directory exists

@@ -1,4 +1,4 @@
-#' Initialize Global Constants
+#' initialize global constants
 #'
 #' Creates global constants for colors, functional areas, stages, and environments by calling internal functions.
 #'

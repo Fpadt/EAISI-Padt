@@ -1,4 +1,4 @@
-#' Left Pad Material Numbers
+#' left pad material numbers
 #'
 #' Pads material numbers with leading zeros to match the standard
 #' 18-character SAP material number format.
@@ -25,7 +25,7 @@ pa_matn1_input <- function(x) {
   .LP0(x, 18)
 }
 
-#' Remove Leading Zeros
+#' remove leading zeros
 #'
 #' This function removes leading zeros from a string, but only if the string is purely numeric.
 #' If the string contains non-numeric characters, it will be returned unchanged.
@@ -57,7 +57,7 @@ pa_matn1_output <-
     )
   }
 
-#' Preview the Header of a Parquet File
+#' preview the header of a parquet file
 #'
 #' Retrieves the first \code{n} rows of a Parquet file as a \code{data.table}.
 #'

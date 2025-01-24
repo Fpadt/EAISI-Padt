@@ -1,4 +1,4 @@
-#' Get Config Value from YAML File
+#' get config value from YAML file
 #'
 #' Reads a value from a YAML configuration file based on the provided key.
 #'

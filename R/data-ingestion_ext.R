@@ -1,5 +1,5 @@
 
-#' Retrieve All Pipeline Definitions
+#' get all pipeline definitions
 #'
 #' @description
 #' Reads two CSV files (\emph{B4_PIPELINE_ORG.csv} and \emph{B4_PIPELINE_MOD.csv}) from a predefined
@@ -32,10 +32,10 @@ pa_get_pipelines <- function() {
 
   rbind(
     fread(file = file.path(
-      pa_getwd(), "config", "B4_PIPELINE_ORG.csv")) %>%
+      pa_get_wd(), "config", "B4_PIPELINE_ORG.csv")) %>%
       .[, `:=`(SRC = "O", WHERE_CLAUSE = "")],
     fread(file = file.path(
-      pa_getwd(), "config", "B4_PIPELINE_MOD.csv")) %>%
+      pa_get_wd(), "config", "B4_PIPELINE_MOD.csv")) %>%
       .[, `:=`(SRC = "C")]
   ) %T>%
     setorder(SRC, OHDEST, POSIT) %>%
@@ -43,7 +43,7 @@ pa_get_pipelines <- function() {
 }
 
 
-#' Transform CSV Files to Parquet
+#' transform CSV files to parquet
 #'
 #' @description
 #' This function transforms one or more CSV files into Parquet format using a predefined

@@ -1,4 +1,4 @@
-#' Calculate Forecast Accuracy Metrics
+#' calculate forecast accuracy metrics
 #'
 #' This function calculates forecast accuracy metrics by merging actual and forecast data,
 #' deriving error-based metrics such as Absolute Percentage Error (APE), and returning a detailed
