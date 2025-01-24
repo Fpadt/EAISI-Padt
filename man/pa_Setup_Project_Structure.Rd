@@ -2,7 +2,7 @@
 % Please edit documentation in R/setup_ext.R
 \name{pa_setup_project_structure}
 \alias{pa_setup_project_structure}
-\title{Set Up a Project Directory Structure}
+\title{set up a project directory structure}
 \usage{
 pa_setup_project_structure(
   root_dir = ".",

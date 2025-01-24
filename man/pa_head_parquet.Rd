@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers_ext.R
 \name{pa_head_parquet}
 \alias{pa_head_parquet}
-\title{Preview the Header of a Parquet File}
+\title{preview the header of a parquet file}
 \usage{
 pa_head_parquet(.fn, .n = 1000)
 }

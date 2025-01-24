@@ -33,7 +33,7 @@ pa_get_config_value <- function(key, config_file = ".config.yaml") {
   return(value)
 }
 
-#' Set Config Value in YAML File
+#' set config value in YAML file
 #'
 #' Adds or updates a key-value pair in a YAML configuration file.
 #'

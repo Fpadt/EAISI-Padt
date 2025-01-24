@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers_ext.R
 \name{pa_matn1_input}
 \alias{pa_matn1_input}
-\title{Left Pad Material Numbers}
+\title{left pad material numbers}
 \usage{
 pa_matn1_input(x)
 }

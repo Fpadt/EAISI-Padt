@@ -2,7 +2,7 @@
 % Please edit documentation in R/data-ingestion_ext.R
 \name{pa_get_pipelines}
 \alias{pa_get_pipelines}
-\title{Retrieve All Pipeline Definitions}
+\title{get all pipeline definitions}
 \usage{
 pa_get_pipelines()
 }

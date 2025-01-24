@@ -2,7 +2,7 @@
 % Please edit documentation in R/evaluation_ext.R
 \name{pa_accuracy}
 \alias{pa_accuracy}
-\title{Calculate Forecast Accuracy Metrics}
+\title{calculate forecast accuracy metrics}
 \usage{
 pa_accuracy(.tab, .act_ftype = 1, .fct_ftype = 2)
 }

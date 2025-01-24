@@ -2,7 +2,7 @@
 % Please edit documentation in R/data-ingestion_ext.R
 \name{pa_transform_csv_to_parquet}
 \alias{pa_transform_csv_to_parquet}
-\title{Transform CSV Files to Parquet}
+\title{transform CSV files to parquet}
 \usage{
 pa_transform_csv_to_parquet(
   source_path,

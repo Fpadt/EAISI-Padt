@@ -2,7 +2,7 @@
 % Please edit documentation in R/constants_ext.R
 \name{pa_initialize_constants}
 \alias{pa_initialize_constants}
-\title{Initialize Global Constants}
+\title{initialize global constants}
 \usage{
 pa_initialize_constants()
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/yaml_ext.R
 \name{pa_set_config_value}
 \alias{pa_set_config_value}
-\title{Set Config Value in YAML File}
+\title{set config value in YAML file}
 \usage{
 pa_set_config_value(key, value, config_file = ".config.yaml")
 }

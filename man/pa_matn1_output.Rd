@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers_ext.R
 \name{pa_matn1_output}
 \alias{pa_matn1_output}
-\title{Remove Leading Zeros}
+\title{remove leading zeros}
 \usage{
 pa_matn1_output(x)
 }

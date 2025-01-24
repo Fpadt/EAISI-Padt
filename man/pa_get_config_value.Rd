@@ -2,7 +2,7 @@
 % Please edit documentation in R/yaml_ext.R
 \name{pa_get_config_value}
 \alias{pa_get_config_value}
-\title{Get Config Value from YAML File}
+\title{get config value from YAML file}
 \usage{
 pa_get_config_value(key, config_file = ".config.yaml")
 }

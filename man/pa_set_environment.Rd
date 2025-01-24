@@ -2,7 +2,7 @@
 % Please edit documentation in R/setup_ext.R
 \name{pa_set_environment}
 \alias{pa_set_environment}
-\title{Set the Current pa_DTAP Environment}
+\title{set the current DTAP environment}
 \usage{
 pa_set_environment(.project_dir = ".", .environment = "Production")
 }

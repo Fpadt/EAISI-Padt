@@ -2,7 +2,7 @@
 % Please edit documentation in R/paths_ext.R
 \name{pa_get_wd}
 \alias{pa_get_wd}
-\title{Get Working Directory}
+\title{get working directory}
 \usage{
 pa_get_wd(project_dir = ".")
 }
