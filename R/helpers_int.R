@@ -407,7 +407,7 @@
   if (!is.null(.material) && length(.material) > 0) {
     .clauses <- c(
       .clauses,
-      glue_sql("MATERIAL IN ({vals*})", vals = pa_MATN1(.material), .con = .con)
+      glue_sql("MATERIAL IN ({vals*})", vals = pa_MATN1_I(.material), .con = .con)
     )
   }
 

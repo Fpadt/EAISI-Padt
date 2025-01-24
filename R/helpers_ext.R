@@ -1,20 +1,27 @@
 #' Left Pad Material Numbers
 #'
-#' Pads material numbers with leading zeros to match the standard 18-character SAP material number format.
+#' Pads material numbers with leading zeros to match the standard
+#' 18-character SAP material number format.
 #'
-#' @param x A character vector of material numbers. Only numeric-like strings will be padded.
+#' @param x A character vector of material numbers.
+#' Only numeric-like strings will be padded.
 #'
-#' @return A character vector where numeric strings are left-padded with zeros to a width of 18. Non-numeric strings remain unchanged.
+#' @return A character vector where numeric strings are left-padded with
+#' zeros to a width of 18. Non-numeric strings remain unchanged.
 #'
 #' @details
-#' This function mimics the behavior of SAP's \code{CONVERSION_EXIT_pa_MATN1_INPUT}, which ensures material numbers are standardized to 18 characters by adding leading zeros.
+#' This function mimics the behavior of SAP's \code{CONVERSION_EXIT_MATN1_INPUT},
+#' which ensures material numbers are standardized to 18 characters by
+#' adding leading zeros.
 #'
 #' @examples
-#' pa_MATN1(c("123", "456789", "A123"))
+#' pa_MATN1_I(c("123", "456789", "A123"))
 #' # Returns: c("000000000000000123", "000000000000456789", "A123")
 #'
 #' @export
-pa_MATN1 <- function(x) {
+pa_MATN1_I <- function(x) {
+  # like CONVERSION_EXIT_MATN1_INPUT
+  # only leftpad leading zero's in case it is a number
   .LP0(x, 18)
 }
 
@@ -28,15 +35,19 @@ pa_MATN1 <- function(x) {
 #' @return A character vector with leading zeros removed for numeric strings.
 #'         Non-numeric strings will be returned unchanged.
 #'
+#' @details
+#' This function mimics the behavior of SAP's \code{CONVERSION_EXIT_MATN1_OUTPUT}
+#' which removes leading zeros from material numbers if these only contain numbers.
+#'
 #' @examples
-#' pa_RL0("00123") # Returns "123"
-#' pa_RL0("abc123") # Returns "abc123"
-#' pa_RL0(c("00123", "abc123", "000045")) # Returns c("123", "abc123", "45")
+#' pa_MATN1_O("00123")     # Returns "123"
+#' pa_MATN1_O("00000A123") # Returns "00000A123"
+#' pa_MATN1_O(c("00123", "00000A123", "A000045")) # Returns c("123", "abc123", "A000045")
 #'
 #' @export
-pa_RL0 <-
+pa_MATN1_O <-
   function(x){
-    # like CONVERSION_EXIT_pa_MATN1_INPUT
+    # like CONVERSION_EXIT_MATN1_OUTPUT
     # only remove leading zero's in case it is a number
     is_num <- grepl("^[0-9]+$", x)
     ifelse(
@@ -58,8 +69,6 @@ pa_RL0 <-
 #' @details
 #' This function connects to DuckDB to query the specified Parquet file and fetch the first \code{n} rows.
 #'
-#' @examples
-#' # example follows
 #' @export
 pa_Head_PQT <-
   function(.fn, .n = 1000){

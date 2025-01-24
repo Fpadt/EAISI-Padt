@@ -20,6 +20,3 @@ Retrieves the first \code{n} rows of a Parquet file as a \code{data.table}.
 \details{
 This function connects to DuckDB to query the specified Parquet file and fetch the first \code{n} rows.
 }
-\examples{
-# example follows
-}
