@@ -21,7 +21,7 @@ pa_ET_COLS <- c(
 #' @details Demo environment is to showcase the package functionality
 #'
 #' @export
-pa_pa_DTAP <- c("Development", "Test", "Acceptance", "Production", "Demo")
+pa_DTAP <- c("Development", "Test", "Acceptance", "Production", "Demo")
 
 #' pa_BSGP Stages
 #'
@@ -29,12 +29,12 @@ pa_pa_DTAP <- c("Development", "Test", "Acceptance", "Production", "Demo")
 #'
 #' @details Platinum is used for Forecast Exports
 #' @export
-pa_pa_BSGP <- c("Bronze", "Silver", "Gold", "Platinum")
+pa_BSGP <- c("Bronze", "Silver", "Gold", "Platinum")
 
 #' Functional pa_AREAs
 #'
 #' Common functional pa_AREAs for demonstration purposes.
 #' @export
-pa_pa_AREA <- c("sales", "stock", "promotions", "master_data")
+pa_AREA <- c("sales", "stock", "promotions", "master_data")
 
 

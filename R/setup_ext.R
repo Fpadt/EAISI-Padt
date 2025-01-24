@@ -33,7 +33,7 @@
 #'   [yaml::write_yaml()] for saving configurations.
 #'
 #' @export
-pa_Setup_Project_Structure <- function(
+pa_setup_project_structure <- function(
     root_dir         = ".",
     pa_DTAP_levels      = pa_DTAP,
     pa_BSGP_levels      = pa_BSGP,
