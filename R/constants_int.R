@@ -18,6 +18,29 @@ SCOPE_PRDH <- c(
   '65'   # NATURELA
 )
 
+# Predefined data for colors, functional areas, stages, and environments
+.ET_COLS <- c(
+  WT = "#FFFFFF"    , CG = "#0f5e3c",
+  FG = "#089b35"    , LG = "#38e56d",
+  YL = "#fff200"    , BL = "#000000"
+)
+
+.AREA <- c(
+  SLS = "sales"     , STK = "stock",
+  PRM = "promotions", MD  = "master_data"
+)
+
+.BSGP <- c(
+  B = "Bronze"     , S = "Silver",
+  G = "Gold"       , P = "Platinum"
+)
+
+.DTAP <- c(
+  D = "Development", T = "Test",
+  A = "Acceptance" , P = "Production",
+  X = "Demo"
+)
+
 #' Generate Variables for Ecotone Brand Colors
 #'
 #' Dynamically creates variables named "col_<name>" in the specified environment.

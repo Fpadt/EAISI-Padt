@@ -5,7 +5,7 @@
 utils::globalVariables(
   c(
     "colors"    , "environments", "stages" , "areas",
-    "pa_ET_COLS", "pa_AREA"     , "pa_BSGP", "pa_DTAP",
+    ".ET_COLS"  , ".AREA"       , ".BSGP"  , ".DTAP",
     ".",
     "SRC", "OHDEST", "POSIT",
     "WHERE_CLAUSE", "SCOPE_MATL",

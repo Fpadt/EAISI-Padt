@@ -1,11 +1,11 @@
 #' set up a project directory structure
 #'
-#' Creates a directory structure for different pa_DTAP environments, pa_BSGP stages,
-#' and functional pa_AREAs, and saves the root directory location in `.config.yaml`.
+#' Creates a directory structure for different DTAP environments, BSGP stages,
+#' and functional AREAs, and saves the root directory location in `.config.yaml`.
 #'
 #' @param root_dir A character string specifying the top-level directory under
 #'   which all subdirectories will be created. Defaults to `"."`.
-#' @param pa_DTAP_levels A character vector defining the pa_DTAP levels.
+#' @param DTAP_levels A character vector defining the DTAP levels.
 #'   Defaults to `pa_DTAP` = c("Development", "Test", "Acceptance", "Production").
 #' @param pa_BSGP_levels A character vector defining the pa_BSGP stages.
 #'   Defaults to `pa_BSGP` = c("Bronze", "Silver", "Gold", "Platinum").
@@ -35,9 +35,6 @@
 #' @export
 pa_setup_project_structure <- function(
     root_dir         = ".",
-    pa_DTAP_levels      = pa_DTAP,
-    pa_BSGP_levels      = pa_BSGP,
-    functional_pa_AREAs = pa_AREA,
     project_dir      = "."
 ) {
   # Get OneDrive paths from environment variables
@@ -75,10 +72,10 @@ pa_setup_project_structure <- function(
   })
 
   # Create the pa_DTAP, pa_BSGP, and functional pa_AREA directory structure
-  for (pa_DTAP in pa_DTAP_levels) {
-    for (pa_BSGP in pa_BSGP_levels) {
-      for (pa_AREA in functional_pa_AREAs) {
-        dir_create(path(root_dir, pa_DTAP, pa_BSGP, pa_AREA))
+  for (dtap in .DTAP) {
+    for (bsgp in .BGSP) {
+      for (area in .AREA) {
+        dir_create(path(root_dir, dtap, bgsp, area))
       }
     }
 
@@ -119,7 +116,9 @@ pa_set_environment <- function(
     .environment = "Production"
 ) {
   if(!.environment %in% pa_DTAP){
-    message(green(paste0("Valid environments: ", paste(pa_DTAP, collapse = ", "))))
+    message(green(
+      paste0("Valid environments: ",
+             paste(pa_DTAP, collapse = ", "))))
     stop("Invalid environment: ", .environment)
   }
 
