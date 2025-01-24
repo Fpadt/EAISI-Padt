@@ -43,6 +43,6 @@ pa_initialize_constants <- function() {
   .generate_stage_variables(pa_BSGP)
   .generate_environment_variables(pa_DTAP)
 
-  message("Global constants have been initialized successfully.")
+  message(green("Global constants have been initialized successfully."))
 }
 

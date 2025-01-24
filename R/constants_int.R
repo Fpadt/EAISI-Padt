@@ -42,8 +42,9 @@ SCOPE_PRDH <- c(
     assign(var_name, colors[[name]], envir = env)
   }
 
-  message("Color variables generated: ",
-          paste(paste0("col_", names(colors)), collapse = ", "))
+  message(
+    paste0(green("Color variables generated: ",
+                 paste(paste0("col_", names(colors)), collapse = ", "))))
 }
 
 
@@ -65,7 +66,9 @@ SCOPE_PRDH <- c(
     assign(var_name, environments[[name]], envir = env)
   }
 
-  message("Environment variables generated: ", paste(paste0("env_", names(environments)), collapse = ", "))
+  message(
+    paste0(green("Environment variables generated: ",
+                 paste(paste0("env_", names(environments)), collapse = ", "))))
 }
 
 #' Generate Variables for Stages
@@ -84,8 +87,9 @@ SCOPE_PRDH <- c(
     assign(var_name, stages[[name]], envir = env)
   }
 
-  message("Stage variables generated: ",
-          paste(paste0("stg_", names(stages)), collapse = ", "))
+  message(
+    paste0(green("Stage variables generated: ",
+                 paste(paste0("stg_", names(stages)), collapse = ", "))))
 }
 
 #' Generate Variables for Functional Areas
@@ -104,8 +108,9 @@ SCOPE_PRDH <- c(
     assign(var_name, areas[[name]], envir = env)
   }
 
-  message("Functional area variables generated: ",
-          paste(paste0("fun_", names(areas)), collapse = ", "))
+  message(
+    paste0(green("Functional area variables generated: ",
+                 paste(paste0("fun_", names(areas)), collapse = ", "))))
 }
 
 
