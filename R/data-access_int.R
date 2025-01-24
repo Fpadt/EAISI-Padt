@@ -50,7 +50,7 @@
       FTYPE,
       VTYPE,
       BASE_UOM,
-      SUM(DEMND_QTY) AS Q
+      SUM(Q) AS Q
     FROM
       read_parquet([{DBI::SQL(file_list)}])
     WHERE
