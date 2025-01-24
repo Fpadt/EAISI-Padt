@@ -4,7 +4,7 @@
 \alias{.generate_functional_area_variables}
 \title{Generate Variables for Functional Areas}
 \usage{
-.generate_functional_area_variables(env = globalenv())
+.generate_functional_area_variables(areas, env = globalenv())
 }
 \arguments{
 \item{env}{The environment where the variables should be created. Defaults to the global environment.}

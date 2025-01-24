@@ -4,7 +4,7 @@
 \alias{.generate_stage_variables}
 \title{Generate Variables for Stages}
 \usage{
-.generate_stage_variables(env = globalenv())
+.generate_stage_variables(stages, env = globalenv())
 }
 \arguments{
 \item{env}{The environment where the variables should be created. Defaults to the global environment.}

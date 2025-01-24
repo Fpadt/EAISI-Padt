@@ -33,7 +33,7 @@ SCOPE_PRDH <- c(
 #' [](https://coolors.co/3e074a-0f431c-fde8e9-f0f600)
 #'
 #' @keywords internal
-.generate_color_variables <- function(env = globalenv()) {
+.generate_color_variables <- function(colors, env = globalenv()) {
 
   for (name in names(colors)) {
     # Construct the variable name
@@ -56,7 +56,7 @@ SCOPE_PRDH <- c(
 #' @param env The environment where the variables should be created. Defaults to the global environment.
 #' @return NULL. The function creates variables dynamically.
 #' @keywords internal
-.generate_environment_variables <- function(env = globalenv()) {
+.generate_environment_variables <- function(environments, env = globalenv()) {
 
   for (name in names(environments)) {
     # Construct the variable name
@@ -75,7 +75,7 @@ SCOPE_PRDH <- c(
 #' @param env The environment where the variables should be created. Defaults to the global environment.
 #' @return NULL. The function creates variables dynamically.
 #' @keywords internal
-.generate_stage_variables <- function(env = globalenv()) {
+.generate_stage_variables <- function(stages, env = globalenv()) {
 
   for (name in names(stages)) {
     # Construct the variable name
@@ -95,7 +95,7 @@ SCOPE_PRDH <- c(
 #' @param env The environment where the variables should be created. Defaults to the global environment.
 #' @return NULL. The function creates variables dynamically.
 #' @keywords internal
-.generate_functional_area_variables <- function(env = globalenv()) {
+.generate_functional_area_variables <- function(areas, env = globalenv()) {
 
   for (name in names(areas)) {
     # Construct the variable name

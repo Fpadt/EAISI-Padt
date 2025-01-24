@@ -4,7 +4,7 @@
 \alias{.generate_color_variables}
 \title{Generate Variables for Ecotone Brand Colors}
 \usage{
-.generate_color_variables(env = globalenv())
+.generate_color_variables(colors, env = globalenv())
 }
 \arguments{
 \item{env}{The environment where the variables should be created. Defaults to the global environment.}

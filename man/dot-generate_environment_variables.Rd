@@ -4,7 +4,7 @@
 \alias{.generate_environment_variables}
 \title{Generate Variables for DTAP Environments}
 \usage{
-.generate_environment_variables(env = globalenv())
+.generate_environment_variables(environments, env = globalenv())
 }
 \arguments{
 \item{env}{The environment where the variables should be created. Defaults to the global environment.}
