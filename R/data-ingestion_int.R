@@ -217,6 +217,10 @@
       WHERE
         {DBI::SQL(where_clause)} AND
         TRUE
+      GROUP BY
+        ALL
+      ORDER BY
+        ALL
       ",
         sql_read_csv = .,
         where_clause = .gen_where_clause(pipe_line),
