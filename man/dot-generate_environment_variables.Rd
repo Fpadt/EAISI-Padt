@@ -8,8 +8,6 @@
 }
 \arguments{
 \item{env}{The environment where the variables should be created. Defaults to the global environment.}
-
-\item{environments}{A named vector or list of environments (e.g., DTAP stages).}
 }
 \value{
 NULL. The function creates variables dynamically.

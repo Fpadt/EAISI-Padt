@@ -8,8 +8,6 @@
 }
 \arguments{
 \item{env}{The environment where the variables should be created. Defaults to the global environment.}
-
-\item{colors}{A named vector or list of colors.}
 }
 \value{
 NULL. The function creates variables dynamically.

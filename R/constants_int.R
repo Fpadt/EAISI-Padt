@@ -22,7 +22,6 @@ SCOPE_PRDH <- c(
 #'
 #' Dynamically creates variables named "col_<name>" in the specified environment.
 #'
-#' @param colors A named vector or list of colors.
 #' @param env The environment where the variables should be created. Defaults to the global environment.
 #' @return NULL. The function creates variables dynamically.
 #'
@@ -54,7 +53,6 @@ SCOPE_PRDH <- c(
 #'
 #' Dynamically creates variables named "env_<name>" based on the given list of DTAP environments.
 #'
-#' @param environments A named vector or list of environments (e.g., DTAP stages).
 #' @param env The environment where the variables should be created. Defaults to the global environment.
 #' @return NULL. The function creates variables dynamically.
 #' @keywords internal
@@ -74,7 +72,6 @@ SCOPE_PRDH <- c(
 #'
 #' Dynamically creates variables named "stg_<name>" based on the given list of stages.
 #'
-#' @param stages A named vector or list of stages.
 #' @param env The environment where the variables should be created. Defaults to the global environment.
 #' @return NULL. The function creates variables dynamically.
 #' @keywords internal
@@ -95,7 +92,6 @@ SCOPE_PRDH <- c(
 #'
 #' Dynamically creates variables named "fun_<name>" based on the given list of functional areas.
 #'
-#' @param areas A named vector or list of functional areas.
 #' @param env The environment where the variables should be created. Defaults to the global environment.
 #' @return NULL. The function creates variables dynamically.
 #' @keywords internal

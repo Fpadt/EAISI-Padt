@@ -8,8 +8,6 @@
 }
 \arguments{
 \item{env}{The environment where the variables should be created. Defaults to the global environment.}
-
-\item{areas}{A named vector or list of functional areas.}
 }
 \value{
 NULL. The function creates variables dynamically.
