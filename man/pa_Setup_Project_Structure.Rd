@@ -4,19 +4,16 @@
 \alias{pa_setup_project_structure}
 \title{set up a project directory structure}
 \usage{
-pa_setup_project_structure(
-  root_dir = ".",
-  pa_DTAP_levels = pa_DTAP,
-  pa_BSGP_levels = pa_BSGP,
-  functional_pa_AREAs = pa_AREA,
-  project_dir = "."
-)
+pa_setup_project_structure(root_dir = ".", project_dir = ".")
 }
 \arguments{
 \item{root_dir}{A character string specifying the top-level directory under
 which all subdirectories will be created. Defaults to `"."`.}
 
-\item{pa_DTAP_levels}{A character vector defining the pa_DTAP levels.
+\item{project_dir}{A character string specifying the directory where the
+`.config.yaml` file will be saved or updated. Defaults to `"."`.}
+
+\item{DTAP_levels}{A character vector defining the DTAP levels.
 Defaults to `pa_DTAP` = c("Development", "Test", "Acceptance", "Production").}
 
 \item{pa_BSGP_levels}{A character vector defining the pa_BSGP stages.
@@ -25,16 +22,13 @@ Defaults to `pa_BSGP` = c("Bronze", "Silver", "Gold", "Platinum").}
 \item{functional_pa_AREAs}{A character vector defining functional pa_AREAs within
 each pa_BSGP stage. Defaults to
 `pa_AREA` = c("sales", "stock", "promotions", "master_data").}
-
-\item{project_dir}{A character string specifying the directory where the
-`.config.yaml` file will be saved or updated. Defaults to `"."`.}
 }
 \value{
 Invisibly returns the normalized `root_dir`.
 }
 \description{
-Creates a directory structure for different pa_DTAP environments, pa_BSGP stages,
-and functional pa_AREAs, and saves the root directory location in `.config.yaml`.
+Creates a directory structure for different DTAP environments, BSGP stages,
+and functional AREAs, and saves the root directory location in `.config.yaml`.
 }
 \details{
 This function constructs a multi-level directory hierarchy reflecting

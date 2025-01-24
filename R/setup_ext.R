@@ -115,7 +115,7 @@ pa_set_environment <- function(
     .project_dir = ".",
     .environment = "Production"
 ) {
-  if(!.environment %in% pa_DTAP){
+  if(!.environment %in% .DTAP){
     message(green(
       paste0("Valid environments: ",
              paste(pa_DTAP, collapse = ", "))))
