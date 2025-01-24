@@ -5,6 +5,7 @@
 #' @return NULL. This function creates constants dynamically in the global environment.
 #' @export
 pa_initialize_constants <- function() {
+
   # Check if internal functions exist
   if (!exists(".generate_color_variables") ||
       !exists(".generate_functional_area_variables") ||
@@ -21,18 +22,18 @@ pa_initialize_constants <- function() {
   )
 
   pa_AREA <- c(
-    SLS = "sales", STK = "stock",
-    PRM = "promotions", M_D = "master_data"
+    SLS = "sales"     , STK = "stock",
+    PRM = "promotions", MD  = "master_data"
   )
 
   pa_BSGP <- c(
     B = "Bronze", S = "Silver",
-    G = "Gold", P = "Platinum"
+    G = "Gold"  , P = "Platinum"
   )
 
   pa_DTAP <- c(
     D = "Development", T = "Test",
-    A = "Acceptance", P = "Production",
+    A = "Acceptance" , P = "Production",
     X = "Demo"
   )
 
