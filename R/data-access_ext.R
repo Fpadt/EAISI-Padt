@@ -48,12 +48,12 @@
 #' @importFrom glue glue_sql
 #' @export
 pa_Get_MAT <- function(
-    .material    = NULL,     # Optional user-supplied material
-    .salesorg    = NULL,     # Optional user-supplied salesorg
-    .scope_matl  = TRUE,     # restrict to Pythia Scope
-    .scope_sorg  = NULL,     # restrict to Pythia Scope
+    .material    = NULL,       # Optional user-supplied material
+    .salesorg    = NULL,       # Optional user-supplied salesorg
+    .scope_matl  = TRUE,       # restrict to Pythia Scope
+    .scope_sorg  = NULL,       # restrict to Pythia Scope
     .ftype       = c(1, 2, 3), # File type: 1 = MATL, 2 = MATS, 3 = MATP
-    .n           = Inf       # number of rows to return
+    .n           = Inf         # number of rows to return
 ) {
 
   # Validate .ftype input
@@ -71,8 +71,8 @@ pa_Get_MAT <- function(
 
   # Get the list of files to query for the first file type in .ftype
   file_list <- .get_data_full_file_names(
-    .pa_BSGP  = 2,
-    .pa_AREA  = 4,
+    .BSGP  = 2,
+    .AREA  = 4,
     .vtype = '010',
     .ftype = .ftype[1], # Use the first file type in .ftype
     .etype = "parquet"

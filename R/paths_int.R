@@ -18,8 +18,8 @@
 #' @import data.table
 #' @keywords internal
 .get_data_full_file_names <- function(
-    .pa_BSGP,
-    .pa_AREA,
+    .bsgp,
+    .area,
     .vtype,
     .ftype,
     .etype

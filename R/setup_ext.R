@@ -73,7 +73,7 @@ pa_setup_project_structure <- function(
 
   # Create the pa_DTAP, pa_BSGP, and functional pa_AREA directory structure
   for (dtap in .DTAP) {
-    for (bsgp in .BGSP) {
+    for (bsgp in .BSGP) {
       for (area in .AREA) {
         dir_create(path(root_dir, dtap, bgsp, area))
       }

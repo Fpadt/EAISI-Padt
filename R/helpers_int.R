@@ -308,8 +308,8 @@
 
   # Get the list of files to query for the first file type in .ftype
   FN_MATL <- .get_data_full_file_names(
-    .pa_BSGP  = 2,
-    .pa_AREA  = 4,
+    .bsgp  = 2,
+    .area  = 4,
     .vtype = '010',
     .ftype = 1,
     .etype = "parquet"
