@@ -1,40 +1,47 @@
-#' Ecotone Brand Colors
+#' Initialize Global Constants
 #'
-#' @details authorized colours for the logo.
-#' Castle Green will only be used for the housing of the logo.
-#' The colours for the leaves are Forest Green, Light Green and Yellow.
-#' The ecotone wordmark colour is White.
-#' For the tagline only Jet Black or White can be used.
-#' [](https://coolors.co/3e074a-0f431c-fde8e9-f0f600)
+#' Creates global constants for colors, functional areas, stages, and environments by calling internal functions.
+#'
+#' @return NULL. This function creates constants dynamically in the global environment.
 #' @export
-pa_ET_COLS <- c(
-  WT = "#FFFFFF", CG = "#0f5e3c",
-  FG = "#089b35", LG = "#38e56d",
-  YL = "#fff200", BL = "#000000"
-)
+pa_initialize_constants <- function() {
+  # Check if internal functions exist
+  if (!exists(".generate_color_variables") ||
+      !exists(".generate_functional_area_variables") ||
+      !exists(".generate_stage_variables") ||
+      !exists(".generate_environment_variables")) {
+    stop("One or more internal functions are missing.")
+  }
 
-# R/constants.R
-#' pa_DTAP Environments
-#'
-#' These are the default pa_DTAP environments used in the package.
-#'
-#' @details Demo environment is to showcase the package functionality
-#'
-#' @export
-pa_DTAP <- c("Development", "Test", "Acceptance", "Production", "Demo")
+  # Predefined data for colors, functional areas, stages, and environments
+  pa_ET_COLS <- c(
+    WT = "#FFFFFF", CG = "#0f5e3c",
+    FG = "#089b35", LG = "#38e56d",
+    YL = "#fff200", BL = "#000000"
+  )
 
-#' pa_BSGP Stages
-#'
-#' The four data stages commonly used in data processing.
-#'
-#' @details Platinum is used for Forecast Exports
-#' @export
-pa_BSGP <- c("Bronze", "Silver", "Gold", "Platinum")
+  pa_AREA <- c(
+    SLS = "sales", STK = "stock",
+    PRM = "promotions", M_D = "master_data"
+  )
 
-#' Functional pa_AREAs
-#'
-#' Common functional pa_AREAs for demonstration purposes.
-#' @export
-pa_AREA <- c("sales", "stock", "promotions", "master_data")
+  pa_BSGP <- c(
+    B = "Bronze", S = "Silver",
+    G = "Gold", P = "Platinum"
+  )
 
+  pa_DTAP <- c(
+    D = "Development", T = "Test",
+    A = "Acceptance", P = "Production",
+    X = "Demo"
+  )
+
+  # Call internal functions to generate constants
+  .generate_color_variables(pa_ET_COLS)
+  .generate_functional_area_variables(pa_AREA)
+  .generate_stage_variables(pa_BSGP)
+  .generate_environment_variables(pa_DTAP)
+
+  message("Global constants have been initialized successfully.")
+}
 

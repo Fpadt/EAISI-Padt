@@ -53,27 +53,3 @@ fOpen_Folder <-
     shell.exec(normalizePath(path))
   }
 
-#' Generate Variables for Colors in pa_ET_COLS
-#'
-#' Dynamically creates variables named "col_<name>" in the specified environment.
-#'
-#' @param colors A named vector or list of colors.
-#' @param env The environment where the variables should be created. Defaults to the global environment.
-#' @return NULL. The function creates variables dynamically.
-#' @export
-generate_color_variables <- function(colors, env = globalenv()) {
-  if (!is.vector(colors) && !is.list(colors)) {
-    stop("The 'colors' argument must be a named vector or list.")
-  }
-
-  for (name in names(colors)) {
-    # Construct the variable name
-    var_name <- paste0("col_", name)
-    # Assign the color value to the variable in the specified environment
-    assign(var_name, colors[[name]], envir = env)
-  }
-
-  message("Color variables generated: ", paste(paste0("col_", names(colors)), collapse = ", "))
-}
-
-

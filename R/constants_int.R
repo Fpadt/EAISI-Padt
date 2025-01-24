@@ -17,3 +17,99 @@ SCOPE_PRDH <- c(
   '53',  # TANOSHI
   '65'   # NATURELA
 )
+
+#' Generate Variables for Ecotone Brand Colors
+#'
+#' Dynamically creates variables named "col_<name>" in the specified environment.
+#'
+#' @param colors A named vector or list of colors.
+#' @param env The environment where the variables should be created. Defaults to the global environment.
+#' @return NULL. The function creates variables dynamically.
+#'
+#' @details authorized colours for the logo.
+#' Castle Green will only be used for the housing of the logo.
+#' The colours for the leaves are Forest Green, Light Green and Yellow.
+#' The ecotone wordmark colour is White.
+#' For the tagline only Jet Black or White can be used.
+#' [](https://coolors.co/3e074a-0f431c-fde8e9-f0f600)
+#'
+#' @keywords internal
+.generate_color_variables <- function(env = globalenv()) {
+
+  for (name in names(colors)) {
+    # Construct the variable name
+    var_name <- paste0("col_", name)
+    # Assign the color value to the variable in the specified environment
+    assign(var_name, colors[[name]], envir = env)
+  }
+
+  message("Color variables generated: ",
+          paste(paste0("col_", names(colors)), collapse = ", "))
+}
+
+
+# R/constants.R
+
+#' Generate Variables for DTAP Environments
+#'
+#' Dynamically creates variables named "env_<name>" based on the given list of DTAP environments.
+#'
+#' @param environments A named vector or list of environments (e.g., DTAP stages).
+#' @param env The environment where the variables should be created. Defaults to the global environment.
+#' @return NULL. The function creates variables dynamically.
+#' @keywords internal
+.generate_environment_variables <- function(env = globalenv()) {
+
+  for (name in names(environments)) {
+    # Construct the variable name
+    var_name <- paste0("env_", name)
+    # Assign the environment value to the variable in the specified environment
+    assign(var_name, environments[[name]], envir = env)
+  }
+
+  message("Environment variables generated: ", paste(paste0("env_", names(environments)), collapse = ", "))
+}
+
+#' Generate Variables for Stages
+#'
+#' Dynamically creates variables named "stg_<name>" based on the given list of stages.
+#'
+#' @param stages A named vector or list of stages.
+#' @param env The environment where the variables should be created. Defaults to the global environment.
+#' @return NULL. The function creates variables dynamically.
+#' @keywords internal
+.generate_stage_variables <- function(env = globalenv()) {
+
+  for (name in names(stages)) {
+    # Construct the variable name
+    var_name <- paste0("stg_", name)
+    # Assign the stage value to the variable in the specified environment
+    assign(var_name, stages[[name]], envir = env)
+  }
+
+  message("Stage variables generated: ",
+          paste(paste0("stg_", names(stages)), collapse = ", "))
+}
+
+#' Generate Variables for Functional Areas
+#'
+#' Dynamically creates variables named "fun_<name>" based on the given list of functional areas.
+#'
+#' @param areas A named vector or list of functional areas.
+#' @param env The environment where the variables should be created. Defaults to the global environment.
+#' @return NULL. The function creates variables dynamically.
+#' @keywords internal
+.generate_functional_area_variables <- function(env = globalenv()) {
+
+  for (name in names(areas)) {
+    # Construct the variable name
+    var_name <- paste0("fun_", name)
+    # Assign the area value to the variable in the specified environment
+    assign(var_name, areas[[name]], envir = env)
+  }
+
+  message("Functional area variables generated: ",
+          paste(paste0("fun_", names(areas)), collapse = ", "))
+}
+
+

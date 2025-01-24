@@ -4,10 +4,11 @@
 
 utils::globalVariables(
   c(
+    "colors"    , "environments", "stages" , "areas",
+    "pa_ET_COLS", "pa_AREA"     , "pa_BSGP", "pa_DTAP",
     ".",
     "SRC", "OHDEST", "POSIT",
     "WHERE_CLAUSE", "SCOPE_MATL",
-    "pa_DTAP", "pa_BSGP", "pa_AREA",
     "vtype", "ftype", "fname",
     "VTYPE", "FTYPE", "SALESORG", "PLANT", "MATERIAL", "CALMONTH", "Q", "STEP"
     )
