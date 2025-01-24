@@ -1,27 +1,3 @@
-# ET color palette
-# https://coolors.co/3e074a-0f431c-fde8e9-f0f600
-
-#' ET Colors
-#' @export
-ET_CG <- "#0f5e3c"
-
-#' ET Colors
-#' @export
-ET_FG <- "#089b35"
-
-#' ET Colors
-#' @export
-ET_LG <- "#38e56d"
-
-#' ET Colors
-#' @export
-ET_YL <- "#fff200"
-
-#' ET Colors
-#' @export
-ET_JB <- "#333333"
-
-
 CM_MIN   <- '2021.01'
 CM_MAX   <- '2025.06'
 STEP_MIN <- 1
@@ -41,5 +17,3 @@ SCOPE_PRDH <- c(
   '53',  # TANOSHI
   '65'   # NATURELA
 )
-
-

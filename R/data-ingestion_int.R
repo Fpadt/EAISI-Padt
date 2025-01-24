@@ -254,7 +254,7 @@
 #' @title Internal Helper: Retrieve a Pipeline by ohdest
 #'
 #' @description
-#' Internal helper function that queries all available pipelines (via \code{fGetPipeLines()})
+#' Internal helper function that queries all available pipelines (via \code{pa_Get_Pipelines()})
 #' and returns only those relevant for a given \code{ohdest}. The returned data.table is then sorted.
 #'
 #' @param ohdest A character string indicating which pipeline to filter on.
@@ -264,11 +264,11 @@
 #'
 #' @details
 #' This is an internal function (\emph{not exported}) and is intended to be used by other functions
-#' within this package. It relies on \code{fGetPipeLines()} to load the master pipeline data first.
+#' within this package. It relies on \code{pa_Get_Pipelines()} to load the master pipeline data first.
 #'
 #' @keywords internal
 .get_pipe_line <- function(ohdest) {
-  fGetPipeLines() %>%
+  pa_Get_Pipelines() %>%
     .[OHDEST == ohdest] %T>%
     setorder(OHDEST, POSIT)
 }

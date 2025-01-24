@@ -33,7 +33,7 @@
 #'   [yaml::write_yaml()] for saving configurations.
 #'
 #' @export
-setup_project_structure <- function(
+pa_Setup_Project_Structure <- function(
     root_dir         = ".",
     dtap_levels      = DTAP,
     bsgp_levels      = BSGP,
@@ -114,7 +114,7 @@ setup_project_structure <- function(
 #' @return Invisibly returns `NULL` after updating the configuration.
 #'
 #' @export
-set_current_environment <- function(
+pa_Set_Current_Environment <- function(
     .project_dir = ".",
     .environment = "Production"
 ) {
@@ -129,7 +129,7 @@ set_current_environment <- function(
     .project_dir = .project_dir
   )
 
-  .copy_config_folder(get_environment_path())
+  .copy_config_folder(pa_get_environment_path())
 
 }
 

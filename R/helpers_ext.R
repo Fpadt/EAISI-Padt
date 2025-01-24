@@ -7,14 +7,14 @@
 #' @return A character vector where numeric strings are left-padded with zeros to a width of 18. Non-numeric strings remain unchanged.
 #'
 #' @details
-#' This function mimics the behavior of SAP's \code{CONVERSION_EXIT_MATN1_INPUT}, which ensures material numbers are standardized to 18 characters by adding leading zeros.
+#' This function mimics the behavior of SAP's \code{CONVERSION_EXIT_pa_MATN1_INPUT}, which ensures material numbers are standardized to 18 characters by adding leading zeros.
 #'
 #' @examples
-#' MATN1(c("123", "456789", "A123"))
+#' pa_MATN1(c("123", "456789", "A123"))
 #' # Returns: c("000000000000000123", "000000000000456789", "A123")
 #'
 #' @export
-MATN1 <- function(x) {
+pa_MATN1 <- function(x) {
   .LP0(x, 18)
 }
 
@@ -29,14 +29,14 @@ MATN1 <- function(x) {
 #'         Non-numeric strings will be returned unchanged.
 #'
 #' @examples
-#' RL0("00123") # Returns "123"
-#' RL0("abc123") # Returns "abc123"
-#' RL0(c("00123", "abc123", "000045")) # Returns c("123", "abc123", "45")
+#' pa_RL0("00123") # Returns "123"
+#' pa_RL0("abc123") # Returns "abc123"
+#' pa_RL0(c("00123", "abc123", "000045")) # Returns c("123", "abc123", "45")
 #'
 #' @export
-RL0 <-
+pa_RL0 <-
   function(x){
-    # like CONVERSION_EXIT_MATN1_INPUT
+    # like CONVERSION_EXIT_pa_MATN1_INPUT
     # only remove leading zero's in case it is a number
     is_num <- grepl("^[0-9]+$", x)
     ifelse(
@@ -44,4 +44,42 @@ RL0 <-
       sub("^0*", "", x, perl = TRUE),
       x
     )
+  }
+
+#' Preview the Header of a Parquet File
+#'
+#' Retrieves the first \code{n} rows of a Parquet file as a \code{data.table}.
+#'
+#' @param .fn Character. The file path to the Parquet file.
+#' @param .n Numeric. The number of rows to retrieve. Defaults to 1000.
+#'
+#' @return A \code{data.table} containing the first \code{n} rows of the Parquet file.
+#'
+#' @details
+#' This function connects to DuckDB to query the specified Parquet file and fetch the first \code{n} rows.
+#'
+#' @examples
+#' # example follows
+#' @export
+pa_Head_PQT <-
+  function(.fn, .n = 1000){
+
+    con <- .get_duckdb_conn()
+
+    on.exit( .close_duckdb_conn())
+
+    query <- glue_sql("
+    SELECT
+      *
+    FROM
+      read_parquet([{`.fn`}])
+    LIMIT {.n}
+   ", .con = con)
+
+    dt <-
+      dbGetQuery(con, query) %>%
+      setDT()
+
+    return(dt)
+
   }

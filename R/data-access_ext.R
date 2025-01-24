@@ -30,24 +30,24 @@
 #' @examples
 #' \dontrun{
 #' # Fetch all material master data
-#' materials <- fGet_MAT()
+#' materials <- pa_Get_MAT()
 #'
 #' # Fetch material data filtered by material and sales organization
-#' materials <- fGet_MAT(
+#' materials <- pa_Get_MAT(
 #'   .material = c("MAT001", "MAT002"),
 #'   .salesorg = c("SORG001", "SORG002"),
 #'   .n = 100
 #' )
 #'
 #' # Fetch only material master data per plant
-#' materials <- fGet_MAT(.ftype = 3)
+#' materials <- pa_Get_MAT(.ftype = 3)
 #' }
 #'
 #' @import data.table
 #' @importFrom DBI dbGetQuery
 #' @importFrom glue glue_sql
 #' @export
-fGet_MAT <- function(
+pa_Get_MAT <- function(
     .material    = NULL,     # Optional user-supplied material
     .salesorg    = NULL,     # Optional user-supplied salesorg
     .scope_matl  = TRUE,     # restrict to Pythia Scope
@@ -127,16 +127,16 @@ fGet_MAT <- function(
 #' @examples
 #' \dontrun{
 #' # Fetch all DYN data
-#' dyn_data <- fGet_DYN()
+#' dyn_data <- pa_Get_DYN()
 #'
 #' # Fetch data filtered by material and sales organization
-#' dyn_data <- fGet_DYN(
+#' dyn_data <- pa_Get_DYN(
 #'   .material = c("MAT001", "MAT002"),
 #'   .salesorg = c("SORG001", "SORG002")
 #' )
 #'
 #' # Fetch data for a specific version type and calendar month range
-#' dyn_data <- fGet_DYN(
+#' dyn_data <- pa_Get_DYN(
 #'   .vtype = "FORECAST",
 #'   .cm_min = "202301",
 #'   .cm_max = "202312"
@@ -146,7 +146,7 @@ fGet_MAT <- function(
 #' @import data.table
 #' @importFrom DBI dbGetQuery
 #' @export
-fGet_DYN <-
+pa_Get_DYN <-
   function(
     .vtype       = NULL    , # NULL will get all vtypes
     .ftype       = NULL    , # NULL will get all ftypes
@@ -225,7 +225,7 @@ fGet_DYN <-
 #' @examples
 #' # Fetch RTP data for all materials and sales organizations in the Pythia scope
 #' @export
-fGet_RTP <-
+pa_Get_RTP <-
   function(
     .material    = NULL    , # Optional user-supplied material
     .salesorg    = NULL    , # Optional user-supplied salesorg
@@ -324,7 +324,7 @@ fGet_RTP <-
 #' @examples
 #' # Fetch IPM data for all materials and sales organizations in the Pythia scope
 #' @export
-fGet_IPM <-
+pa_Get_IPM <-
   function(
     .material    = NULL    , # Optional user-supplied material
     .salesorg    = NULL    , # Optional user-supplied salesorg

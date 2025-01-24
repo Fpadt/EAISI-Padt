@@ -44,11 +44,11 @@
 #' )
 #'
 #' # Calculate accuracy metrics
-#' result <- fCalc_Accuracy(.tab)
+#' result <- pa_Calc_Accuracy(.tab)
 #' print(result)
 #'
 #' @export
-fCalc_Accuracy <- function(
+pa_Calc_Accuracy <- function(
     .tab,
     .act_ftype = 1,
     .fct_ftype = 2) {

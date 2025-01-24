@@ -23,19 +23,19 @@
 #' @examples
 #' \dontrun{
 #'   # Fetch pipeline data
-#'   dt_pipe <- fGetPipeLines()
+#'   dt_pipe <- pa_Get_Pipelines()
 #'   head(dt_pipe)
 #' }
 #'
 #' @export
-fGetPipeLines <- function() {
+pa_Get_Pipelines <- function() {
 
   rbind(
     fread(file = file.path(
-      get_environment_path(), "config", "B4_PIPELINE_ORG.csv")) %>%
+      pa_get_environment_path(), "config", "B4_PIPELINE_ORG.csv")) %>%
       .[, `:=`(SRC = "O", WHERE_CLAUSE = "")],
     fread(file = file.path(
-      get_environment_path(), "config", "B4_PIPELINE_MOD.csv")) %>%
+      pa_get_environment_path(), "config", "B4_PIPELINE_MOD.csv")) %>%
       .[, `:=`(SRC = "C")]
   ) %T>%
     setorder(SRC, OHDEST, POSIT) %>%
@@ -73,7 +73,7 @@ fGetPipeLines <- function() {
 #' \code{\link{.get_pipe_line}}, \code{\link{.transform_csv_to_parquet}}
 #'
 #' @export
-fTransform_csv_to_parquet <- function(
+pa_Transform_csv_to_parquet <- function(
     source_path,
     output_path,
     file_pattern,
