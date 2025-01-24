@@ -15,7 +15,7 @@
 #' `environment`) are missing, the function will stop with an error message.
 #'
 #' @export
-pa_get_environment_path <- function(
+pa_getwd <- function(
     project_dir = "."
 ) {
   # Normalize project directory

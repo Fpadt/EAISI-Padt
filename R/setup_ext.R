@@ -114,7 +114,7 @@ pa_Setup_Project_Structure <- function(
 #' @return Invisibly returns `NULL` after updating the configuration.
 #'
 #' @export
-pa_Set_Current_Environment <- function(
+pa_set_environment <- function(
     .project_dir = ".",
     .environment = "Production"
 ) {
@@ -129,7 +129,7 @@ pa_Set_Current_Environment <- function(
     .project_dir = .project_dir
   )
 
-  .copy_config_folder(pa_get_environment_path())
+  .copy_config_folder(pa_getwd())
 
 }
 

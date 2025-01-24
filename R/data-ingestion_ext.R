@@ -32,10 +32,10 @@ pa_Get_Pipelines <- function() {
 
   rbind(
     fread(file = file.path(
-      pa_get_environment_path(), "config", "B4_PIPELINE_ORG.csv")) %>%
+      pa_getwd(), "config", "B4_PIPELINE_ORG.csv")) %>%
       .[, `:=`(SRC = "O", WHERE_CLAUSE = "")],
     fread(file = file.path(
-      pa_get_environment_path(), "config", "B4_PIPELINE_MOD.csv")) %>%
+      pa_getwd(), "config", "B4_PIPELINE_MOD.csv")) %>%
       .[, `:=`(SRC = "C")]
   ) %T>%
     setorder(SRC, OHDEST, POSIT) %>%

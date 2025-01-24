@@ -51,7 +51,7 @@
 
   # Validate root directory
   root_dir <- tryCatch({
-    pa_get_environment_path()
+    pa_getwd()
   }, error = function(e) {
     stop("Error retrieving root directory: ", e$message)
   })
