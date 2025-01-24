@@ -13,11 +13,11 @@
 Returns a \code{data.table} with pipeline steps (sorted by \code{OHDEST}, \code{POSIT}) for the specified \code{ohdest}.
 }
 \description{
-Internal helper function that queries all available pipelines (via \code{pa_Get_Pipelines()})
+Internal helper function that queries all available pipelines (via \code{pa_get_pipelines()})
 and returns only those relevant for a given \code{ohdest}. The returned data.table is then sorted.
 }
 \details{
 This is an internal function (\emph{not exported}) and is intended to be used by other functions
-within this package. It relies on \code{pa_Get_Pipelines()} to load the master pipeline data first.
+within this package. It relies on \code{pa_get_pipelines()} to load the master pipeline data first.
 }
 \keyword{internal}

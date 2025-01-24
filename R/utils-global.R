@@ -7,7 +7,8 @@ utils::globalVariables(
     ".",
     "SRC", "OHDEST", "POSIT",
     "WHERE_CLAUSE", "SCOPE_MATL",
-    "area", "vtype", "ftype", "fname",
+    "pa_DTAP", "pa_BSGP", "pa_AREA",
+    "vtype", "ftype", "fname",
     "VTYPE", "FTYPE", "SALESORG", "PLANT", "MATERIAL", "CALMONTH", "Q", "STEP"
     )
   )

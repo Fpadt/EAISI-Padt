@@ -308,8 +308,8 @@
 
   # Get the list of files to query for the first file type in .ftype
   FN_MATL <- .get_data_full_file_names(
-    .bsgp  = 2,
-    .area  = 4,
+    .pa_BSGP  = 2,
+    .pa_AREA  = 4,
     .vtype = '010',
     .ftype = 1,
     .etype = "parquet"
@@ -407,7 +407,7 @@
   if (!is.null(.material) && length(.material) > 0) {
     .clauses <- c(
       .clauses,
-      glue_sql("MATERIAL IN ({vals*})", vals = pa_MATN1_I(.material), .con = .con)
+      glue_sql("MATERIAL IN ({vals*})", vals = pa_matn1_input(.material), .con = .con)
     )
   }
 

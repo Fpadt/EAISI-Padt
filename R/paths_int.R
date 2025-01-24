@@ -2,8 +2,8 @@
 #'
 #' Constructs full file paths for a given combination of parameters and returns them as a single string separated by commas.
 #'
-#' @param .bsgp Integer. The index corresponding to the BSGP (Bronze, Silver, Gold, Platinum) tier. Must align with the \code{BSGP} vector.
-#' @param .area Integer. The index corresponding to the functional area. Must align with the \code{AREA} vector.
+#' @param .pa_BSGP Integer. The index corresponding to the pa_BSGP (Bronze, Silver, Gold, Platinum) tier. Must align with the \code{pa_BSGP} vector.
+#' @param .pa_AREA Integer. The index corresponding to the functional pa_AREA. Must align with the \code{pa_AREA} vector.
 #' @param .vtype Character. The data type code (e.g., "010", "060").
 #' @param .ftype Integer. The file type code used to identify the file in the configuration table.
 #' @param .etype Character. The file extension (e.g., "parquet", "csv").
@@ -18,20 +18,20 @@
 #' @import data.table
 #' @keywords internal
 .get_data_full_file_names <- function(
-    .bsgp,
-    .area,
+    .pa_BSGP,
+    .pa_AREA,
     .vtype,
     .ftype,
     .etype
 ) {
   # Validate input parameters
-  if (missing(.bsgp) || missing(.area) || missing(.vtype) || missing(.ftype) || missing(.etype)) {
-    stop("All arguments (.bsgp, .area, .vtype, .ftype, .etype) must be provided.")
+  if (missing(.pa_BSGP) || missing(.pa_AREA) || missing(.vtype) || missing(.ftype) || missing(.etype)) {
+    stop("All arguments (.pa_BSGP, .pa_AREA, .vtype, .ftype, .etype) must be provided.")
   }
 
   # Load paths table (should ideally be moved to a configuration setup or loaded once for efficiency)
   paths_parquet_files <- data.table::fread("
-    area, vtype, ftype, all, fname
+    pa_AREA, vtype, ftype, all, fname
     1   , 010  , 1,     *  , SDSFRPR1
     1   , 010  , 3,     *  , SDSFRLV1
     1   , 010  , 2,     *  , SDSFRPR3
@@ -56,16 +56,16 @@
     stop("Error retrieving root directory: ", e$message)
   })
 
-  # Validate if .bsgp and .area are within acceptable ranges
-  if (.bsgp > length(BSGP) || .area > length(AREA)) {
-    stop("Invalid .bsgp or .area value. Ensure it aligns with BSGP and AREA definitions.")
+  # Validate if .pa_BSGP and .pa_AREA are within acceptable ranges
+  if (.pa_BSGP > length(pa_BSGP) || .pa_AREA > length(pa_AREA)) {
+    stop("Invalid .pa_BSGP or .pa_AREA value. Ensure it aligns with pa_BSGP and pa_AREA definitions.")
   }
 
   # Filter paths and construct full file paths
   filtered_files <- paths_parquet_files[
-    area == .area & vtype %chin% .vtype & ftype %in% .ftype,
+    pa_AREA == .pa_AREA & vtype %chin% .vtype & ftype %in% .ftype,
     file.path(
-      root_dir, BSGP[.bsgp], AREA[.area],
+      root_dir, pa_BSGP[.pa_BSGP], pa_AREA[.pa_AREA],
       paste0(fname, all, ".", .etype)
     )
   ]

@@ -2,7 +2,7 @@
 % Please edit documentation in R/setup_ext.R
 \name{pa_set_environment}
 \alias{pa_set_environment}
-\title{Set the Current DTAP Environment}
+\title{Set the Current pa_DTAP Environment}
 \usage{
 pa_set_environment(.project_dir = ".", .environment = "Production")
 }
@@ -11,13 +11,13 @@ pa_set_environment(.project_dir = ".", .environment = "Production")
 where the `.config.yaml` file is located. Defaults to `"."`.}
 
 \item{.environment}{A character string specifying the environment to set.
-Must be one of the values in `DTAP`.}
+Must be one of the values in `pa_DTAP`.}
 }
 \value{
 Invisibly returns `NULL` after updating the configuration.
 }
 \description{
-Updates the `.config.yaml` file to indicate which DTAP environment
+Updates the `.config.yaml` file to indicate which pa_DTAP environment
 (Development, Test, Acceptance, Production) is currently active.
 }
 \details{

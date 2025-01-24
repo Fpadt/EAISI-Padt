@@ -7,7 +7,8 @@
 #' @param project_dir Character. The path to the project directory containing the `.config.yaml` file.
 #' @return Character. The absolute path to the working directory.
 #' @export
-pa_getwd <- function(project_dir) {
+pa_getwd <- function(
+    project_dir = ".") {
 
   # Check if the project directory exists
   if (!dir.exists(project_dir)) {

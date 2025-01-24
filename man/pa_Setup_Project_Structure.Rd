@@ -6,9 +6,9 @@
 \usage{
 pa_Setup_Project_Structure(
   root_dir = ".",
-  dtap_levels = DTAP,
-  bsgp_levels = BSGP,
-  functional_areas = AREA,
+  pa_DTAP_levels = pa_DTAP,
+  pa_BSGP_levels = pa_BSGP,
+  functional_pa_AREAs = pa_AREA,
   project_dir = "."
 )
 }
@@ -16,15 +16,15 @@ pa_Setup_Project_Structure(
 \item{root_dir}{A character string specifying the top-level directory under
 which all subdirectories will be created. Defaults to `"."`.}
 
-\item{dtap_levels}{A character vector defining the DTAP levels.
-Defaults to `DTAP` = c("Development", "Test", "Acceptance", "Production").}
+\item{pa_DTAP_levels}{A character vector defining the pa_DTAP levels.
+Defaults to `pa_DTAP` = c("Development", "Test", "Acceptance", "Production").}
 
-\item{bsgp_levels}{A character vector defining the BSGP stages.
-Defaults to `BSGP` = c("Bronze", "Silver", "Gold", "Platinum").}
+\item{pa_BSGP_levels}{A character vector defining the pa_BSGP stages.
+Defaults to `pa_BSGP` = c("Bronze", "Silver", "Gold", "Platinum").}
 
-\item{functional_areas}{A character vector defining functional areas within
-each BSGP stage. Defaults to
-`AREA` = c("sales", "stock", "promotions", "master_data").}
+\item{functional_pa_AREAs}{A character vector defining functional pa_AREAs within
+each pa_BSGP stage. Defaults to
+`pa_AREA` = c("sales", "stock", "promotions", "master_data").}
 
 \item{project_dir}{A character string specifying the directory where the
 `.config.yaml` file will be saved or updated. Defaults to `"."`.}
@@ -33,14 +33,14 @@ each BSGP stage. Defaults to
 Invisibly returns the normalized `root_dir`.
 }
 \description{
-Creates a directory structure for different DTAP environments, BSGP stages,
-and functional areas, and saves the root directory location in `.config.yaml`.
+Creates a directory structure for different pa_DTAP environments, pa_BSGP stages,
+and functional pa_AREAs, and saves the root directory location in `.config.yaml`.
 }
 \details{
 This function constructs a multi-level directory hierarchy reflecting
-different DTAP (Development, Test, Acceptance, Production) environments,
-each with BSGP (Bronze, Silver, Gold, Platinum) stages and designated
-functional areas (e.g., "sales", "stock"). If the specified `root_dir` is
+different pa_DTAP (Development, Test, Acceptance, Production) environments,
+each with pa_BSGP (Bronze, Silver, Gold, Platinum) stages and designated
+functional pa_AREAs (e.g., "sales", "stock"). If the specified `root_dir` is
 within the user's OneDrive path (either consumer or commercial), the path
 stored in the YAML file will be replaced with a placeholder
 ("OneDriveConsumer" or "OneDriveBusiness") and the relative subdirectory

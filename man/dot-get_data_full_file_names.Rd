@@ -4,12 +4,12 @@
 \alias{.get_data_full_file_names}
 \title{Get Full File Names as a Comma-Separated String}
 \usage{
-.get_data_full_file_names(.bsgp, .area, .vtype, .ftype, .etype)
+.get_data_full_file_names(.pa_BSGP, .pa_AREA, .vtype, .ftype, .etype)
 }
 \arguments{
-\item{.bsgp}{Integer. The index corresponding to the BSGP (Bronze, Silver, Gold, Platinum) tier. Must align with the \code{BSGP} vector.}
+\item{.pa_BSGP}{Integer. The index corresponding to the pa_BSGP (Bronze, Silver, Gold, Platinum) tier. Must align with the \code{pa_BSGP} vector.}
 
-\item{.area}{Integer. The index corresponding to the functional area. Must align with the \code{AREA} vector.}
+\item{.pa_AREA}{Integer. The index corresponding to the functional pa_AREA. Must align with the \code{pa_AREA} vector.}
 
 \item{.vtype}{Character. The data type code (e.g., "010", "060").}
 

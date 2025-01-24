@@ -71,8 +71,8 @@ pa_Get_MAT <- function(
 
   # Get the list of files to query for the first file type in .ftype
   file_list <- .get_data_full_file_names(
-    .bsgp  = 2,
-    .area  = 4,
+    .pa_BSGP  = 2,
+    .pa_AREA  = 4,
     .vtype = '010',
     .ftype = .ftype[1], # Use the first file type in .ftype
     .etype = "parquet"

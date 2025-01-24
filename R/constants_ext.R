@@ -1,43 +1,40 @@
-# ET color palette
-# https://coolors.co/3e074a-0f431c-fde8e9-f0f600
-
-#' ET Colors
+#' Ecotone Brand Colors
+#'
+#' @details authorized colours for the logo.
+#' Castle Green will only be used for the housing of the logo.
+#' The colours for the leaves are Forest Green, Light Green and Yellow.
+#' The ecotone wordmark colour is White.
+#' For the tagline only Jet Black or White can be used.
+#' [](https://coolors.co/3e074a-0f431c-fde8e9-f0f600)
 #' @export
-ET_CG <- "#0f5e3c"
-
-#' ET Colors
-#' @export
-ET_FG <- "#089b35"
-
-#' ET Colors
-#' @export
-ET_LG <- "#38e56d"
-
-#' ET Colors
-#' @export
-ET_YL <- "#fff200"
-
-#' ET Colors
-#' @export
-ET_JB <- "#333333"
+pa_ET_COLS <- c(
+  WT = "#FFFFFF", CG = "#0f5e3c",
+  FG = "#089b35", LG = "#38e56d",
+  YL = "#fff200", BL = "#000000"
+)
 
 # R/constants.R
-#' Vector of DTAP Environments
+#' pa_DTAP Environments
 #'
-#' These are the default DTAP environments used in the package.
+#' These are the default pa_DTAP environments used in the package.
+#'
+#' @details Demo environment is to showcase the package functionality
+#'
 #' @export
-DTAP <- c("Development", "Test", "Acceptance", "Production")
+pa_pa_DTAP <- c("Development", "Test", "Acceptance", "Production", "Demo")
 
-#' Vector of BSGP Stages
+#' pa_BSGP Stages
 #'
 #' The four data stages commonly used in data processing.
-#' @export
-BSGP <- c("Bronze", "Silver", "Gold", "Platinum")
-
-#' Vector of Functional Areas
 #'
-#' Common functional areas for demonstration purposes.
+#' @details Platinum is used for Forecast Exports
 #' @export
-AREA <- c("sales", "stock", "promotions", "master_data")
+pa_pa_BSGP <- c("Bronze", "Silver", "Gold", "Platinum")
+
+#' Functional pa_AREAs
+#'
+#' Common functional pa_AREAs for demonstration purposes.
+#' @export
+pa_pa_AREA <- c("sales", "stock", "promotions", "master_data")
 
 

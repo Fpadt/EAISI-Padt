@@ -1,17 +1,17 @@
 #' Set Up a Project Directory Structure
 #'
-#' Creates a directory structure for different DTAP environments, BSGP stages,
-#' and functional areas, and saves the root directory location in `.config.yaml`.
+#' Creates a directory structure for different pa_DTAP environments, pa_BSGP stages,
+#' and functional pa_AREAs, and saves the root directory location in `.config.yaml`.
 #'
 #' @param root_dir A character string specifying the top-level directory under
 #'   which all subdirectories will be created. Defaults to `"."`.
-#' @param dtap_levels A character vector defining the DTAP levels.
-#'   Defaults to `DTAP` = c("Development", "Test", "Acceptance", "Production").
-#' @param bsgp_levels A character vector defining the BSGP stages.
-#'   Defaults to `BSGP` = c("Bronze", "Silver", "Gold", "Platinum").
-#' @param functional_areas A character vector defining functional areas within
-#'   each BSGP stage. Defaults to
-#'   `AREA` = c("sales", "stock", "promotions", "master_data").
+#' @param pa_DTAP_levels A character vector defining the pa_DTAP levels.
+#'   Defaults to `pa_DTAP` = c("Development", "Test", "Acceptance", "Production").
+#' @param pa_BSGP_levels A character vector defining the pa_BSGP stages.
+#'   Defaults to `pa_BSGP` = c("Bronze", "Silver", "Gold", "Platinum").
+#' @param functional_pa_AREAs A character vector defining functional pa_AREAs within
+#'   each pa_BSGP stage. Defaults to
+#'   `pa_AREA` = c("sales", "stock", "promotions", "master_data").
 #' @param project_dir A character string specifying the directory where the
 #'   `.config.yaml` file will be saved or updated. Defaults to `"."`.
 #'
@@ -19,9 +19,9 @@
 #'
 #' @details
 #' This function constructs a multi-level directory hierarchy reflecting
-#' different DTAP (Development, Test, Acceptance, Production) environments,
-#' each with BSGP (Bronze, Silver, Gold, Platinum) stages and designated
-#' functional areas (e.g., "sales", "stock"). If the specified `root_dir` is
+#' different pa_DTAP (Development, Test, Acceptance, Production) environments,
+#' each with pa_BSGP (Bronze, Silver, Gold, Platinum) stages and designated
+#' functional pa_AREAs (e.g., "sales", "stock"). If the specified `root_dir` is
 #' within the user's OneDrive path (either consumer or commercial), the path
 #' stored in the YAML file will be replaced with a placeholder
 #' ("OneDriveConsumer" or "OneDriveBusiness") and the relative subdirectory
@@ -35,9 +35,9 @@
 #' @export
 pa_Setup_Project_Structure <- function(
     root_dir         = ".",
-    dtap_levels      = DTAP,
-    bsgp_levels      = BSGP,
-    functional_areas = AREA,
+    pa_DTAP_levels      = pa_DTAP,
+    pa_BSGP_levels      = pa_BSGP,
+    functional_pa_AREAs = pa_AREA,
     project_dir      = "."
 ) {
   # Get OneDrive paths from environment variables
@@ -74,11 +74,11 @@ pa_Setup_Project_Structure <- function(
     stop("Failed to create the root directory: ", root_dir, "\n", e$message)
   })
 
-  # Create the DTAP, BSGP, and functional area directory structure
-  for (dtap in dtap_levels) {
-    for (bsgp in bsgp_levels) {
-      for (area in functional_areas) {
-        dir_create(path(root_dir, dtap, bsgp, area))
+  # Create the pa_DTAP, pa_BSGP, and functional pa_AREA directory structure
+  for (pa_DTAP in pa_DTAP_levels) {
+    for (pa_BSGP in pa_BSGP_levels) {
+      for (pa_AREA in functional_pa_AREAs) {
+        dir_create(path(root_dir, pa_DTAP, pa_BSGP, pa_AREA))
       }
     }
 
@@ -96,15 +96,15 @@ pa_Setup_Project_Structure <- function(
   return(invisible(root_dir))
 }
 
-#' Set the Current DTAP Environment
+#' Set the Current pa_DTAP Environment
 #'
-#' Updates the `.config.yaml` file to indicate which DTAP environment
+#' Updates the `.config.yaml` file to indicate which pa_DTAP environment
 #' (Development, Test, Acceptance, Production) is currently active.
 #'
 #' @param .project_dir A character string specifying the project directory
 #'   where the `.config.yaml` file is located. Defaults to `"."`.
 #' @param .environment A character string specifying the environment to set.
-#'   Must be one of the values in `DTAP`.
+#'   Must be one of the values in `pa_DTAP`.
 #'
 #' @details
 #' If an invalid environment name is provided, the function will stop
@@ -118,8 +118,8 @@ pa_set_environment <- function(
     .project_dir = ".",
     .environment = "Production"
 ) {
-  if(!.environment %in% DTAP){
-    message(green(paste0("Valid environments: ", paste(DTAP, collapse = ", "))))
+  if(!.environment %in% pa_DTAP){
+    message(green(paste0("Valid environments: ", paste(pa_DTAP, collapse = ", "))))
     stop("Invalid environment: ", .environment)
   }
 

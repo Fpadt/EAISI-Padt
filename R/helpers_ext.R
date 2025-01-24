@@ -15,11 +15,11 @@
 #' adding leading zeros.
 #'
 #' @examples
-#' pa_MATN1_I(c("123", "456789", "A123"))
+#' pa_matn1_input(c("123", "456789", "A123"))
 #' # Returns: c("000000000000000123", "000000000000456789", "A123")
 #'
 #' @export
-pa_MATN1_I <- function(x) {
+pa_matn1_input <- function(x) {
   # like CONVERSION_EXIT_MATN1_INPUT
   # only leftpad leading zero's in case it is a number
   .LP0(x, 18)
@@ -40,12 +40,12 @@ pa_MATN1_I <- function(x) {
 #' which removes leading zeros from material numbers if these only contain numbers.
 #'
 #' @examples
-#' pa_MATN1_O("00123")     # Returns "123"
-#' pa_MATN1_O("00000A123") # Returns "00000A123"
-#' pa_MATN1_O(c("00123", "00000A123", "A000045")) # Returns c("123", "abc123", "A000045")
+#' pa_matn1_output("00123")     # Returns "123"
+#' pa_matn1_output("00000A123") # Returns "00000A123"
+#' pa_matn1_output(c("00123", "00000A123", "A000045")) # Returns c("123", "abc123", "A000045")
 #'
 #' @export
-pa_MATN1_O <-
+pa_matn1_output <-
   function(x){
     # like CONVERSION_EXIT_MATN1_OUTPUT
     # only remove leading zero's in case it is a number
@@ -70,7 +70,7 @@ pa_MATN1_O <-
 #' This function connects to DuckDB to query the specified Parquet file and fetch the first \code{n} rows.
 #'
 #' @export
-pa_Head_PQT <-
+pa_head_parquet <-
   function(.fn, .n = 1000){
 
     con <- .get_duckdb_conn()

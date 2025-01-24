@@ -23,12 +23,12 @@
 #' @examples
 #' \dontrun{
 #'   # Fetch pipeline data
-#'   dt_pipe <- pa_Get_Pipelines()
+#'   dt_pipe <- pa_get_pipelines()
 #'   head(dt_pipe)
 #' }
 #'
 #' @export
-pa_Get_Pipelines <- function() {
+pa_get_pipelines <- function() {
 
   rbind(
     fread(file = file.path(
@@ -73,7 +73,7 @@ pa_Get_Pipelines <- function() {
 #' \code{\link{.get_pipe_line}}, \code{\link{.transform_csv_to_parquet}}
 #'
 #' @export
-pa_Transform_csv_to_parquet <- function(
+pa_transform_csv_to_parquet <- function(
     source_path,
     output_path,
     file_pattern,

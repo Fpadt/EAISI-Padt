@@ -4,7 +4,7 @@
 \alias{pa_getwd}
 \title{Get Working Directory}
 \usage{
-pa_getwd(project_dir)
+pa_getwd(project_dir = ".")
 }
 \arguments{
 \item{project_dir}{Character. The path to the project directory containing the `.config.yaml` file.}
