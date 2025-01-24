@@ -185,7 +185,46 @@ fGet_DYN <-
 
   }
 
-
+#' Fetch RTP Data from DuckDB
+#'
+#' This function retrieves RTP (Real-Time Planning) data based on specified filters
+#' such as material, sales organization, and calendar month range. It fetches data
+#' from a DuckDB connection and returns it as a `data.table` object.
+#'
+#' @param .material [character] (default: `NULL`)
+#'   Optional user-supplied material filter. If not specified, all materials are included.
+#' @param .salesorg [character] (default: `NULL`)
+#'   Optional user-supplied sales organization filter. If not specified, all sales organizations are included.
+#' @param .scope_matl [logical] (default: `TRUE`)
+#'   If `TRUE`, restricts data to materials within the Pythia scope.
+#' @param .scope_sorg [logical] (default: `TRUE`)
+#'   If `TRUE`, restricts data to sales organizations within the Pythia scope.
+#' @param .cm_min [character] (default: `'202101'`)
+#'   Specifies the earliest calendar month for which data is available, formatted as `YYYYMM`.
+#' @param .cm_max [character] (default: `'202506'`)
+#'   Specifies the latest calendar month for which data is available, formatted as `YYYYMM`.
+#' @param .n [numeric] (default: `Inf`)
+#'   The maximum number of materials to return. Use `Inf` to return all matching records.
+#'
+#' @return A `data.table` object containing RTP data with the following columns:
+#'   - `SALESORG`: Sales organization code.
+#'   - `PLANT`: Plant code.
+#'   - `MATERIAL`: Material code.
+#'   - `STEP`: Processing step (fixed as `-1`).
+#'   - `CALMONTH`: Calendar month in `YYYYMM` format.
+#'   - `FTYPE`: Fixed as `'4'`.
+#'   - `VTYPE`: Fixed as `'010'`.
+#'   - `Q`: Sum of sales and free-of-charge quantities.
+#'   - `SLS`: Sum of sales quantities.
+#'   - `RET`: Sum of return quantities.
+#'   - `FOC`: Sum of free-of-charge quantities.
+#'   - `DIR`: Sum of direct sales quantities.
+#'   - `ICS`: Sum of intercompany sales quantities.
+#'   - `MSL`: Sum of MSL quantities.
+#'
+#' @examples
+#' # Fetch RTP data for all materials and sales organizations in the Pythia scope
+#' @export
 fGet_RTP <-
   function(
     .material    = NULL    , # Optional user-supplied material
@@ -240,11 +279,51 @@ fGet_RTP <-
       ", .con = config$duckdb_con)
 
     # fetch .n results and return as data.table
-    dbGetQuery(config$duckdb_con, query, n = .n) %>%
+    dbGetQuery(.get_duckdb_conn(), query, n = .n) %>%
       setDT()
 
   }
 
+#' Fetch IPM Data from DuckDB
+#'
+#' This function retrieves IPM (Inventory Planning Management) data based on specified filters
+#' such as material, sales organization, and calendar month range. It fetches data
+#' from a DuckDB connection and returns it as a `data.table` object.
+#'
+#' @param .material [character] (default: `NULL`)
+#'   Optional user-supplied material filter. If not specified, all materials are included.
+#' @param .salesorg [character] (default: `NULL`)
+#'   Optional user-supplied sales organization filter. If not specified, all sales organizations are included.
+#' @param .scope_matl [logical] (default: `TRUE`)
+#'   If `TRUE`, restricts data to materials within the Pythia scope.
+#' @param .scope_sorg [logical] (default: `TRUE`)
+#'   If `TRUE`, restricts data to sales organizations within the Pythia scope.
+#' @param .cm_min [character] (default: `'202101'`)
+#'   Specifies the earliest calendar month for which data is available, formatted as `YYYYMM`.
+#' @param .cm_max [character] (default: `'202506'`)
+#'   Specifies the latest calendar month for which data is available, formatted as `YYYYMM`.
+#' @param .n [numeric] (default: `Inf`)
+#'   The maximum number of materials to return. Use `Inf` to return all matching records.
+#'
+#' @return A `data.table` object containing IPM data with the following columns:
+#'   - `SALESORG`: Sales organization code.
+#'   - `PLANT`: Plant code.
+#'   - `MATERIAL`: Material code.
+#'   - `STEP`: Processing step (fixed as `-1`).
+#'   - `CALMONTH`: Calendar month in `YYYYMM` format.
+#'   - `FTYPE`: Fixed as `'3'`.
+#'   - `VTYPE`: Fixed as `'010'`.
+#'   - `Q`: Sum of sales and free-of-charge quantities.
+#'   - `SLS`: Sum of sales quantities.
+#'   - `RET`: Sum of return quantities.
+#'   - `FOC`: Sum of free-of-charge quantities.
+#'   - `DIR`: Sum of direct sales quantities.
+#'   - `ICS`: Sum of intercompany sales quantities.
+#'   - `MSL`: Sum of MSL quantities.
+#'
+#' @examples
+#' # Fetch IPM data for all materials and sales organizations in the Pythia scope
+#' @export
 fGet_IPM <-
   function(
     .material    = NULL    , # Optional user-supplied material
@@ -299,7 +378,7 @@ fGet_IPM <-
       ", .con = config$duckdb_con)
 
     # fetch .n results and return as data.table
-    dbGetQuery(config$duckdb_con, query, n = .n) %>%
+    dbGetQuery(.get_duckdb_conn(), query, n = .n) %>%
       setDT()
 
   }
