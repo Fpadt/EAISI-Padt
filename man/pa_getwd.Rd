@@ -2,24 +2,18 @@
 % Please edit documentation in R/paths_ext.R
 \name{pa_getwd}
 \alias{pa_getwd}
-\title{Get the Path to the Currently Set Environment}
+\title{Get Working Directory}
 \usage{
-pa_getwd(project_dir = ".")
+pa_getwd(project_dir)
 }
 \arguments{
-\item{project_dir}{A character string specifying the project directory
-where the `.config.yaml` file is located. Defaults to `"."`.}
+\item{project_dir}{Character. The path to the project directory containing the `.config.yaml` file.}
 }
 \value{
-A character string containing the absolute path to the current
-  environment.
+Character. The absolute path to the working directory.
 }
 \description{
-Reads the `.config.yaml` configuration and resolves placeholders such as
-`"OneDriveConsumer"` or `"OneDriveBusiness"` back to real file paths,
-then appends the currently set environment to the path.
-}
-\details{
-If `.config.yaml` does not exist or the required keys (`root_dir` and
-`environment`) are missing, the function will stop with an error message.
+Determines the working directory based on the project directory and the configuration file.
+resolves placeholders such as `"OneDriveConsumer"` or `"OneDriveBusiness"`
+back to real file paths, then appends the currently set environment to the path.
 }

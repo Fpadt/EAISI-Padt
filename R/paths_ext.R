@@ -1,49 +1,46 @@
-#' Get the Path to the Currently Set Environment
+#' Get Working Directory
 #'
-#' Reads the `.config.yaml` configuration and resolves placeholders such as
-#' `"OneDriveConsumer"` or `"OneDriveBusiness"` back to real file paths,
-#' then appends the currently set environment to the path.
+#' Determines the working directory based on the project directory and the configuration file.
+#' resolves placeholders such as `"OneDriveConsumer"` or `"OneDriveBusiness"`
+#' back to real file paths, then appends the currently set environment to the path.
 #'
-#' @param project_dir A character string specifying the project directory
-#'   where the `.config.yaml` file is located. Defaults to `"."`.
-#'
-#' @return A character string containing the absolute path to the current
-#'   environment.
-#'
-#' @details
-#' If `.config.yaml` does not exist or the required keys (`root_dir` and
-#' `environment`) are missing, the function will stop with an error message.
-#'
+#' @param project_dir Character. The path to the project directory containing the `.config.yaml` file.
+#' @return Character. The absolute path to the working directory.
 #' @export
-pa_getwd <- function(
-    project_dir = "."
-) {
+pa_getwd <- function(project_dir) {
+
+  # Check if the project directory exists
+  if (!dir.exists(project_dir)) {
+    stop("The provided project directory does not exist: ", project_dir)
+  }
+
   # Normalize project directory
   project_dir <- path_abs(project_dir)
 
   # Define the path for the .config file
   config_file <- path(project_dir, ".config.yaml")
 
-  # Check if the config file exists
-  if (!file_exists(config_file)) {
-    stop("Configuration file not found: ", config_file)
-  }
+  # Retrieve root_dir and environment from the YAML file
+  root_dir    <- pa_get_config_value("root_dir"   , config_file)
+  environment <- pa_get_config_value("environment", config_file)
 
-  # Read the configuration data
-  config_data <- read_yaml(config_file)
-
-  # Validate keys in the config
-  if (!"root_dir" %in% names(config_data)) {
-    stop("Key 'root_dir' is missing in the configuration file.")
+  # Check if root_dir and environment are valid
+  if (is.null(root_dir) || root_dir == "") {
+    stop("The 'root_dir' is not set or invalid in the .config.yaml file.")
   }
-  if (!"environment" %in% names(config_data)) {
-    stop("Key 'environment' is missing in the configuration file.")
+  if (is.null(environment) || environment == "") {
+    stop("The 'environment' is not set or invalid in the .config.yaml file.")
   }
 
   # Resolve placeholders in root_dir
-  root_dir <- path_abs(config_data$root_dir)
-  onedrive_consumer   <- path_abs(Sys.getenv("OneDriveConsumer", ""))
+  root_dir            <- path_abs(root_dir)
+  onedrive_consumer   <- path_abs(Sys.getenv("OneDriveConsumer"  , ""))
   onedrive_commercial <- path_abs(Sys.getenv("OneDriveCommercial", ""))
+
+  # Check environment variables
+  if (onedrive_consumer == "" || onedrive_commercial == "") {
+    stop("Environment variables 'OneDriveConsumer' or 'OneDriveCommercial' are not set.")
+  }
 
   if (path_has_parent(root_dir, "OneDriveConsumer")) {
     relative_path <- path_rel(root_dir, start = "OneDriveConsumer")
@@ -54,6 +51,8 @@ pa_getwd <- function(
   }
 
   # Construct and return the normalized environment path
-  environment_path <- path(root_dir, config_data$environment)
+  environment_path <- path(root_dir, environment)
+
   return(path_abs(environment_path))
 }
+
