@@ -1,5 +1,8 @@
 .PACKAGE_NAME <- "padt"
 
+fn_TRFN_ORG <- "transformation_rules_org.csv"
+fn_TRFN_MOD <- "transformation_rules_mod.csv"
+
 CM_MIN   <- '2021.01'
 CM_MAX   <- '2025.06'
 STEP_MIN <- 1

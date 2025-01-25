@@ -32,10 +32,10 @@ pa_transformations_get <- function() {
 
   rbind(
     fread(file = file.path(
-      pa_wd_get(), "config", "B4_PIPELINE_ORG.csv")) %>%
+      pa_wd_get(), "config", fn_TRFN_ORG)) %>%
       .[, `:=`(SRC = "O", WHERE_CLAUSE = "")],
     fread(file = file.path(
-      pa_wd_get(), "config", "B4_PIPELINE_MOD.csv")) %>%
+      pa_wd_get(), "config", fn_TRFN_MOD)) %>%
       .[, `:=`(SRC = "C")]
   ) %T>%
     setorder(SRC, OHDEST, POSIT) %>%
