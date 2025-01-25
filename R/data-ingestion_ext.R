@@ -32,10 +32,10 @@ pa_transformations_get <- function() {
 
   rbind(
     fread(file = file.path(
-      pa_wd_get(), "config", fn_TRFN_ORG)) %>%
+      pa_wd_get(), CONFIG_FLDR, fn_TRFN_ORG)) %>%
       .[, `:=`(SRC = "O", WHERE_CLAUSE = "")],
     fread(file = file.path(
-      pa_wd_get(), "config", fn_TRFN_MOD)) %>%
+      pa_wd_get(), CONFIG_FLDR, fn_TRFN_MOD)) %>%
       .[, `:=`(SRC = "C")]
   ) %T>%
     setorder(SRC, OHDEST, POSIT) %>%

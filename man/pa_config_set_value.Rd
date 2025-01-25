@@ -8,7 +8,7 @@ pa_config_set_value(
   .key,
   .value,
   config_file = ".config.yaml",
-  config_dir = "."
+  config_dir = file.path(".", CONFIG_FLDR)
 )
 }
 \arguments{
@@ -34,6 +34,6 @@ pa_config_set_value(
   .key = "sales.pipeline",
   .value = "OH_FRPR1",
   config_file = ".config.yaml",
-  config_dir = "."
+  config_dir = "./config"
 )
 }

@@ -2,7 +2,8 @@
 
 fn_TRFN_ORG <- "transformation_rules_org.csv"
 fn_TRFN_MOD <- "transformation_rules_mod.csv"
-CONFIG_FLDR <- "config"
+CONFIG_FLDR <- "_pa_config"
+PADEMO_FLDR <- "_pa_demo"
 
 CM_MIN   <- '2021.01'
 CM_MAX   <- '2025.06'

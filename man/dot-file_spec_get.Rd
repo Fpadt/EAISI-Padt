@@ -4,10 +4,7 @@
 \alias{.file_spec_get}
 \title{Get File Specification from YAML Configuration (Internal)}
 \usage{
-.file_spec_get(project_dir)
-}
-\arguments{
-\item{project_dir}{Character. The path to the project directory containing the `.config.yaml` file.}
+.file_spec_get()
 }
 \value{
 A list with the following elements:

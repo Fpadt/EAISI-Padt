@@ -64,12 +64,12 @@ pa_initialize <- function() {
   )
   if (choice2 == 1) {
     .copy_package_folder(
-      folder_name = "demo",
+      folder_name = PADEMO_FLDR,
       target_dir = ".",
       .overwrite = TRUE)
   } else if (choice2 == 2) {
     .copy_package_folder(
-      folder_name = "demo",
+      folder_name = PADEMO_FLDR,
       target_dir = ".",
       .overwrite = FALSE)
   } else if (choice1 == 4) {
@@ -85,7 +85,7 @@ pa_initialize <- function() {
     )
   )
   if (choice3 == 1) {
-    pa_config_set_value("environment", "demo")
+    pa_config_set_value("environment", PADEMO_FLDR)
     pa_config_set_value("data_dir"   , ".")
   }
 

@@ -4,7 +4,11 @@
 \alias{pa_config_get_value}
 \title{Get config value from YAML file with hierarchy support}
 \usage{
-pa_config_get_value(.key, config_file = ".config.yaml", config_dir = ".")
+pa_config_get_value(
+  .key,
+  config_file = ".config.yaml",
+  config_dir = file.path(".", CONFIG_FLDR)
+)
 }
 \arguments{
 \item{.key}{Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "sales.source_path").\cr}
