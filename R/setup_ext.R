@@ -73,7 +73,7 @@ pa_initialize <- function() {
       target_dir = ".",
       .overwrite = FALSE)
   } else if (choice1 == 4) {
-    stop("Initialization process stopped by user.")
+    message(crayon::red("Initialization process stopped by user."))
   }
 
   # Question 3: activate demo environment
