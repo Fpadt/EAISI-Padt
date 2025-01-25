@@ -40,12 +40,12 @@ pa_initialize <- function() {
   )
   if (choice1 == 1) {
     .copy_package_folder(
-      folder_name = "config",
+      folder_name = CONFIG_FLDR,
       target_dir = ".",
       .overwrite = TRUE)
   } else if (choice1 == 2) {
     .copy_package_folder(
-      folder_name = "config",
+      folder_name = CONFIG_FLDR,
       target_dir = ".",
       .overwrite = FALSE)
   } else if (choice1 == 4) {
