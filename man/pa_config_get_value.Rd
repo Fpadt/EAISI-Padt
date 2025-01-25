@@ -2,7 +2,7 @@
 % Please edit documentation in R/yaml_ext.R
 \name{pa_config_get_value}
 \alias{pa_config_get_value}
-\title{Get Config Value from YAML File with Hierarchy Support}
+\title{Get config value from YAML file with hierarchy support}
 \usage{
 pa_config_get_value(.key, config_file = ".config.yaml", config_dir = ".")
 }

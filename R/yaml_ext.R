@@ -1,4 +1,4 @@
-#' Get Config Value from YAML File with Hierarchy Support
+#' Get config value from YAML file with hierarchy support
 #'
 #' Retrieves a value from a YAML configuration file based on a hierarchical
 #' key using dot notation (e.g., "SALES.pipeline").
@@ -46,7 +46,7 @@ pa_config_get_value <- function(
 }
 
 
-#' Set Config Value in YAML File with Hierarchy Support
+#' Set config value in YAML file with hierarchy support
 #'
 #' Adds or updates a key-value pair in a YAML configuration file. Supports hierarchical
 #' keys using dot notation (e.g., "SALES.pipeline").
