@@ -25,14 +25,14 @@ Character. The normalized path of the updated configuration file.
 }
 \description{
 Adds or updates a key-value pair in a YAML configuration file. Supports hierarchical
-keys using dot notation (e.g., "SALES.pipeline"). If the section or key does not exist,
+keys using dot notation (e.g., "sales.pipeline"). If the section or key does not exist,
 it will be created. If it already exists, it will be updated.
 }
 \examples{
 # Set a nested key in a configuration file
 pa_config_set_value(
-  .key = "SALES.pipeline",
-  .value = "OH_DEST",
+  .key = "sales.pipeline",
+  .value = "OH_FRPR1",
   config_file = ".config.yaml",
   config_dir = "."
 )

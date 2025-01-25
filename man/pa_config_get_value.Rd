@@ -7,7 +7,7 @@
 pa_config_get_value(.key, config_file = ".config.yaml", config_dir = ".")
 }
 \arguments{
-\item{.key}{Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").\cr}
+\item{.key}{Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "sales.source_path").\cr}
 
 \item{config_file}{Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr}
 
@@ -18,7 +18,7 @@ The value associated with the given key, or NULL if the key does not exist.
 }
 \description{
 Retrieves a value from a YAML configuration file based on a hierarchical
-key using dot notation (e.g., "SALES.pipeline").
+key using dot notation (e.g., "sales.pipeline").
 }
 \examples{
 # Get a nested key in a configuration file
