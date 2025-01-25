@@ -18,7 +18,7 @@
 pa_config_get_value <- function(
     .key,
     config_file = ".config.yaml",
-    config_dir  = "."
+    config_dir  = file.path(".", CONFIG_FLDR)
     ) {
 
   # Load required package
@@ -71,14 +71,14 @@ pa_config_get_value <- function(
 #'   .key = "sales.pipeline",
 #'   .value = "OH_FRPR1",
 #'   config_file = ".config.yaml",
-#'   config_dir = "."
+#'   config_dir = "./config"
 #' )
 #' @export
 pa_config_set_value <- function(
     .key,
     .value,
     config_file = ".config.yaml",
-    config_dir = "."
+    config_dir  = file.path(".", CONFIG_FLDR)
     ) {
 
   # Load required package

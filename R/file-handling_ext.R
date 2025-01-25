@@ -19,7 +19,7 @@ pa_wd_get <- function(
   project_dir <- path_abs(project_dir)
 
   # Define the path for the .config file
-  config_file <- path(project_dir, ".config.yaml")
+  config_file <- path(project_dir, CONFIG_FLDR, ".config.yaml")
 
   # Retrieve root_dir and environment from the YAML file
   root_dir    <- pa_config_get_value("root_dir"   , config_file)

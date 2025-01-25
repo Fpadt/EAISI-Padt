@@ -278,7 +278,6 @@
 #' Internal function to retrieve the file specification from the YAML configuration file
 #' stored in the specified project directory.
 #'
-#' @param project_dir Character. The path to the project directory containing the `.config.yaml` file.
 #' @return A list with the following elements:
 #' \describe{
 #'   \item{DELIM}{Character. The delimiter used in the files (e.g., `";"`).}
@@ -286,25 +285,13 @@
 #'   \item{DATE_FORMAT}{Character. The date format used in the files (e.g., `\"\%Y-\%m-\%d\"`).}
 #' }
 #' @keywords internal
-.file_spec_get <- function(project_dir) {
-  # Validate project directory
-  if (!fs::dir_exists(project_dir)) {
-    stop("The specified project directory does not exist: ", project_dir)
-  }
-
-  # Define the path to the YAML configuration file
-  config_file <- fs::path(project_dir, ".config.yaml")
-
-  # Validate the configuration file
-  if (!fs::file_exists(config_file)) {
-    stop("The configuration file '.config.yaml' does not exist in the project directory: ", project_dir)
-  }
+.file_spec_get <- function() {
 
   # Retrieve file specification from the YAML file
   FILE_SPEC <- list(
-    DELIM       = pa_config_get_value(key = "DELIM", config_file = config_file),      # Delimiter
-    HEADER      = pa_config_get_value(key = "HEADER", config_file = config_file),     # Header
-    DATE_FORMAT = pa_config_get_value(key = "DATE_FORMAT", config_file = config_file) # Date format
+    DELIM       = pa_config_get_value(key = "DELIM"),      # Delimiter
+    HEADER      = pa_config_get_value(key = "HEADER"),     # Header
+    DATE_FORMAT = pa_config_get_value(key = "DATE_FORMAT") # Date format
   )
 
   # Validate the retrieved values
