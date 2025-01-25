@@ -1,0 +1,6 @@
+project:
+  name: Pythia's Advice
+  department: EAISI
+csv_file_spec:
+  delim: ;
+  date_format: '''%Y-%m-%d'''

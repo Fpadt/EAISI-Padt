@@ -124,7 +124,20 @@ pa_config_set_value <- function(
   config <- set_nested_value(config, key_parts, .value)
 
   # Write the updated configuration back to the YAML file
-  yaml::write_yaml(config, config_path)
+  yaml::write_yaml(config, config_path, indent = 2)
+
+  # Add blank lines between top-level sections for better readability
+  yaml_content <- readLines(config_path)
+  yaml_content <- paste0(
+    unlist(lapply(seq_along(yaml_content), function(i) {
+      if (i < length(yaml_content) && grepl("^\\S+:\\s*$", yaml_content[i])) {
+        return(c(yaml_content[i], "")) # Add a blank line after top-level keys
+      }
+      return(yaml_content[i])
+    })),
+    collapse = "\n"
+  )
+  writeLines(yaml_content, config_path)
 
   # Return the normalized path and print a message
   message(
