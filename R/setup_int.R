@@ -14,15 +14,15 @@
 #' defaults to the current working directory.
 #'
 #' @param folder_name Character. The folder within the package to copy. Defaults to `"extdata"`.
-#' @param source_path Character. The base path within the package where the folder resides. Defaults to `"inst"`.
+#' @param source_dir Character. The base path within the package where the folder resides. Defaults to `"inst"`.
 #' @param target_dir Character. The directory where the folder will be copied. Defaults to the current working directory `"."`.
 #' @return NULL. The function copies the folder and provides a message upon success.
 #' @examples
 #' # Copy the extdata folder to the current project directory
-#' .copy_package_folder(folder_name = "extdata", source_path = "inst", target_dir = ".")
+#' .copy_package_folder(folder_name = "extdata", source_dir = "inst", target_dir = ".")
 #'
 #' # Copy a different folder from the package to a custom directory
-#' .copy_package_folder(folder_name = "data", source_path = "inst", target_dir = "./my_project")
+#' .copy_package_folder(folder_name = "data", source_dir = "inst", target_dir = "./my_project")
 #' @keywords internal
 .copy_package_folder <- function(
     folder_name,
@@ -35,7 +35,7 @@
   package_path <- system.file(package = .PACKAGE_NAME, mustWork = TRUE)
 
   # Define the full source path (e.g., inst/extdata within the package)
-  full_source_path <- fs::path(package_path, source_path, folder_name)
+  full_source_path <- fs::path(package_path, source_dir, folder_name)
 
   # Validate the source path
   if (!fs::dir_exists(full_source_path)) {

@@ -1,9 +1,10 @@
-#' Run Installation Process for the Package
+#' Run installation process for the `padt`-package
 #'
-#' Guides the user through the package installation process by asking three questions
-#' and executing specific functions (`fun1`, `fun2`, `fun3`) based on the user's choices.
+#' Guides the user through the package installation process.
+#' user can choose to create the 'config' folder, copy the demo environment
+#' and activate the demo environment.
 #'
-#' @return NULL. Functions are executed based on user input.
+#' @return Message indicating the installation process is completed.
 #' @examples
 #' # Run the installation process
 #' run_installation()
@@ -14,7 +15,7 @@ pa_initialize <- function() {
   ask_question <- function(question, options) {
     message(silver(question))
     for (i in seq_along(options)) {
-      message(i, ": ", options[[i]])
+      message(silver(i, ": ", options[[i]]))
     }
     repeat {
       choice <- as.integer(readline("Enter the number of your choice: "))
