@@ -22,8 +22,8 @@ pa_get_wd <- function(
   config_file <- path(project_dir, ".config.yaml")
 
   # Retrieve root_dir and environment from the YAML file
-  root_dir    <- pa_get_config_value("root_dir"   , config_file)
-  environment <- pa_get_config_value("environment", config_file)
+  root_dir    <- pa_config_get_value("root_dir"   , config_file)
+  environment <- pa_config_get_value("environment", config_file)
 
   # Check if root_dir and environment are valid
   if (is.null(root_dir) || root_dir == "") {

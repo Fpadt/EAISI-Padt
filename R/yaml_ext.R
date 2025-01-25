@@ -6,12 +6,7 @@
 #' @param config_file Character. The path to the YAML configuration file. Defaults to ".config.yaml".
 #' @return The value associated with the provided key, or NULL if the key does not exist.
 #' @export
-pa_get_config_value <- function(key, config_file = ".config.yaml") {
-
-  # Load required package
-  if (!requireNamespace("yaml", quietly = TRUE)) {
-    stop("The 'yaml' package is required but not installed. Please install it using install.packages('yaml').")
-  }
+pa_config_get_value <- function(key, config_file = ".config.yaml") {
 
   # Check if the config file exists
   if (!file.exists(config_file)) {
@@ -42,11 +37,7 @@ pa_get_config_value <- function(key, config_file = ".config.yaml") {
 #' @param config_file Character. The path to the YAML configuration file. Defaults to ".config.yaml".
 #' @return NULL. The function updates the YAML file in place.
 #' @export
-pa_set_config_value <- function(key, value, config_file = ".config.yaml") {
-  # Load required package
-  if (!requireNamespace("yaml", quietly = TRUE)) {
-    stop("The 'yaml' package is required but not installed. Please install it using install.packages('yaml').")
-  }
+pa_config_set_value <- function(key, value, config_file = ".config.yaml") {
 
   # Initialize an empty config if the file does not exist
   if (!file.exists(config_file)) {

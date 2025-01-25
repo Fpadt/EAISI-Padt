@@ -281,9 +281,9 @@
 #' @param project_dir Character. The path to the project directory containing the `.config.yaml` file.
 #' @return A list with the following elements:
 #' \describe{
-#'   \item{DELIM}{Character. The delimiter used in the files (e.g., ';').}
-#'   \item{HEADER}{Logical. Whether the files have a header (TRUE or FALSE).}
-#'   \item{DATE_FORMAT}{Character. The date format used in the files (e.g., '%Y-%m-%d').}
+#'   \item{DELIM}{Character. The delimiter used in the files (e.g., `";"`).}
+#'   \item{HEADER}{Logical. Whether the files have a header (`TRUE` or `FALSE`).}
+#'   \item{DATE_FORMAT}{Character. The date format used in the files (e.g., `\"\%Y-\%m-\%d\"`).}
 #' }
 #' @keywords internal
 .get_file_spec <- function(project_dir) {
@@ -302,22 +302,21 @@
 
   # Retrieve file specification from the YAML file
   FILE_SPEC <- list(
-    DELIM       = pa_get_config_value(key = "DELIM", config_file = config_file),      # Delimiter
-    HEADER      = pa_get_config_value(key = "HEADER", config_file = config_file),     # Header
-    DATE_FORMAT = pa_get_config_value(key = "DATE_FORMAT", config_file = config_file) # Date format
+    DELIM       = pa_config_get_value(key = "DELIM", config_file = config_file),      # Delimiter
+    HEADER      = pa_config_get_value(key = "HEADER", config_file = config_file),     # Header
+    DATE_FORMAT = pa_config_get_value(key = "DATE_FORMAT", config_file = config_file) # Date format
   )
 
   # Validate the retrieved values
   if (is.null(FILE_SPEC$DELIM) || FILE_SPEC$DELIM == "") {
-    stop("The 'DELIM' key is missing or empty in the configuration file.")
+    stop("The `DELIM` key is missing or empty in the configuration file.")
   }
   if (is.null(FILE_SPEC$HEADER)) {
-    stop("The 'HEADER' key is missing in the configuration file.")
+    stop("The `HEADER` key is missing in the configuration file.")
   }
   if (is.null(FILE_SPEC$DATE_FORMAT) || FILE_SPEC$DATE_FORMAT == "") {
-    stop("The 'DATE_FORMAT' key is missing or empty in the configuration file.")
+    stop("The `DATE_FORMAT` key is missing or empty in the configuration file.")
   }
 
   return(FILE_SPEC)
 }
-
