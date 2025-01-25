@@ -46,16 +46,25 @@ pa_config_get_value <- function(
 }
 
 
-#' Set config value in YAML file with hierarchy support
+#' Set Config Value in YAML File with Hierarchy Support
 #'
 #' Adds or updates a key-value pair in a YAML configuration file. Supports hierarchical
-#' keys using dot notation (e.g., "SALES.pipeline").
+#' keys using dot notation (e.g., "SALES.pipeline"). If the section or key does not exist,
+#' it will be created. If it already exists, it will be updated.
 #'
-#' @param .key Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").\cr
+#' @param .key Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.pipeline").\cr
 #' @param .value Any. The value to associate with the given key.\cr
 #' @param config_file Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr
 #' @param config_dir Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr
 #' @return Character. The normalized path of the updated configuration file.
+#' @examples
+#' # Set a nested key in a configuration file
+#' pa_config_set_value(
+#'   .key = "SALES.pipeline",
+#'   .value = "OH_DEST",
+#'   config_file = ".config.yaml",
+#'   config_dir = "."
+#' )
 #' @export
 pa_config_set_value <- function(
     .key,
@@ -82,21 +91,28 @@ pa_config_set_value <- function(
   # Split the hierarchical .key into parts
   key_parts <- unlist(strsplit(.key, "\\."))
 
-  # Navigate the hierarchy to set the value
-  current <- config
-  for (i in seq_along(key_parts)) {
-    part <- key_parts[i]
-    if (i == length(key_parts)) {
-      # Set the value at the final key
-      current[[part]] <- .value
+  # Helper function to recursively navigate and set values
+  set_nested_value <- function(config, key_parts, value) {
+    if (length(key_parts) == 1) {
+      # Set the final key with the value
+      config[[key_parts[1]]] <- value
     } else {
-      # Create a nested list if the part does not exist or is not a list
-      if (!is.list(current[[part]])) {
-        current[[part]] <- list()
+      # If the current key does not exist or is not a list, initialize it as a list
+      if (!is.list(config[[key_parts[1]]])) {
+        config[[key_parts[1]]] <- list()
       }
-      current <- current[[part]]
+      # Recursively navigate deeper
+      config[[key_parts[1]]] <- set_nested_value(
+        config[[key_parts[1]]],
+        key_parts[-1],
+        value
+      )
     }
+    return(config)
   }
+
+  # Update the configuration using the helper function
+  config <- set_nested_value(config, key_parts, .value)
 
   # Write the updated configuration back to the YAML file
   yaml::write_yaml(config, config_path)
@@ -104,7 +120,10 @@ pa_config_set_value <- function(
   # Return the normalized path and print a message
   message(
     green(
-      paste("Key '", .key, "' has been updated/added with value:", .value,
-            " in config file: ", config_path)))
+      paste("Key '", .key, "' has been updated/added with value:",
+            .value)))
+
   return(config_path)
 }
+
+

@@ -2,7 +2,7 @@
 % Please edit documentation in R/yaml_ext.R
 \name{pa_config_set_value}
 \alias{pa_config_set_value}
-\title{Set config value in YAML file with hierarchy support}
+\title{Set Config Value in YAML File with Hierarchy Support}
 \usage{
 pa_config_set_value(
   .key,
@@ -12,7 +12,7 @@ pa_config_set_value(
 )
 }
 \arguments{
-\item{.key}{Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").\cr}
+\item{.key}{Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.pipeline").\cr}
 
 \item{.value}{Any. The value to associate with the given key.\cr}
 
@@ -25,5 +25,15 @@ Character. The normalized path of the updated configuration file.
 }
 \description{
 Adds or updates a key-value pair in a YAML configuration file. Supports hierarchical
-keys using dot notation (e.g., "SALES.pipeline").
+keys using dot notation (e.g., "SALES.pipeline"). If the section or key does not exist,
+it will be created. If it already exists, it will be updated.
+}
+\examples{
+# Set a nested key in a configuration file
+pa_config_set_value(
+  .key = "SALES.pipeline",
+  .value = "OH_DEST",
+  config_file = ".config.yaml",
+  config_dir = "."
+)
 }
