@@ -126,12 +126,12 @@ pa_config_set_value <- function(
   # Write the updated configuration back to the YAML file
   yaml::write_yaml(config, config_path, indent = 2)
 
-  # Add blank lines between top-level sections for better readability
+  # Add blank lines before top-level sections for better readability
   yaml_content <- readLines(config_path)
   yaml_content <- paste0(
     unlist(lapply(seq_along(yaml_content), function(i) {
-      if (i < length(yaml_content) && grepl("^\\S+:\\s*$", yaml_content[i])) {
-        return(c(yaml_content[i], "")) # Add a blank line after top-level keys
+      if (i > 1 && grepl("^\\S+:\\s*$", yaml_content[i]) && yaml_content[i - 1] != "") {
+        return(c("", yaml_content[i])) # Add a blank line before the top-level key
       }
       return(yaml_content[i])
     })),
