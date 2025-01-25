@@ -57,7 +57,7 @@
 #' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
 #' @keywords internal
 .create_instance_of_default_config_yaml <- function(
-    config_dir     = "./inst/extdata",
+    config_dir     = "./inst/extdata/config",
     key_value_list = NULL) {
 
   # Define the path to the YAML file

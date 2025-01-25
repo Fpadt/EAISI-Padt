@@ -578,62 +578,64 @@
                  "' updated/added in the configuration file: ", config_file)))
 }
 
-#' Copy the Config Folder from Package to Destination
+
+
+#' Get All Objects in the Package Namespace (Internal)
 #'
-#' Internal function to copy the `config` folder located in the package's `extdata`
-#' directory to a specified destination. If the destination already contains a
-#' `config` folder, the function does nothing.
+#' Returns a data.table listing all objects in the package namespace, including
+#' whether they are internal or external and whether they are functions.
 #'
-#' @param destination_dir A character string specifying the directory where the
-#'   `config` folder should be copied. If the folder already exists at the
-#'   destination, no action is taken.
-#'
-#' @details
-#' This function locates the `config` folder in the package's `extdata` directory,
-#' verifies its existence, and copies it to the specified destination directory.
-#' If the `config` folder already exists in the destination directory, the
-#' function does not overwrite it. This is useful for setting up configuration
-#' files during the initialization or setup phase.
-#'
-#' @return
-#' Invisibly returns \code{TRUE} if the folder was successfully copied, or
-#' \code{FALSE} if the destination already contained the folder.
-#'
-#' @seealso
-#' \code{\link[base]{dir.create}} for directory creation,
-#' \code{\link[base]{file.copy}} for file copying.
-#'
+#' @return A data.table with columns:
+#' \describe{
+#'   \item{OBJ}{Character. The name of the object.}
+#'   \item{ACC}{Character. Access level: "E" for exported (external) or "I" for internal.}
+#'   \item{FUN}{Logical. TRUE if the object is a function, FALSE otherwise.}
+#' }
+#' @examples
+#' .get_functions()
 #' @keywords internal
-.copy_config_folder <- function(destination_dir) {
-
-  # Define the source folder (config folder in extdata)
-  # source_dir <- system.file("extdata", "config", package = "padt")
-  source_dir <- file.path("C:/RW/EAISI-Padt", "inst", "extdata", "config")
-
-  # Ensure the source directory exists in the package
-  if (!dir.exists(source_dir)) {
-    stop(
-      red(paste0("Source config folder not found in the package.",
-                 "Ensure it exists in: ", source_dir )))
+.get_functions <- function() {
+  # Ensure required packages are loaded
+  if (!requireNamespace("data.table", quietly = TRUE)) {
+    stop("The 'data.table' package is required but not installed. Please install it using install.packages('data.table').")
   }
 
-  # Define the destination folder path
-  destination_config_dir <-
-    normalizePath(file.path(destination_dir, "config"),
-                  winslash = "/", mustWork = FALSE)
+  # Load data.table
+  library(data.table)
 
-  # Check if the destination config folder already exists
-  if (dir.exists(destination_config_dir)) {
-    # message("The config folder already exists at: ", destination_config_dir)
-    return(invisible(FALSE))  # Indicate that nothing was copied
-  }
+  # Package name (change "padt" to your actual package name)
+  package_name <- "padt"
 
-  # Copy the entire config folder to the destination
-  dir.create(destination_dir, recursive = TRUE, showWarnings = FALSE)
-  file.copy(source_dir, destination_dir, recursive = TRUE)
+  # Get all objects in the package namespace, including those starting with a dot
+  all_objects <- ls(getNamespace(package_name), all.names = TRUE)
 
-  message(green(paste0("Config folder copied to: ", destination_config_dir)))
+  # Create the data.table
+  DT <- data.table(
+    OBJ = all_objects,
+    ACC = ifelse(all_objects %in% getNamespaceExports(package_name), "E", "I"),
+    FUN = sapply(all_objects, function(obj) is.function(get(obj, envir = asNamespace(package_name))))
+  )
 
-  return(invisible(TRUE))  # Indicate that the copy operation was successful
+  return(DT)
 }
 
+fOpen_as_xlsx <-
+  function(pDT, pPath = tempdir(), pFN, pasTable = TRUE){
+
+    library(lubridate)
+    library(openxlsx)
+
+    if (!dir.exists(pPath)) {
+      dir.create(pPath)
+    }
+
+    if (missing(pFN) == TRUE) {
+      pFN <- paste0("~", format(now(), "%Y%m%d-%H%M%S"), ".xlsx")
+    }
+
+    FFN <- file.path(pPath, pFN)
+    write.xlsx(x = pDT, file = FFN, asTable = pasTable,
+               tableStyle = "TableStyleMedium4")
+    openXL(FFN)
+
+  }

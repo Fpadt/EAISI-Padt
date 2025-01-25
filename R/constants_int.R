@@ -1,3 +1,5 @@
+.PACKAGE_NAME <- "padt"
+
 CM_MIN   <- '2021.01'
 CM_MAX   <- '2025.06'
 STEP_MIN <- 1
@@ -31,14 +33,13 @@ SCOPE_PRDH <- c(
 )
 
 .BSGP <- c(
-  B = "Bronze"     , S = "Silver",
-  G = "Gold"       , P = "Platinum"
+  B = "bronze"     , S = "silver",
+  G = "gold"       , P = "platinum"
 )
 
 .DTAP <- c(
-  D = "Development", T = "Test",
-  A = "Acceptance" , P = "Production",
-  X = "Demo"
+  D = "development", T = "test",
+  A = "acceptance" , P = "production"
 )
 
 #' Generate Variables for Ecotone Brand Colors

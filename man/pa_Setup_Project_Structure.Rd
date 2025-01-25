@@ -40,8 +40,3 @@ stored in the YAML file will be replaced with a placeholder
 ("OneDriveConsumer" or "OneDriveBusiness") and the relative subdirectory
 path.
 }
-\seealso{
-[fs::dir_create()] for directory creation,
-  [fs::path_abs()] and [fs::path_rel()] for path manipulations,
-  [yaml::write_yaml()] for saving configurations.
-}

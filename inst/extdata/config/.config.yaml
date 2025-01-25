@@ -1,6 +1,8 @@
 project:
   name: Pythia's Advice
   department: EAISI
+data_dir: ./data
+environment: production
 
 csv_file_spec:
   delim: ;

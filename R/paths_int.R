@@ -76,3 +76,52 @@
            normalizePath(mustWork = FALSE, winslash = "/") %>%
            paste0("'", ., "'", collapse = ", "))
 }
+
+
+#' Replace Absolute Path with OneDrive Root Identifier
+#'
+#' This internal function replaces an absolute path with a OneDrive root identifier
+#' (`OneDriveConsumer` or `OneDriveCommercial`) if the path belongs to the respective
+#' OneDrive directory. If the path does not belong to either directory, the original
+#' path is returned unchanged.
+#'
+#' @param abs_path Character. The absolute path provided by the user.
+#' @return Character. The modified path with the OneDrive root identifier or the original path.
+#' @examples
+#' # Set OneDrive environment variables for testing
+#' Sys.setenv(OneDriveConsumer = "/Users/example/OneDriveConsumer")
+#' Sys.setenv(OneDriveCommercial = "/Users/example/OneDriveBusiness")
+#'
+#' # Test the function
+#' .replace_with_onedrive_root("/Users/example/OneDriveConsumer/Projects/MyProject")
+#' # Returns: "OneDriveConsumer/Projects/MyProject"
+#'
+#' .replace_with_onedrive_root("/Users/example/OtherDirectory/MyProject")
+#' # Returns: "/Users/example/OtherDirectory/MyProject"
+#' @keywords internal
+.replace_with_onedrive_root <- function(abs_path) {
+
+  # Load required package
+  if (!requireNamespace("fs", quietly = TRUE)) {
+    stop("The 'fs' package is required but not installed. Please install it using install.packages('fs').")
+  }
+
+  # Get OneDrive paths from environment variables
+  onedrive_consumer <- fs::path_abs(Sys.getenv("OneDriveConsumer", ""))
+  onedrive_commercial <- fs::path_abs(Sys.getenv("OneDriveCommercial", ""))
+
+  # Check if the absolute path belongs to OneDriveConsumer or OneDriveCommercial
+  if (fs::path_has_parent(abs_path, onedrive_consumer)) {
+    # Replace the consumer path
+    rel_path <- fs::path_rel(abs_path, start = onedrive_consumer)
+    fs::path("OneDriveConsumer", rel_path)
+  } else if (fs::path_has_parent(abs_path, onedrive_commercial)) {
+    # Replace the commercial path
+    rel_path <- fs::path_rel(abs_path, start = onedrive_commercial)
+    fs::path("OneDriveCommercial", rel_path)
+  } else {
+    # Return the original path if it does not belong to OneDrive
+    abs_path
+  }
+}
+
