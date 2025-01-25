@@ -148,3 +148,18 @@ pa_transform_csv_to_parquet <- function(
   invisible(NULL)
 }
 
+#' Get File Specification from YAML Configuration (Internal)
+#'
+#' Internal function to retrieve the file specification from the YAML configuration file
+#' stored in the specified project directory.
+#'
+#' @param project_dir Character. The path to the project directory
+#' containing the `.config.yaml` file.
+#'
+#' @return A list with the following elements:
+#' \describe{
+#'   \item{DELIM}{Character. The delimiter used in the files (e.g., `";"`).}
+#'   \item{HEADER}{Logical. Whether the files have a header (`TRUE` or `FALSE`).}
+#'   \item{DATE_FORMAT}{Character. The date format used in the files (e.g., `"%Y-%m-%d"`).}
+#' }
+#' @keywords internal

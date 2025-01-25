@@ -25,13 +25,14 @@
     .etype
 ) {
   # Validate input parameters
-  if (missing(.pa_BSGP) || missing(.pa_AREA) || missing(.vtype) || missing(.ftype) || missing(.etype)) {
-    stop("All arguments (.pa_BSGP, .pa_AREA, .vtype, .ftype, .etype) must be provided.")
+  if (missing(.bsgp) || missing(.area)
+      || missing(.vtype) || missing(.ftype) || missing(.etype)) {
+    stop("All arguments (.bgsp, .area, .vtype, .ftype, .etype) must be provided.")
   }
 
   # Load paths table (should ideally be moved to a configuration setup or loaded once for efficiency)
   paths_parquet_files <- data.table::fread("
-    pa_AREA, vtype, ftype, all, fname
+    AREA, vtype, ftype, all, fname
     1   , 010  , 1,     *  , SDSFRPR1
     1   , 010  , 3,     *  , SDSFRLV1
     1   , 010  , 2,     *  , SDSFRPR3
@@ -56,16 +57,11 @@
     stop("Error retrieving root directory: ", e$message)
   })
 
-  # Validate if .pa_BSGP and .pa_AREA are within acceptable ranges
-  if (.pa_BSGP > length(pa_BSGP) || .pa_AREA > length(pa_AREA)) {
-    stop("Invalid .pa_BSGP or .pa_AREA value. Ensure it aligns with pa_BSGP and pa_AREA definitions.")
-  }
-
   # Filter paths and construct full file paths
   filtered_files <- paths_parquet_files[
-    pa_AREA == .pa_AREA & vtype %chin% .vtype & ftype %in% .ftype,
+    AREA == .area & vtype %chin% .vtype & ftype %in% .ftype,
     file.path(
-      root_dir, pa_BSGP[.pa_BSGP], pa_AREA[.pa_AREA],
+      root_dir, .bsgp, AREA,
       paste0(fname, all, ".", .etype)
     )
   ]

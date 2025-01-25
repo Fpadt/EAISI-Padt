@@ -4,18 +4,18 @@
 \alias{.get_data_full_file_names}
 \title{Get Full File Names as a Comma-Separated String}
 \usage{
-.get_data_full_file_names(.pa_BSGP, .pa_AREA, .vtype, .ftype, .etype)
+.get_data_full_file_names(.bsgp, .area, .vtype, .ftype, .etype)
 }
 \arguments{
-\item{.pa_BSGP}{Integer. The index corresponding to the pa_BSGP (Bronze, Silver, Gold, Platinum) tier. Must align with the \code{pa_BSGP} vector.}
-
-\item{.pa_AREA}{Integer. The index corresponding to the functional pa_AREA. Must align with the \code{pa_AREA} vector.}
-
 \item{.vtype}{Character. The data type code (e.g., "010", "060").}
 
 \item{.ftype}{Integer. The file type code used to identify the file in the configuration table.}
 
 \item{.etype}{Character. The file extension (e.g., "parquet", "csv").}
+
+\item{.pa_BSGP}{Integer. The index corresponding to the pa_BSGP (Bronze, Silver, Gold, Platinum) tier. Must align with the \code{pa_BSGP} vector.}
+
+\item{.pa_AREA}{Integer. The index corresponding to the functional pa_AREA. Must align with the \code{pa_AREA} vector.}
 }
 \value{
 A character string containing normalized full file paths, separated by commas.
