@@ -2,8 +2,8 @@
 #'
 #' Constructs full file paths for a given combination of parameters and returns them as a single string separated by commas.
 #'
-#' @param .pa_BSGP Integer. The index corresponding to the pa_BSGP (Bronze, Silver, Gold, Platinum) tier. Must align with the \code{pa_BSGP} vector.
-#' @param .pa_AREA Integer. The index corresponding to the functional pa_AREA. Must align with the \code{pa_AREA} vector.
+#' @param .bsgp  Integer. The index corresponding to the pa_BSGP (Bronze, Silver, Gold, Platinum) tier. Must align with the \code{pa_BSGP} vector.
+#' @param .area  Integer. The index corresponding to the functional pa_AREA. Must align with the \code{pa_AREA} vector.
 #' @param .vtype Character. The data type code (e.g., "010", "060").
 #' @param .ftype Integer. The file type code used to identify the file in the configuration table.
 #' @param .etype Character. The file extension (e.g., "parquet", "csv").
