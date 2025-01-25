@@ -26,7 +26,7 @@
 #' @keywords internal
 .copy_package_folder <- function(
     folder_name,
-    source_dir = "inst/extdata",
+    source_dir = "extdata",
     target_dir = ".",
     .overwrite = TRUE
 ) {

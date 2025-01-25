@@ -32,9 +32,9 @@ pa_initialize <- function() {
   choice1 <- ask_question(
     "create 'config' in project root directory?",
     options = c(
-      "create with overwrite",
-      "create don't overwrite",
-      "do nothing"
+      "create, with overwrite",
+      "create, don't overwrite",
+      "do nothing!"
     )
   )
   if (choice1 == 1) {
