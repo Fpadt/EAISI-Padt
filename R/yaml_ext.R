@@ -3,26 +3,31 @@
 #' Retrieves a value from a YAML configuration file based on a hierarchical
 #' key using dot notation (e.g., "SALES.pipeline").
 #'
-#' @param .key Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").
-#' @param config_file Character. The path to the YAML configuration file. Defaults to ".config.yaml".
+#' @param .key Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").\cr
+#' @param config_file Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr
+#' @param config_dir Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr
 #' @return The value associated with the given key, or NULL if the key does not exist.
 #' @export
 pa_config_get_value <- function(
     .key,
-    config_file = ".config.yaml") {
+    config_file = ".config.yaml",
+    config_dir = ".") {
 
   # Load required package
   if (!requireNamespace("yaml", quietly = TRUE)) {
     stop("The 'yaml' package is required but not installed. Please install it using install.packages('yaml').")
   }
 
+  # Normalize and construct the full path to the configuration file
+  config_path <- fs::path_abs(fs::path(config_dir, config_file))
+
   # Check if the config file exists
-  if (!file.exists(config_file)) {
-    stop("Configuration file not found: ", config_file)
+  if (!file.exists(config_path)) {
+    stop("Configuration file not found: ", config_path)
   }
 
   # Read the YAML file
-  config <- yaml::read_yaml(config_file)
+  config <- yaml::read_yaml(config_path)
 
   # Split the hierarchical .key into parts
   key_parts <- unlist(strsplit(.key, "\\."))
@@ -31,7 +36,7 @@ pa_config_get_value <- function(
   current <- config
   for (part in key_parts) {
     if (!is.list(current) || is.null(current[[part]])) {
-      warning("Key '", .key, "' not found in configuration file: ", config_file)
+      warning("Key '", .key, "' not found in configuration file: ", config_path)
       return(NULL)
     }
     current <- current[[part]]
@@ -46,27 +51,32 @@ pa_config_get_value <- function(
 #' Adds or updates a key-value pair in a YAML configuration file. Supports hierarchical
 #' keys using dot notation (e.g., "SALES.pipeline").
 #'
-#' @param .key Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").
-#' @param .value Any. The value to associate with the given key.
-#' @param config_file Character. The path to the YAML configuration file. Defaults to ".config.yaml".
-#' @return NULL. The function updates the YAML file in place.
+#' @param .key Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").\cr
+#' @param .value Any. The value to associate with the given key.\cr
+#' @param config_file Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr
+#' @param config_dir Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr
+#' @return Character. The normalized path of the updated configuration file.
 #' @export
 pa_config_set_value <- function(
     .key,
     .value,
-    config_file = ".config.yaml") {
+    config_file = ".config.yaml",
+    config_dir = ".") {
 
   # Load required package
   if (!requireNamespace("yaml", quietly = TRUE)) {
     stop("The 'yaml' package is required but not installed. Please install it using install.packages('yaml').")
   }
 
+  # Normalize and construct the full path to the configuration file
+  config_path <- fs::path_abs(fs::path(config_dir, config_file))
+
   # Initialize an empty config if the file does not exist
-  if (!file.exists(config_file)) {
+  if (!file.exists(config_path)) {
     config <- list()
   } else {
     # Read the existing YAML file
-    config <- yaml::read_yaml(config_file)
+    config <- yaml::read_yaml(config_path)
   }
 
   # Split the hierarchical .key into parts
@@ -89,7 +99,12 @@ pa_config_set_value <- function(
   }
 
   # Write the updated configuration back to the YAML file
-  yaml::write_yaml(config, config_file)
+  yaml::write_yaml(config, config_path)
 
-  message("Key '", .key, "' has been updated/added with value: ", .value)
+  # Return the normalized path and print a message
+  message(
+    green(
+      paste("Key '", .key, "' has been updated/added with value:", .value,
+            " in config file: ", config_path)))
+  return(config_path)
 }

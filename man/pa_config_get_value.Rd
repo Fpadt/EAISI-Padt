@@ -4,12 +4,14 @@
 \alias{pa_config_get_value}
 \title{Get Config Value from YAML File with Hierarchy Support}
 \usage{
-pa_config_get_value(.key, config_file = ".config.yaml")
+pa_config_get_value(.key, config_file = ".config.yaml", config_dir = ".")
 }
 \arguments{
-\item{.key}{Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").}
+\item{.key}{Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").\cr}
 
-\item{config_file}{Character. The path to the YAML configuration file. Defaults to ".config.yaml".}
+\item{config_file}{Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr}
+
+\item{config_dir}{Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr}
 }
 \value{
 The value associated with the given key, or NULL if the key does not exist.

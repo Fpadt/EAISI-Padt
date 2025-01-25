@@ -4,17 +4,24 @@
 \alias{pa_config_set_value}
 \title{Set Config Value in YAML File with Hierarchy Support}
 \usage{
-pa_config_set_value(.key, .value, config_file = ".config.yaml")
+pa_config_set_value(
+  .key,
+  .value,
+  config_file = ".config.yaml",
+  config_dir = "."
+)
 }
 \arguments{
-\item{.key}{Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").}
+\item{.key}{Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").\cr}
 
-\item{.value}{Any. The value to associate with the given key.}
+\item{.value}{Any. The value to associate with the given key.\cr}
 
-\item{config_file}{Character. The path to the YAML configuration file. Defaults to ".config.yaml".}
+\item{config_file}{Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr}
+
+\item{config_dir}{Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr}
 }
 \value{
-NULL. The function updates the YAML file in place.
+Character. The normalized path of the updated configuration file.
 }
 \description{
 Adds or updates a key-value pair in a YAML configuration file. Supports hierarchical
