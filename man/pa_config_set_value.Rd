@@ -2,7 +2,7 @@
 % Please edit documentation in R/yaml_ext.R
 \name{pa_config_set_value}
 \alias{pa_config_set_value}
-\title{Set Config Value in YAML File with Hierarchy Support}
+\title{Set config value in YAML file with hierarchy support}
 \usage{
 pa_config_set_value(
   .key,

@@ -7,6 +7,13 @@
 #' @param config_file Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr
 #' @param config_dir Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr
 #' @return The value associated with the given key, or NULL if the key does not exist.
+#' @examples
+#' # Get a nested key in a configuration file
+#' pa_config_get_value(
+#'   .key        = "sales.pipeline",
+#'   config_file = ".config.yaml",
+#'   config_dir  = "."
+#' )
 #' @export
 pa_config_get_value <- function(
     .key,
@@ -46,7 +53,7 @@ pa_config_get_value <- function(
 }
 
 
-#' Set Config Value in YAML File with Hierarchy Support
+#' Set config value in YAML file with hierarchy support
 #'
 #' Adds or updates a key-value pair in a YAML configuration file. Supports hierarchical
 #' keys using dot notation (e.g., "SALES.pipeline"). If the section or key does not exist,
