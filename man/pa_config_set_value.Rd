@@ -7,7 +7,7 @@
 pa_config_set_value(
   .key,
   .value,
-  config_file = ".config.yaml",
+  config_file = CONFIG_YAML,
   config_dir = file.path(".", CONFIG_FLDR)
 )
 }
@@ -16,7 +16,7 @@ pa_config_set_value(
 
 \item{.value}{Any. The value to associate with the given key.\cr}
 
-\item{config_file}{Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr}
+\item{config_file}{Character. The name of the YAML configuration file. Defaults to CONFIG_YAML.\cr}
 
 \item{config_dir}{Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr}
 }
@@ -33,7 +33,7 @@ it will be created. If it already exists, it will be updated.
 pa_config_set_value(
   .key = "sales.pipeline",
   .value = "OH_FRPR1",
-  config_file = ".config.yaml",
+  config_file = CONFIG_YAML,
   config_dir = "./config"
 )
 }

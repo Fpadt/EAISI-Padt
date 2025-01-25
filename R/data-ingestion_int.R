@@ -289,9 +289,9 @@
 
   # Retrieve file specification from the YAML file
   FILE_SPEC <- list(
-    DELIM       = pa_config_get_value(key = "DELIM"),      # Delimiter
-    HEADER      = pa_config_get_value(key = "HEADER"),     # Header
-    DATE_FORMAT = pa_config_get_value(key = "DATE_FORMAT") # Date format
+    DELIM       = pa_config_get_value(.key = "DELIM"),      # Delimiter
+    HEADER      = pa_config_get_value(.key = "HEADER"),     # Header
+    DATE_FORMAT = pa_config_get_value(.key = "DATE_FORMAT") # Date format
   )
 
   # Validate the retrieved values

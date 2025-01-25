@@ -25,8 +25,12 @@
     .etype
 ) {
   # Validate input parameters
-  if (missing(.bsgp) || missing(.area)
-      || missing(.vtype) || missing(.ftype) || missing(.etype)) {
+  if (missing(.bsgp)
+      || missing(.area)
+      || missing(.vtype)
+      || missing(.ftype)
+      || missing(.etype)
+      ) {
     stop("All arguments (.bgsp, .area, .vtype, .ftype, .etype) must be provided.")
   }
 

@@ -6,14 +6,14 @@
 \usage{
 pa_config_get_value(
   .key,
-  config_file = ".config.yaml",
+  config_file = CONFIG_YAML,
   config_dir = file.path(".", CONFIG_FLDR)
 )
 }
 \arguments{
 \item{.key}{Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "sales.source_path").\cr}
 
-\item{config_file}{Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr}
+\item{config_file}{Character. The name of the YAML configuration file. Defaults to CONFIG_YAML.\cr}
 
 \item{config_dir}{Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr}
 }
@@ -28,7 +28,7 @@ key using dot notation (e.g., "sales.pipeline").
 # Get a nested key in a configuration file
 pa_config_get_value(
   .key        = "sales.pipeline",
-  config_file = ".config.yaml",
+  config_file = CONFIG_YAML,
   config_dir  = "."
 )
 }

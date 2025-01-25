@@ -80,7 +80,7 @@
 #' .create_data_folders(
 #'   root_dir = "./data",
 #'   .bsgp = .BGSP,
-#'   .area = .AREA
+#'   .area = .AREA,
 #'   .dtap = .DTAP
 #' )
 #' @keywords internal

@@ -4,20 +4,20 @@
 #' key using dot notation (e.g., "sales.pipeline").
 #'
 #' @param .key Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "sales.source_path").\cr
-#' @param config_file Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr
+#' @param config_file Character. The name of the YAML configuration file. Defaults to CONFIG_YAML.\cr
 #' @param config_dir Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr
 #' @return The value associated with the given key, or NULL if the key does not exist.
 #' @examples
 #' # Get a nested key in a configuration file
 #' pa_config_get_value(
 #'   .key        = "sales.pipeline",
-#'   config_file = ".config.yaml",
+#'   config_file = CONFIG_YAML,
 #'   config_dir  = "."
 #' )
 #' @export
 pa_config_get_value <- function(
     .key,
-    config_file = ".config.yaml",
+    config_file = CONFIG_YAML,
     config_dir  = file.path(".", CONFIG_FLDR)
     ) {
 
@@ -62,7 +62,7 @@ pa_config_get_value <- function(
 #'
 #' @param .key Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.pipeline").\cr
 #' @param .value Any. The value to associate with the given key.\cr
-#' @param config_file Character. The name of the YAML configuration file. Defaults to ".config.yaml".\cr
+#' @param config_file Character. The name of the YAML configuration file. Defaults to CONFIG_YAML.\cr
 #' @param config_dir Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr
 #' @return Character. The normalized path of the updated configuration file.
 #' @examples
@@ -70,14 +70,14 @@ pa_config_get_value <- function(
 #' pa_config_set_value(
 #'   .key = "sales.pipeline",
 #'   .value = "OH_FRPR1",
-#'   config_file = ".config.yaml",
+#'   config_file = CONFIG_YAML,
 #'   config_dir = "./config"
 #' )
 #' @export
 pa_config_set_value <- function(
     .key,
     .value,
-    config_file = ".config.yaml",
+    config_file = CONFIG_YAML,
     config_dir  = file.path(".", CONFIG_FLDR)
     ) {
 

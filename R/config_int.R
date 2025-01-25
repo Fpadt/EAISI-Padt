@@ -61,7 +61,7 @@
     key_value_list = NULL) {
 
   # Define the path to the YAML file
-  config_file <- fs::path(config_dir, ".config.yaml")
+  config_file <- fs::path(config_dir, CONFIG_YAML)
 
   # Delete the existing .config.yaml file if it exists
   if (file.exists(config_file)) {
