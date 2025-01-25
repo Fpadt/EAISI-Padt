@@ -47,6 +47,11 @@
   # Define the absolute target path
   full_target_path <- fs::path_abs(target_dir, folder_name)
 
+  # if overwrite delete folder if it exists
+  if (.overwrite && fs::dir_exists(full_target_path)) {
+    fs::dir_delete(full_target_path)
+  }
+
   # Ensure the target directory exists
   fs::dir_create(full_target_path)
 

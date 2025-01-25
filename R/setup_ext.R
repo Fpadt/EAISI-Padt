@@ -34,7 +34,8 @@ pa_initialize <- function() {
     options = c(
       "create, with overwrite",
       "create, don't overwrite",
-      "do nothing!"
+      "skip, do nothing!",
+      "stop initialization process!"
     )
   )
   if (choice1 == 1) {
@@ -47,6 +48,8 @@ pa_initialize <- function() {
       folder_name = "config",
       target_dir = ".",
       .overwrite = FALSE)
+  } else if (choice1 == 4) {
+    stop("Initialization process stopped by user.")
   }
 
   # Question 2: copy demo environment with data
@@ -55,7 +58,8 @@ pa_initialize <- function() {
     options = c(
       "create with overwrite",
       "create don't overwrite",
-      "do nothing"
+      "skip, do nothing",
+      "stop initialization process!"
     )
   )
   if (choice2 == 1) {
@@ -68,6 +72,8 @@ pa_initialize <- function() {
       folder_name = "demo",
       target_dir = ".",
       .overwrite = FALSE)
+  } else if (choice1 == 4) {
+    stop("Initialization process stopped by user.")
   }
 
   # Question 3: activate demo environment
