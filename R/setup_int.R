@@ -45,7 +45,7 @@
   }
 
   # Define the absolute target path
-  full_target_path <- fs::path_abs(target_dir)
+  full_target_path <- fs::path_abs(target_dir, folder_name)
 
   # Ensure the target directory exists
   fs::dir_create(full_target_path)

@@ -84,7 +84,7 @@ pa_initialize <- function() {
   }
 
   # Question 4: Ecotone Brand colors
-  choice3 <- ask_question(
+  choice4 <- ask_question(
     "Add Ecotone Brand Colors?",
     options = c(
       "Yes",

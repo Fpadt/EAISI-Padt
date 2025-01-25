@@ -6,7 +6,7 @@
 \usage{
 .copy_package_folder(
   folder_name,
-  source_dir = "inst/extdata",
+  source_dir = "extdata",
   target_dir = ".",
   .overwrite = TRUE
 )
@@ -14,9 +14,9 @@
 \arguments{
 \item{folder_name}{Character. The folder within the package to copy. Defaults to `"extdata"`.}
 
-\item{target_dir}{Character. The directory where the folder will be copied. Defaults to the current working directory `"."`.}
+\item{source_dir}{Character. The base path within the package where the folder resides. Defaults to `"inst"`.}
 
-\item{source_path}{Character. The base path within the package where the folder resides. Defaults to `"inst"`.}
+\item{target_dir}{Character. The directory where the folder will be copied. Defaults to the current working directory `"."`.}
 }
 \value{
 NULL. The function copies the folder and provides a message upon success.
@@ -28,9 +28,9 @@ defaults to the current working directory.
 }
 \examples{
 # Copy the extdata folder to the current project directory
-.copy_package_folder(folder_name = "extdata", source_path = "inst", target_dir = ".")
+.copy_package_folder(folder_name = "extdata", source_dir = "inst", target_dir = ".")
 
 # Copy a different folder from the package to a custom directory
-.copy_package_folder(folder_name = "data", source_path = "inst", target_dir = "./my_project")
+.copy_package_folder(folder_name = "data", source_dir = "inst", target_dir = "./my_project")
 }
 \keyword{internal}

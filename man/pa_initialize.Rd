@@ -2,16 +2,17 @@
 % Please edit documentation in R/setup_ext.R
 \name{pa_initialize}
 \alias{pa_initialize}
-\title{Run Installation Process for the Package}
+\title{Run installation process for the `padt`-package}
 \usage{
 pa_initialize()
 }
 \value{
-NULL. Functions are executed based on user input.
+Message indicating the installation process is completed.
 }
 \description{
-Guides the user through the package installation process by asking three questions
-and executing specific functions (`fun1`, `fun2`, `fun3`) based on the user's choices.
+Guides the user through the package installation process.
+user can choose to create the 'config' folder, copy the demo environment
+and activate the demo environment.
 }
 \examples{
 # Run the installation process
