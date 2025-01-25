@@ -15,7 +15,3 @@ This function does not return anything. It opens the folder in the system's file
 \description{
 Opens a specified folder in the system's default file explorer (e.g., Windows Explorer on Windows).
 }
-\examples{
-fOpen_Folder("C:/Users/YourUserName/Documents")
-
-}

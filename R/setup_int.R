@@ -17,12 +17,6 @@
 #' @param source_dir Character. The base path within the package where the folder resides. Defaults to `"inst"`.
 #' @param target_dir Character. The directory where the folder will be copied. Defaults to the current working directory `"."`.
 #' @return NULL. The function copies the folder and provides a message upon success.
-#' @examples
-#' # Copy the extdata folder to the current project directory
-#' .copy_package_folder(folder_name = "extdata", source_dir = "inst", target_dir = ".")
-#'
-#' # Copy a different folder from the package to a custom directory
-#' .copy_package_folder(folder_name = "data", source_dir = "inst", target_dir = "./my_project")
 #' @keywords internal
 .copy_package_folder <- function(
     folder_name,
@@ -75,14 +69,6 @@
 #' @param .area Character vector. The functional areas, defaults to `.AREA`.
 #' @param .dtap Character vector. The DTAP stages, defaults to `.DTAP`.
 #' @return NULL. The function creates the directory structure and does not return anything.
-#' @examples
-#' # Create the default folder structure
-#' .create_data_folders(
-#'   root_dir = "./data",
-#'   .bsgp = .BGSP,
-#'   .area = .AREA,
-#'   .dtap = .DTAP
-#' )
 #' @keywords internal
 .create_data_folders <- function(
     root_dir,

@@ -4,15 +4,6 @@
 #'
 #' @param config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
 #' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
-#' @examples
-#' .config_default_create(
-#'   config_dir = "./inst/extdata",
-#'   key_value_list = list(
-#'     "project.name"        = "Pythia's Advice",
-#'     "project.department"  = "EAISI",
-#'     "csv_file_spec.delim" = ";"
-#'     )
-#'   )
 #' @keywords internal
 .config_default_create <- function(
     config_dir = "./inst/extdata",

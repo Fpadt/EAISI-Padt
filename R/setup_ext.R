@@ -7,7 +7,7 @@
 #' @return Message indicating the installation process is completed.
 #' @examples
 #' # Run the installation process
-#' run_installation()
+#' pa_initialize()
 #' @export
 pa_initialize <- function() {
 

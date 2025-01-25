@@ -22,13 +22,4 @@ NULL. The function creates the directory structure and does not return anything.
 Internal helper function to create a folder structure based on the root directory,
 BS(GP) tiers, functional areas, and DTAP stages.
 }
-\examples{
-# Create the default folder structure
-.create_data_folders(
-  root_dir = "./data",
-  .bsgp = .BGSP,
-  .area = .AREA,
-  .dtap = .DTAP
-)
-}
 \keyword{internal}

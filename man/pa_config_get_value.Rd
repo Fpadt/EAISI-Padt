@@ -24,11 +24,3 @@ The value associated with the given key, or NULL if the key does not exist.
 Retrieves a value from a YAML configuration file based on a hierarchical
 key using dot notation (e.g., "sales.pipeline").
 }
-\examples{
-# Get a nested key in a configuration file
-pa_config_get_value(
-  .key        = "sales.pipeline",
-  config_file = CONFIG_YAML,
-  config_dir  = "."
-)
-}

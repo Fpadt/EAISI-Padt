@@ -18,16 +18,4 @@ This internal function replaces an absolute path with a OneDrive root identifier
 OneDrive directory. If the path does not belong to either directory, the original
 path is returned unchanged.
 }
-\examples{
-# Set OneDrive environment variables for testing
-Sys.setenv(OneDriveConsumer = "/Users/example/OneDriveConsumer")
-Sys.setenv(OneDriveCommercial = "/Users/example/OneDriveBusiness")
-
-# Test the function
-.onedrive_reference("/Users/example/OneDriveConsumer/Projects/MyProject")
-# Returns: "OneDriveConsumer/Projects/MyProject"
-
-.onedrive_reference("/Users/example/OtherDirectory/MyProject")
-# Returns: "/Users/example/OtherDirectory/MyProject"
-}
 \keyword{internal}

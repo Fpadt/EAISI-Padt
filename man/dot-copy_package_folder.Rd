@@ -26,11 +26,4 @@ Copies a specified folder from the package's installation directory to a target 
 The source folder defaults to `inst/extdata` within the package, and the target directory
 defaults to the current working directory.
 }
-\examples{
-# Copy the extdata folder to the current project directory
-.copy_package_folder(folder_name = "extdata", source_dir = "inst", target_dir = ".")
-
-# Copy a different folder from the package to a custom directory
-.copy_package_folder(folder_name = "data", source_dir = "inst", target_dir = "./my_project")
-}
 \keyword{internal}

@@ -91,17 +91,6 @@
 #'
 #' @param abs_path Character. The absolute path provided by the user.
 #' @return Character. The modified path with the OneDrive root identifier or the original path.
-#' @examples
-#' # Set OneDrive environment variables for testing
-#' Sys.setenv(OneDriveConsumer = "/Users/example/OneDriveConsumer")
-#' Sys.setenv(OneDriveCommercial = "/Users/example/OneDriveBusiness")
-#'
-#' # Test the function
-#' .onedrive_reference("/Users/example/OneDriveConsumer/Projects/MyProject")
-#' # Returns: "OneDriveConsumer/Projects/MyProject"
-#'
-#' .onedrive_reference("/Users/example/OtherDirectory/MyProject")
-#' # Returns: "/Users/example/OtherDirectory/MyProject"
 #' @keywords internal
 .onedrive_reference <- function(abs_path) {
 

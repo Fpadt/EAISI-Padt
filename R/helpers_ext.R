@@ -138,9 +138,6 @@ pa_parquet_head <-
 #'
 #' @return This function does not return anything. It opens the folder in the system's file explorer.
 #'
-#' @examples
-#' fOpen_Folder("C:/Users/YourUserName/Documents")
-#'
 #' @export
 pa_folder_open <-
   function(path){

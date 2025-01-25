@@ -16,5 +16,5 @@ and activate the demo environment.
 }
 \examples{
 # Run the installation process
-run_installation()
+pa_initialize()
 }

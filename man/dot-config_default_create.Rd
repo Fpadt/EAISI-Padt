@@ -14,14 +14,4 @@
 \description{
 Internal helper function to create a default `config.yaml` file in the specified directory.
 }
-\examples{
-.config_default_create(
-  config_dir = "./inst/extdata",
-  key_value_list = list(
-    "project.name"        = "Pythia's Advice",
-    "project.department"  = "EAISI",
-    "csv_file_spec.delim" = ";"
-    )
-  )
-}
 \keyword{internal}
