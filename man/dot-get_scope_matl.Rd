@@ -24,7 +24,7 @@ on the \code{PRDH1} column.
 \details{
 This function dynamically constructs a SQL query using \code{glue::glue_sql},
 ensuring that inputs are safely parameterized. The parquet file path for material
-data is determined internally via \code{.get_data_full_file_names}.
+data is determined internally via \code{.data_full_file_names_get}.
 
 The returned SQL defines a Common Table Expression (CTE) named \code{SCOPE_MATL},
 which filters materials from a parquet file based on the specified \code{PRDH1} values.

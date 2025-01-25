@@ -19,11 +19,13 @@ Imports:
     crayon,
     data.table,
     DBI,
+    devtools,
     duckdb,
     fs,
     glue,
     lubridate,
     magrittr,
+    openxlsx,
     purrr,
     stringr,
     yaml

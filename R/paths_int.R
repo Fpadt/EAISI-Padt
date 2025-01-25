@@ -17,7 +17,7 @@
 #' # No examples are provided to avoid errors during package checks.
 #' @import data.table
 #' @keywords internal
-.get_data_full_file_names <- function(
+.data_full_file_names_get <- function(
     .bsgp,
     .area,
     .vtype,
@@ -52,7 +52,7 @@
 
   # Validate root directory
   root_dir <- tryCatch({
-    pa_get_wd()
+    pa_wd_get()
   }, error = function(e) {
     stop("Error retrieving root directory: ", e$message)
   })
@@ -93,13 +93,13 @@
 #' Sys.setenv(OneDriveCommercial = "/Users/example/OneDriveBusiness")
 #'
 #' # Test the function
-#' .replace_with_onedrive_root("/Users/example/OneDriveConsumer/Projects/MyProject")
+#' .onedrive_reference("/Users/example/OneDriveConsumer/Projects/MyProject")
 #' # Returns: "OneDriveConsumer/Projects/MyProject"
 #'
-#' .replace_with_onedrive_root("/Users/example/OtherDirectory/MyProject")
+#' .onedrive_reference("/Users/example/OtherDirectory/MyProject")
 #' # Returns: "/Users/example/OtherDirectory/MyProject"
 #' @keywords internal
-.replace_with_onedrive_root <- function(abs_path) {
+.onedrive_reference <- function(abs_path) {
 
   # Load required package
   if (!requireNamespace("fs", quietly = TRUE)) {

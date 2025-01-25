@@ -20,8 +20,8 @@
 #' @details
 #' This function performs the following steps:
 #' \enumerate{
-#'   \item Retrieves configuration details, such as Common Table Expression (CTE) for scope materials and WHERE clause filters, using \code{.get_duckdb_parts()}.
-#'   \item Dynamically determines the list of parquet files to query based on the specified file type (\code{.ftype}) using \code{.get_data_full_file_names()}.
+#'   \item Retrieves configuration details, such as Common Table Expression (CTE) for scope materials and WHERE clause filters, using \code{.duckdb_get_parts()}.
+#'   \item Dynamically determines the list of parquet files to query based on the specified file type (\code{.ftype}) using \code{.data_full_file_names_get()}.
 #'   \item Constructs and executes an SQL query in DuckDB to fetch the requested material master data, applying the provided filters.
 #' }
 #'
@@ -62,7 +62,7 @@ pa_Get_MAT <- function(
   }
 
   # Retrieve configuration for the query
-  config <- .get_duckdb_parts(
+  config <- .duckdb_get_parts(
     .material    = .material,
     .salesorg    = .salesorg,
     .scope_matl  = .scope_matl,
@@ -70,7 +70,7 @@ pa_Get_MAT <- function(
   )
 
   # Get the list of files to query for the first file type in .ftype
-  file_list <- .get_data_full_file_names(
+  file_list <- .data_full_file_names_get(
     .bsgp  = 2,
     .area  = 4,
     .vtype = '010',
@@ -164,7 +164,7 @@ pa_Get_DYN <-
   ){
 
     # construct Query
-    query <- .make_sql_query_dyn(
+    query <- .sql_access_create_dyn(
       .vtype       = .vtype,
       .ftype       = .ftype,
       .material    = .material,
@@ -180,7 +180,7 @@ pa_Get_DYN <-
     )
 
     # fetch .n results and return as data.table
-    dbGetQuery(.get_duckdb_conn(), query, n = .n) %>%
+    dbGetQuery(.duckdb_open_conn(), query, n = .n) %>%
       setDT()
 
   }
@@ -237,7 +237,7 @@ pa_Get_RTP <-
   ){
 
     # Get Centralized config
-    config <- .get_duckdb_parts(
+    config <- .duckdb_get_parts(
       .material   = .material,
       .salesorg   = .salesorg,
       .scope_matl = .scope_matl,
@@ -279,7 +279,7 @@ pa_Get_RTP <-
       ", .con = config$duckdb_con)
 
     # fetch .n results and return as data.table
-    dbGetQuery(.get_duckdb_conn(), query, n = .n) %>%
+    dbGetQuery(.duckdb_open_conn(), query, n = .n) %>%
       setDT()
 
   }
@@ -336,7 +336,7 @@ pa_Get_IPM <-
   ){
 
     # Get Centralized config
-    config <- .get_duckdb_parts(
+    config <- .duckdb_get_parts(
       .material   = .material,
       .salesorg   = .salesorg,
       .scope_matl = .scope_matl,
@@ -378,7 +378,7 @@ pa_Get_IPM <-
       ", .con = config$duckdb_con)
 
     # fetch .n results and return as data.table
-    dbGetQuery(.get_duckdb_conn(), query, n = .n) %>%
+    dbGetQuery(.duckdb_open_conn(), query, n = .n) %>%
       setDT()
 
   }

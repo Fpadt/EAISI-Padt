@@ -1,129 +1,99 @@
-#' set up a project directory structure
+#' Run Installation Process for the Package
 #'
-#' Creates a directory structure for different DTAP environments, BSGP stages,
-#' and functional AREAs, and saves the root directory location in `.config.yaml`.
+#' Guides the user through the package installation process by asking three questions
+#' and executing specific functions (`fun1`, `fun2`, `fun3`) based on the user's choices.
 #'
-#' @param root_dir A character string specifying the top-level directory under
-#'   which all subdirectories will be created. Defaults to `"."`.
-#' @param DTAP_levels A character vector defining the DTAP levels.
-#'   Defaults to `pa_DTAP` = c("Development", "Test", "Acceptance", "Production").
-#' @param pa_BSGP_levels A character vector defining the pa_BSGP stages.
-#'   Defaults to `pa_BSGP` = c("Bronze", "Silver", "Gold", "Platinum").
-#' @param functional_pa_AREAs A character vector defining functional pa_AREAs within
-#'   each pa_BSGP stage. Defaults to
-#'   `pa_AREA` = c("sales", "stock", "promotions", "master_data").
-#' @param project_dir A character string specifying the directory where the
-#'   `.config.yaml` file will be saved or updated. Defaults to `"."`.
-#'
-#' @return Invisibly returns the normalized `root_dir`.
-#'
-#' @details
-#' This function constructs a multi-level directory hierarchy reflecting
-#' different pa_DTAP (Development, Test, Acceptance, Production) environments,
-#' each with pa_BSGP (Bronze, Silver, Gold, Platinum) stages and designated
-#' functional pa_AREAs (e.g., "sales", "stock"). If the specified `root_dir` is
-#' within the user's OneDrive path (either consumer or commercial), the path
-#' stored in the YAML file will be replaced with a placeholder
-#' ("OneDriveConsumer" or "OneDriveBusiness") and the relative subdirectory
-#' path.
-#'
+#' @return NULL. Functions are executed based on user input.
+#' @examples
+#' # Run the installation process
+#' run_installation()
 #' @export
-pa_setup_project_structure <- function(
-    root_dir         = ".",
-    project_dir      = "."
-) {
-  # Get OneDrive paths from environment variables
-  onedrive_consumer   <- path_abs(Sys.getenv("OneDriveConsumer"))
-  onedrive_commercial <- path_abs(Sys.getenv("OneDriveCommercial"))
+pa_initialize <- function() {
 
-  # Normalize and validate root_dir
-  root_dir <- tryCatch({
-    path_abs(root_dir)
-  }, error = function(e) {
-    stop("Invalid root directory path: ", root_dir, "\n", e$message)
-  })
-
-  # check if root dir already exists
-  if (dir_exists(root_dir)) {
-    stop(silver("Root directory already exists!: "), green(root_dir))
-  }
-
-  # Determine the value to store for root_dir in the YAML
-  yaml_root_dir <- if (path_has_parent(root_dir, onedrive_consumer)) {
-    rel_path <- path_rel(root_dir, start = onedrive_consumer)
-    path("OneDriveConsumer", rel_path)
-  } else if (path_has_parent(root_dir, onedrive_commercial)) {
-    rel_path <- path_rel(root_dir, start = onedrive_commercial)
-    path("OneDriveBusiness", rel_path)
-  } else {
-    root_dir
-  }
-
-  # Attempt to create the root directory
-  tryCatch({
-    dir_create(root_dir)
-  }, error = function(e) {
-    stop("Failed to create the root directory: ", root_dir, "\n", e$message)
-  })
-
-  # Create the pa_DTAP, pa_BSGP, and functional pa_AREA directory structure
-  for (dtap in .DTAP) {
-    for (bsgp in .BSGP) {
-      for (area in .AREA) {
-        dir_create(path(root_dir, dtap, bgsp, area))
-      }
+  # Helper function to ask a question and process the user's choice
+  ask_question <- function(question, options) {
+    message(silver(question))
+    for (i in seq_along(options)) {
+      message(i, ": ", options[[i]])
     }
-
+    repeat {
+      choice <- as.integer(readline("Enter the number of your choice: "))
+      if (!is.na(choice) && choice >= 1 && choice <= length(options)) {
+        return(choice)
+      }
+      message(
+        red(paste("Invalid choice. Please enter a number between 1 and",
+                  length(options), ".")))
+    }
   }
 
-  # Save the root_dir to the YAML file
-  .save_config_to_yaml(
-    config_list = list(root_dir = yaml_root_dir),
-    project_dir = project_dir
+  # Question 1: create config folder
+  choice1 <- ask_question(
+    "create 'config' in project root directory?",
+    options = c(
+      "create with overwrite",
+      "create don't overwrite",
+      "do nothing"
+    )
   )
-
-  message(
-    green(paste0("Project structure created successfully at: ", root_dir)))
-
-  return(invisible(root_dir))
-}
-
-#' set the current DTAP environment
-#'
-#' Updates the `.config.yaml` file to indicate which pa_DTAP environment
-#' (Development, Test, Acceptance, Production) is currently active.
-#'
-#' @param .project_dir A character string specifying the project directory
-#'   where the `.config.yaml` file is located. Defaults to `"."`.
-#' @param .environment A character string specifying the environment to set.
-#'   Must be one of the values in `pa_DTAP`.
-#'
-#' @details
-#' If an invalid environment name is provided, the function will stop
-#' execution and display a list of valid environments in green using the
-#' **`crayon`** package.
-#'
-#' @return Invisibly returns `NULL` after updating the configuration.
-#'
-#' @export
-pa_set_environment <- function(
-    .project_dir = ".",
-    .environment = "Production"
-) {
-  if(!.environment %in% .DTAP){
-    message(green(
-      paste0("Valid environments: ",
-             paste(pa_DTAP, collapse = ", "))))
-    stop("Invalid environment: ", .environment)
+  if (choice1 == 1) {
+    .copy_package_folder(
+      folder_name = "config",
+      target_dir = ".",
+      .overwrite = TRUE)
+  } else if (choice1 == 2) {
+    .copy_package_folder(
+      folder_name = "config",
+      target_dir = ".",
+      .overwrite = FALSE)
   }
 
-  .upsert_config_in_yaml(
-    .key         = "environment",
-    .value       = .environment,
-    .project_dir = .project_dir
+  # Question 2: copy demo environment with data
+  choice2 <- ask_question(
+    "create demo environment in project root directory?",
+    options = c(
+      "create with overwrite",
+      "create don't overwrite",
+      "do nothing"
+    )
   )
+  if (choice2 == 1) {
+    .copy_package_folder(
+      folder_name = "demo",
+      target_dir = ".",
+      .overwrite = TRUE)
+  } else if (choice2 == 2) {
+    .copy_package_folder(
+      folder_name = "demo",
+      target_dir = ".",
+      .overwrite = FALSE)
+  }
 
-  .copy_config_folder(pa_get_wd())
+  # Question 3: activate demo environment
+  choice3 <- ask_question(
+    "Activate the demo environment?",
+    options = c(
+      "Yes",
+      "No"
+    )
+  )
+  if (choice3 == 1) {
+    pa_config_set_value("environment", "demo")
+    pa_config_set_value("data_dir"   , ".")
+  }
 
+  # Question 4: Ecotone Brand colors
+  choice3 <- ask_question(
+    "Add Ecotone Brand Colors?",
+    options = c(
+      "Yes",
+      "No"
+    )
+  )
+  if (choice4 == 1) {
+    .generate_color_variables(.ET_COLS)
+  }
+
+
+  message(green("Installation process completed."))
 }
-

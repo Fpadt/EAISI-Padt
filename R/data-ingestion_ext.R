@@ -23,19 +23,19 @@
 #' @examples
 #' \dontrun{
 #'   # Fetch pipeline data
-#'   dt_pipe <- pa_get_pipelines()
+#'   dt_pipe <- pa_transformations_get()
 #'   head(dt_pipe)
 #' }
 #'
 #' @export
-pa_get_pipelines <- function() {
+pa_transformations_get <- function() {
 
   rbind(
     fread(file = file.path(
-      pa_get_wd(), "config", "B4_PIPELINE_ORG.csv")) %>%
+      pa_wd_get(), "config", "B4_PIPELINE_ORG.csv")) %>%
       .[, `:=`(SRC = "O", WHERE_CLAUSE = "")],
     fread(file = file.path(
-      pa_get_wd(), "config", "B4_PIPELINE_MOD.csv")) %>%
+      pa_wd_get(), "config", "B4_PIPELINE_MOD.csv")) %>%
       .[, `:=`(SRC = "C")]
   ) %T>%
     setorder(SRC, OHDEST, POSIT) %>%
@@ -70,10 +70,10 @@ pa_get_pipelines <- function() {
 #' Returns \code{NULL} invisibly. The side-effect is that new Parquet files are written to \code{output_path}.
 #'
 #' @seealso
-#' \code{\link{.get_pipe_line}}, \code{\link{.transform_csv_to_parquet}}
+#' \code{\link{.transformation_rules_get}}, \code{\link{.transform_csv_to_parquet}}
 #'
 #' @export
-pa_transform_csv_to_parquet <- function(
+pa_transform <- function(
     source_path,
     output_path,
     file_pattern,
@@ -122,7 +122,7 @@ pa_transform_csv_to_parquet <- function(
   }
 
   #--- Get Transformation Pipeline ---------------------------------------------
-  PIPE_LINE <- .get_pipe_line(ohdest = ohdest)
+  PIPE_LINE <- .transformation_rules_get(ohdest = ohdest)
 
   #--- Check if the pipeline for the source exists -----------------------------
   if (nrow(PIPE_LINE) == 0) {
@@ -148,18 +148,54 @@ pa_transform_csv_to_parquet <- function(
   invisible(NULL)
 }
 
-#' Get File Specification from YAML Configuration (Internal)
+#' Prompt User for Transformation Decision with Options
 #'
-#' Internal function to retrieve the file specification from the YAML configuration file
-#' stored in the specified project directory.
+#' Asks the user how to handle the files found (transform all, transform new, transform modified, or do nothing).
 #'
-#' @param project_dir Character. The path to the project directory
-#' containing the `.config.yaml` file.
-#'
-#' @return A list with the following elements:
-#' \describe{
-#'   \item{DELIM}{Character. The delimiter used in the files (e.g., `";"`).}
-#'   \item{HEADER}{Logical. Whether the files have a header (`TRUE` or `FALSE`).}
-#'   \item{DATE_FORMAT}{Character. The date format used in the files (e.g., `"%Y-%m-%d"`).}
-#' }
-#' @keywords internal
+#' @param pa_SYNC A list with two elements:
+#'   \describe{
+#'     \item{NEW}{Character vector of paths for new files.}
+#'     \item{MOD}{Character vector of paths for modified files.}
+#'   }
+#' @return Character. One of the options: ".all", ".new", ".mod", or ".none".
+#' @export
+pa_ask_user_transform_files <- function(pa_SYNC) {
+
+  # Calculate file counts
+  .new <- length(pa_SYNC[["NEW"]])
+  .mod <- length(pa_SYNC[["MOD"]])
+  .all <- .new + .mod
+
+  # Define options
+  options <- c(
+    paste0("Transform All (", .all, " files)"),
+    paste0("Transform New (", .new, " files)"),
+    paste0("Transform Modified (", .mod, " files)"),
+    "Do Nothing"
+  )
+
+  # Display the question and options
+  cat("How would you like to handle the files?\n")
+  for (i in seq_along(options)) {
+    cat(i, ":", options[i], "\n")
+  }
+
+  # Get user input and validate it
+  repeat {
+    choice <- readline(prompt = "Please choose 1, 2, 3, or 4: ")
+
+    # Validate the input
+    if (choice %in% c("1", "2", "3", "4")) {
+      # Map user choice to return value
+      return(switch(
+        choice,
+        ".all", # Option 1
+        ".new", # Option 2
+        ".mod", # Option 3
+        ".none" # Option 4
+      ))
+    } else {
+      cat("Invalid input. Please choose 1, 2, 3, or 4.\n")
+    }
+  }
+}

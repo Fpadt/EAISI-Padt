@@ -194,10 +194,10 @@
     }
 
     # Establish a connection to DuckDB
-    con <- .get_duckdb_conn()
+    con <- .duckdb_open_conn()
 
     # Ensure the connection is closed when the function exits
-    on.exit(.close_duckdb_conn(), add = TRUE)
+    on.exit(.duckdb_close_conn(), add = TRUE)
 
     # Generate duckdb SQL to transform_csv_to_parquet
     sql_transform_csv_to_parquet <- glue("
@@ -254,7 +254,7 @@
 #' @title Internal Helper: Retrieve a Pipeline by ohdest
 #'
 #' @description
-#' Internal helper function that queries all available pipelines (via \code{pa_get_pipelines()})
+#' Internal helper function that queries all available pipelines (via \code{pa_transformations_get()})
 #' and returns only those relevant for a given \code{ohdest}. The returned data.table is then sorted.
 #'
 #' @param ohdest A character string indicating which pipeline to filter on.
@@ -264,11 +264,11 @@
 #'
 #' @details
 #' This is an internal function (\emph{not exported}) and is intended to be used by other functions
-#' within this package. It relies on \code{pa_get_pipelines()} to load the master pipeline data first.
+#' within this package. It relies on \code{pa_transformations_get()} to load the master pipeline data first.
 #'
 #' @keywords internal
-.get_pipe_line <- function(ohdest) {
-  pa_get_pipelines() %>%
+.transformation_rules_get <- function(ohdest) {
+  pa_transformations_get() %>%
     .[OHDEST == ohdest] %T>%
     setorder(OHDEST, POSIT)
 }
@@ -286,7 +286,7 @@
 #'   \item{DATE_FORMAT}{Character. The date format used in the files (e.g., `\"\%Y-\%m-\%d\"`).}
 #' }
 #' @keywords internal
-.get_file_spec <- function(project_dir) {
+.file_spec_get <- function(project_dir) {
   # Validate project directory
   if (!fs::dir_exists(project_dir)) {
     stop("The specified project directory does not exist: ", project_dir)

@@ -41,8 +41,8 @@ Fetches global material master data, material master data per sales organization
 \details{
 This function performs the following steps:
 \enumerate{
-  \item Retrieves configuration details, such as Common Table Expression (CTE) for scope materials and WHERE clause filters, using \code{.get_duckdb_parts()}.
-  \item Dynamically determines the list of parquet files to query based on the specified file type (\code{.ftype}) using \code{.get_data_full_file_names()}.
+  \item Retrieves configuration details, such as Common Table Expression (CTE) for scope materials and WHERE clause filters, using \code{.duckdb_get_parts()}.
+  \item Dynamically determines the list of parquet files to query based on the specified file type (\code{.ftype}) using \code{.data_full_file_names_get()}.
   \item Constructs and executes an SQL query in DuckDB to fetch the requested material master data, applying the provided filters.
 }
 

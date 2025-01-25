@@ -17,7 +17,7 @@ fDescribe_Parquet <-
   ){
 
     # Establish a connection to DuckDB
-    con <- .get_duckdb_conn()
+    con <- .duckdb_open_conn()
 
     # construct Query
     query <-

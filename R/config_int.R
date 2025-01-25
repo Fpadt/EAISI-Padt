@@ -5,7 +5,7 @@
 #' @param config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
 #' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
 #' @examples
-#' .create_default_config_yaml(
+#' .config_default_create(
 #'   config_dir = "./inst/extdata",
 #'   key_value_list = list(
 #'     "project.name"        = "Pythia's Advice",
@@ -14,7 +14,7 @@
 #'     )
 #'   )
 #' @keywords internal
-.create_default_config_yaml <- function(
+.config_default_create <- function(
     config_dir = "./inst/extdata",
     key_value_list = NULL
     ) {
@@ -56,7 +56,7 @@
 #' @param config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
 #' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
 #' @keywords internal
-.create_instance_of_default_config_yaml <- function(
+.config_default_write <- function(
     config_dir     = "./inst/extdata/config",
     key_value_list = NULL) {
 

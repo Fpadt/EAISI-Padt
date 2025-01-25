@@ -1,4 +1,4 @@
-.make_sql_query_dyn <-
+.sql_access_create_dyn <-
   function(
     .vtype       = NULL    , # NULL will get both 010 and 060
     .ftype       = NULL    , # NULL will get all ftypes
@@ -15,7 +15,7 @@
   ) {
 
     # Get Centralized config
-    config <- .get_duckdb_parts(
+    config <- .duckdb_get_parts(
       .vtype       = .vtype,
       .ftype       = .ftype,
       .material    = .material,
@@ -31,7 +31,7 @@
     )
 
     # Determine Files to read
-    file_list <- .get_data_full_file_names(
+    file_list <- .data_full_file_names_get(
       .bgsp  = 2, .area = 1, .vtype = .vtype, .ftype = .ftype,
       .etype = "parquet"
     )

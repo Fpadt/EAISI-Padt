@@ -1,8 +1,8 @@
 # prerequisite(s):
-#  - execute yaml_int::.create_instance_of_default_config_yaml()
+#  - execute yaml_int::.config_default_write()
 #
 # Set Up - after package installation
-#  1. .copy_config_folder
+#  1. .copy_package_folder
 #  2. .create_data_folders()
 #  3. copy demo data to demo folder
 #  4. sync files
@@ -27,7 +27,8 @@
 .copy_package_folder <- function(
     folder_name,
     source_dir = "inst/extdata",
-    target_dir = "."
+    target_dir = ".",
+    .overwrite = TRUE
 ) {
 
   # Get the package's installation path
@@ -50,7 +51,7 @@
   fs::dir_create(full_target_path)
 
   # Copy the folder to the target directory
-  fs::dir_copy(full_source_path, full_target_path, overwrite = TRUE)
+  fs::dir_copy(full_source_path, full_target_path, overwrite = .overwrite)
 
   # Inform the user of the successful copy
   message(
@@ -92,7 +93,7 @@
   for (dtap in .dtap) {
     for (bsgp in .bsgp) {
       for (area in .area) {
-        fs::dir_create(fs::path(root_dir, "data", dtap, bsgp, area))
+        fs::dir_create(fs::path(root_dir, dtap, bsgp, area))
       }
     }
   }

@@ -20,9 +20,14 @@
 #'
 #' @export
 pa_matn1_input <- function(x) {
-  # like CONVERSION_EXIT_MATN1_INPUT
+  # like SAP-CONVERSION_EXIT_MATN1_INPUT
   # only leftpad leading zero's in case it is a number
-  .LP0(x, 18)
+  is_num <- grepl("^[0-9]+$", x)
+  ifelse(
+    is_num,
+    stringr::str_pad(string = x, width = width, side = "left", pad = "0"),
+    x
+  )
 }
 
 #' remove leading zeros
@@ -47,7 +52,7 @@ pa_matn1_input <- function(x) {
 #' @export
 pa_matn1_output <-
   function(x){
-    # like CONVERSION_EXIT_MATN1_OUTPUT
+    # like SAP-CONVERSION_EXIT_MATN1_OUTPUT
     # only remove leading zero's in case it is a number
     is_num <- grepl("^[0-9]+$", x)
     ifelse(
@@ -56,40 +61,3 @@ pa_matn1_output <-
       x
     )
   }
-
-#' preview the header of a parquet file
-#'
-#' Retrieves the first \code{n} rows of a Parquet file as a \code{data.table}.
-#'
-#' @param .fn Character. The file path to the Parquet file.
-#' @param .n Numeric. The number of rows to retrieve. Defaults to 1000.
-#'
-#' @return A \code{data.table} containing the first \code{n} rows of the Parquet file.
-#'
-#' @details
-#' This function connects to DuckDB to query the specified Parquet file and fetch the first \code{n} rows.
-#'
-#' @export
-pa_parquet_head <-
-  function(.fn, .n = 1000){
-
-    con <- .duckdb_open_conn()
-
-    on.exit( .duckdb_close_conn())
-
-    query <- glue_sql("
-    SELECT
-      *
-    FROM
-      read_parquet([{`.fn`}])
-    LIMIT {.n}
-   ", .con = con)
-
-    dt <-
-      dbGetQuery(con, query) %>%
-      setDT()
-
-    return(dt)
-
-  }
-

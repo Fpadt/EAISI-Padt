@@ -9,26 +9,6 @@
 #      )
 #   "
 
-#' Left Pad with Zeros
-#'
-#' Internal helper function to left-pad numeric strings with leading zeros to a specified width.
-#'
-#' @param x A character vector. Only numeric-like strings will be padded.
-#' @param width An integer specifying the total width of the output strings. Non-numeric strings remain unchanged.
-#'
-#' @return A character vector where numeric strings are left-padded with zeros to the specified width.
-#'
-#' @keywords internal
-.LP0 <- function(x, width) {
-  # Only add leading zeros if it is a number
-  is_num <- grepl("^[0-9]+$", x)
-  ifelse(
-    is_num,
-    stringr::str_pad(string = x, width = width, side = "left", pad = "0"),
-    x
-  )
-}
-
 #' Display Verbose Output for Function Execution
 #'
 #' Helper function to print details about a function's name, arguments, and return value if verbose mode is enabled.
@@ -43,7 +23,7 @@
 #' @examples
 #' # Example for internal testing
 #' @keywords internal
-.Verbose <- function(
+.verbose <- function(
     function_name = NULL,
     function_args = NULL,
     function_return = NULL,
@@ -67,96 +47,7 @@
   }
 }
 
-#' Retrieve DuckDB Config Parts
-#'
-#' This internal helper function returns a list of three elements:
-#' \enumerate{
-#'   \item \code{duckdb_con} - The DuckDB connection.
-#'   \item \code{cte_scope_materials} - The CTE (common table expression) snippet
-#'         for scope materials, constructed if needed.
-#'   \item \code{where_clause} - A character vector of one or more WHERE clauses,
-#'         built according to the provided parameters.
-#' }
-#'
-#' @param .material A character vector of materials to filter on. If \code{NULL},
-#'   no material-based filter is applied (beyond scope constraints).
-#' @param .salesorg A character vector of sales organizations to filter on. If \code{NULL},
-#'   no salesorg-based filter is applied (beyond scope constraints).
-#' @param .scope_matl Logical. If \code{TRUE}, the returned \code{cte_scope_materials}
-#'   (and any relevant WHERE clauses) will restrict to materials in the scope definition.
-#' @param .scope_sorg Logical. If \code{TRUE}, where clauses will restrict to
-#'   the provided sales organization scope (if \code{.salesorg} is not \code{NULL}).
-#' @param .cm_min Character. Minimum YYYYMM to apply in date-based filtering. Defaults to
-#'   \code{NULL}.
-#' @param .cm_max Character. Maximum YYYYMM to apply in date-based filtering. Defaults to
-#'   \code{NULL}.
-#' @param .step_min Numeric. Minimum step filter. Defaults to \code{NULL}.
-#' @param .step_max Numeric. Maximum step filter. Defaults to \code{NULL}.
-#' @param .lagg_min Numeric. Minimum lag filter. Defaults to \code{NULL}.
-#' @param .lagg_max Numeric. Maximum lag filter. Defaults to \code{NULL}.
-#'
-#' @return A named \code{list} with three elements:
-#'   \itemize{
-#'     \item \code{duckdb_con} - The active DuckDB connection.
-#'     \item \code{cte_scope_materials} - SQL snippet for scope materials (may be an
-#'            empty string if \code{.scope_matl=FALSE}).
-#'     \item \code{where_clause} - A character vector of WHERE clauses.
-#'   }
-#'
-#' @details
-#' This function centralizes the logic of creating a DuckDB connection,
-#' constructing the \code{cte_scope_materials} snippet, and building the \code{where_clause}.
-#' Other functions can call this to avoid repeating code.
-#'
-#' @keywords internal
-.get_duckdb_parts <- function(
-    .vtype       = NULL,
-    .ftype       = NULL,
-    .material    = NULL,
-    .salesorg    = NULL,
-    .scope_matl  = NULL,
-    .scope_sorg  = FALSE,
-    .cm_min      = NULL,
-    .cm_max      = NULL,
-    .step_min    = NULL,
-    .step_max    = NULL,
-    .lagg_min    = NULL,
-    .lagg_max    = NULL
-) {
 
-  # -- 1) Get or create a DuckDB connection --
-  con <- .get_duckdb_conn()
-
-  # -- 2) Build the CTE snippet for scope materials --
-  cte_scope_materials <- .get_cte_scope_materials(
-    .scope_matl = .scope_matl,
-    .con        = con
-  )
-
-  # -- 3) Build the WHERE clause according to the given parameters --
-  where_clause <- .get_where_clause(
-    .vtype      = .vtype,
-    .ftype      = .ftype,
-    .material   = .material,
-    .salesorg   = .salesorg,
-    .scope_matl = .scope_matl,
-    .scope_sorg = .scope_sorg,
-    .cm_min     = .cm_min,
-    .cm_max     = .cm_max,
-    .step_min   = .step_min,
-    .step_max   = .step_max,
-    .lagg_min   = .lagg_min,
-    .lagg_max   = .lagg_max,
-    .con        = con
-  )
-
-  # Return as a named list
-  list(
-    duckdb_con          = con,
-    cte_scope_materials = cte_scope_materials,
-    where_clause        = where_clause
-  )
-}
 
 
 #' Construct a SQL CTE Clause for Scope Materials
@@ -212,58 +103,10 @@
 
 
 
-#' Get (or create) a DuckDB connection
-#'
-#' Internal function that returns a `DBIConnection` to DuckDB. If no connection
-#' exists in the `.duckdb_env`, a new one is created using \code{\link[DBI]{dbConnect}}.
-#'
-#' @param dbdir Character. Location of the DuckDB database file. Use \code{":memory:"}
-#'   for an in-memory database.
-#'
-#' @return A `DBIConnection` object to DuckDB.
-#'
-#' @details
-#' This internal helper function checks if there is an existing DuckDB connection in
-#' the environment `.duckdb_env$conn`. If none is found, it initializes a new one and
-#' caches it. Subsequent calls will reuse the same connection.
-#'
-#' @keywords internal
-.get_duckdb_conn <- function(dbdir = ":memory:") {
-  if (!exists("conn", envir = .duckdb_env)) {
-    message("Initializing DuckDB connection...")
-    .duckdb_env$conn <- DBI::dbConnect(duckdb::duckdb(), dbdir = dbdir)
-  }
-  .duckdb_env$conn
-}
 
 
-#' Close and Remove the DuckDB Connection
-#'
-#' This internal helper function checks whether a DuckDB connection (stored in
-#' \code{.duckdb_env$conn}) exists. If found, it closes (disconnects) the
-#' DuckDB connection using \code{\link[DBI]{dbDisconnect}} and removes the
-#' \code{conn} object from \code{.duckdb_env}. If no connection is present,
-#' a message is displayed indicating that nothing is closed.
-#'
-#' @details
-#' This function is called to cleanly release resources associated with a
-#' DuckDB connection in the internal environment. It can be invoked at the end
-#' of your workflow or whenever you wish to reset the internal DuckDB state.
-#'
-#' @return
-#' This function is called for its side effects (closing and removing the
-#' connection). It returns \code{NULL} invisibly.
-#'
-#' @keywords internal
-.close_duckdb_conn <- function() {
-  if (exists("conn", envir = .duckdb_env)) {
-    message("Closing DuckDB connection...")
-    DBI::dbDisconnect(.duckdb_env$conn, shutdown = TRUE)
-    rm("conn", envir = .duckdb_env)
-  } else {
-    message("No DuckDB connection found to close.")
-  }
-}
+
+
 
 #' Generate SQL for Scope Materials CTE
 #'
@@ -281,7 +124,7 @@
 #' @details
 #' This function dynamically constructs a SQL query using \code{glue::glue_sql},
 #' ensuring that inputs are safely parameterized. The parquet file path for material
-#' data is determined internally via \code{.get_data_full_file_names}.
+#' data is determined internally via \code{.data_full_file_names_get}.
 #'
 #' The returned SQL defines a Common Table Expression (CTE) named \code{SCOPE_MATL},
 #' which filters materials from a parquet file based on the specified \code{PRDH1} values.
@@ -307,7 +150,7 @@
   }
 
   # Get the list of files to query for the first file type in .ftype
-  FN_MATL <- .get_data_full_file_names(
+  FN_MATL <- .data_full_file_names_get(
     .bsgp  = 2,
     .area  = 4,
     .vtype = '010',
@@ -497,89 +340,6 @@
 }
 
 
-#' Save a Configuration to YAML
-#'
-#' Internal function to save configuration settings to a `.config.yaml` file.
-#'
-#' @param config_list A named list of configuration items to write to the YAML file.
-#' @param project_dir A character string specifying the project directory where
-#'   the `.config.yaml` file is (or will be) located. Defaults to `"."`.
-#'
-#' @details
-#' This function is used internally by the package to store key-value pairs
-#' into a YAML file for persistent configuration management.
-#'
-#' @keywords internal
-.save_config_to_yaml <- function(
-    config_list,
-    project_dir = ".") {
-
-  # Normalize project directory
-  project_dir <- normalizePath(project_dir, mustWork = TRUE)
-
-  # Define the path for the .config file
-  config_file <- file.path(project_dir, ".config.yaml")
-
-  # Write the configuration data to the YAML file
-  write_yaml(config_list, config_file)
-
-  message(
-    green(paste0("Configuration saved to YAML file: ", config_file)))
-}
-
-#' Upsert (Update/Insert) a Key-Value Pair in Configuration
-#'
-#' Internal function to add or update a single key-value pair in `.config.yaml`.
-#'
-#' @param .key A character string specifying the key to be updated or inserted.
-#' @param .value The value to assign to the key.
-#' @param .project_dir A character string specifying the project directory where
-#'   the `.config.yaml` file is (or will be) located. Defaults to `"."`.
-#'
-#' @details
-#' If the `.config.yaml` file already exists, this function updates or inserts
-#' the key-value pair in that file. If the file does not exist, it is created
-#' along with a minimal configuration list.
-#'
-#' @keywords internal
-.upsert_config_in_yaml <- function(
-    .key,
-    .value,
-    .project_dir = ".") {
-
-  # Normalize project directory
-  project_dir <- normalizePath(.project_dir, mustWork = TRUE)
-
-  # Define the path for the .config file
-  config_file <- file.path(project_dir, ".config.yaml")
-
-  # Check if the config file exists
-  if (file.exists(config_file)) {
-    # Read the existing configuration
-    config_data <- read_yaml(config_file)
-  } else {
-    # Initialize an empty configuration if the file does not exist
-    config_data <- list()
-  }
-
-  # Check if the key exists and update or insert
-  if (!.key %in% names(config_data)) {
-    message(
-      silver(paste0("Key '", .key, "' does not exist. ",
-                    "Adding it to the configuration.")))
-  }
-  config_data[[.key]] <- .value
-
-  # Write the updated configuration back to the YAML file
-  write_yaml(config_data, config_file)
-
-  message(
-    green(paste0("Key '", .key,
-                 "' updated/added in the configuration file: ", config_file)))
-}
-
-
-
 #' Get All Objects in the Package Namespace (Internal)
 #'
 #' Returns a data.table listing all objects in the package namespace, including
@@ -602,6 +362,7 @@
 
   # Load data.table
   library(data.table)
+  devtools::load_all()
 
   # Package name (change "padt" to your actual package name)
   package_name <- "padt"
@@ -616,10 +377,10 @@
     FUN = sapply(all_objects, function(obj) is.function(get(obj, envir = asNamespace(package_name))))
   )
 
-  return(DT)
+  .open_as_xlsx(DT)
 }
 
-fOpen_as_xlsx <-
+.open_as_xlsx <-
   function(pDT, pPath = tempdir(), pFN, pasTable = TRUE){
 
     library(lubridate)
