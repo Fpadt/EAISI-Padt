@@ -2,18 +2,19 @@
 % Please edit documentation in R/yaml_ext.R
 \name{pa_config_get_value}
 \alias{pa_config_get_value}
-\title{get config value from YAML file}
+\title{Get Config Value from YAML File with Hierarchy Support}
 \usage{
-pa_config_get_value(key, config_file = ".config.yaml")
+pa_config_get_value(.key, config_file = ".config.yaml")
 }
 \arguments{
-\item{key}{Character. The key whose value needs to be retrieved.}
+\item{.key}{Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").}
 
 \item{config_file}{Character. The path to the YAML configuration file. Defaults to ".config.yaml".}
 }
 \value{
-The value associated with the provided key, or NULL if the key does not exist.
+The value associated with the given key, or NULL if the key does not exist.
 }
 \description{
-Reads a value from a YAML configuration file based on the provided key.
+Retrieves a value from a YAML configuration file based on a hierarchical
+key using dot notation (e.g., "SALES.pipeline").
 }

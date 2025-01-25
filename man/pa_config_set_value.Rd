@@ -2,14 +2,14 @@
 % Please edit documentation in R/yaml_ext.R
 \name{pa_config_set_value}
 \alias{pa_config_set_value}
-\title{set config value in YAML file}
+\title{Set Config Value in YAML File with Hierarchy Support}
 \usage{
-pa_config_set_value(key, value, config_file = ".config.yaml")
+pa_config_set_value(.key, .value, config_file = ".config.yaml")
 }
 \arguments{
-\item{key}{Character. The key to add or update in the YAML file.}
+\item{.key}{Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.source_path").}
 
-\item{value}{Any. The value to associate with the given key.}
+\item{.value}{Any. The value to associate with the given key.}
 
 \item{config_file}{Character. The path to the YAML configuration file. Defaults to ".config.yaml".}
 }
@@ -17,5 +17,6 @@ pa_config_set_value(key, value, config_file = ".config.yaml")
 NULL. The function updates the YAML file in place.
 }
 \description{
-Adds or updates a key-value pair in a YAML configuration file.
+Adds or updates a key-value pair in a YAML configuration file. Supports hierarchical
+keys using dot notation (e.g., "SALES.pipeline").
 }
