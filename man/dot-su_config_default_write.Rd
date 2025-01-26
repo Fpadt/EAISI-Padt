@@ -5,8 +5,8 @@
 \title{Create Default Config YAML File (Internal)}
 \usage{
 .su_config_default_write(
-  config_dir = "./inst/extdata/config",
-  key_value_list = NULL
+  .config_dir = .cn_root_dir_get(),
+  .key_value_list = NULL
 )
 }
 \arguments{

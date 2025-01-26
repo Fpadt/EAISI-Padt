@@ -7,3 +7,5 @@
 ^SECURITY\.md$
 ^CRAN-SUBMISSION$
 ^dev$
+^_config$
+^sample_data$

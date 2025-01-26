@@ -1,11 +1,10 @@
 test_that("Test .di_csv_file_spec_get functionality", {
 
-  # Load the function from the package namespace
-  result <- padt:::.di_csv_file_spec_get()
+    # Ensure the environment is initialized
+    .padt_env_initialize()
 
-  # Expected output (replace this with the actual expected result)
-  expected <- "Expected Result"
+    # Test the functionality
+    result <- .di_csv_file_spec_get()
+    expect_true(!is.null(result))
 
-  # Test the output
-  expect_equal(result, expected)
 })

@@ -12,9 +12,9 @@ connection). It returns \code{NULL} invisibly.
 }
 \description{
 This internal helper function checks whether a DuckDB connection (stored in
-\code{.duckdb_env$conn}) exists. If found, it closes (disconnects) the
+\code{.padt_env$conn}) exists. If found, it closes (disconnects) the
 DuckDB connection using \code{\link[DBI]{dbDisconnect}} and removes the
-\code{conn} object from \code{.duckdb_env}. If no connection is present,
+\code{conn} object from \code{.padt_env}. If no connection is present,
 a message is displayed indicating that nothing is closed.
 }
 \details{

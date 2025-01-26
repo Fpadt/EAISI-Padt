@@ -4,12 +4,15 @@
 \alias{.su_config_default_create}
 \title{Create Default Config YAML File (Internal)}
 \usage{
-.su_config_default_create(config_dir = "./inst/extdata", key_value_list = NULL)
+.su_config_default_create(
+  .config_dir = .cn_root_dir_get(),
+  .key_value_list = NULL
+)
 }
 \arguments{
-\item{config_dir}{Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.}
+\item{.config_dir}{Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.}
 
-\item{key_value_list}{List. A named list of key-value pairs to set in the configuration file.}
+\item{.key_value_list}{List. A named list of key-value pairs to set in the configuration file.}
 }
 \description{
 Internal helper function to create a default `config.yaml` file in the specified directory.

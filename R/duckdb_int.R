@@ -1,7 +1,7 @@
 #' Get (or create) a DuckDB connection
 #'
 #' Internal function that returns a `DBIConnection` to DuckDB. If no connection
-#' exists in the `.duckdb_env`, a new one is created using \code{\link[DBI]{dbConnect}}.
+#' exists in the `.padt_env`, a new one is created using \code{\link[DBI]{dbConnect}}.
 #'
 #' @param dbdir Character. Location of the DuckDB database file. Use \code{":memory:"}
 #'   for an in-memory database.
@@ -10,24 +10,24 @@
 #'
 #' @details
 #' This internal helper function checks if there is an existing DuckDB connection in
-#' the environment `.duckdb_env$conn`. If none is found, it initializes a new one and
+#' the environment `.padt_env$conn`. If none is found, it initializes a new one and
 #' caches it. Subsequent calls will reuse the same connection.
 #'
 #' @keywords internal
 .duckdb_open_conn <- function(dbdir = ":memory:") {
-  if (!exists("conn", envir = .duckdb_env)) {
+  if (!exists("conn", envir = .padt_env)) {
     message("Initializing DuckDB connection...")
-    .duckdb_env$conn <- DBI::dbConnect(duckdb::duckdb(), dbdir = dbdir)
+    .padt_env$conn <- DBI::dbConnect(duckdb::duckdb(), dbdir = dbdir)
   }
-  .duckdb_env$conn
+  .padt_env$conn
 }
 
 #' Close and Remove the DuckDB Connection
 #'
 #' This internal helper function checks whether a DuckDB connection (stored in
-#' \code{.duckdb_env$conn}) exists. If found, it closes (disconnects) the
+#' \code{.padt_env$conn}) exists. If found, it closes (disconnects) the
 #' DuckDB connection using \code{\link[DBI]{dbDisconnect}} and removes the
-#' \code{conn} object from \code{.duckdb_env}. If no connection is present,
+#' \code{conn} object from \code{.padt_env}. If no connection is present,
 #' a message is displayed indicating that nothing is closed.
 #'
 #' @details
@@ -41,10 +41,10 @@
 #'
 #' @keywords internal
 .duckdb_close_conn <- function() {
-  if (exists("conn", envir = .duckdb_env)) {
+  if (exists("conn", envir = .padt_env)) {
     message("Closing DuckDB connection...")
-    DBI::dbDisconnect(.duckdb_env$conn, shutdown = TRUE)
-    rm("conn", envir = .duckdb_env)
+    DBI::dbDisconnect(.padt_env$conn, shutdown = TRUE)
+    rm("conn", envir = .padt_env)
   } else {
     message("No DuckDB connection found to close.")
   }

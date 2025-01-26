@@ -22,38 +22,40 @@
     target_dir = ".",
     .overwrite = TRUE
 ) {
-
   # Define the full source path (e.g., inst/extdata within the package)
   full_source_path <- fs::path(
-    system.file("extdata", folder_name, package = "padt"))
+    system.file("extdata", folder_name, package = "padt")
+  )
 
   # Validate the source path
   if (!fs::dir_exists(full_source_path)) {
     stop(paste0(
       "The folder '", folder_name,
-      "' does not exist in the package directory: ", full_source_path))
+      "' does not exist in the package directory: ", full_source_path
+    ))
   }
 
-  # Define the absolute target path
-  full_target_path <- fs::path_abs(target_dir, folder_name)
+  # Define the full target path (folder inside the target directory)
+  full_target_path <- fs::path(target_dir, folder_name)
 
-  if (.overwrite == TRUE && fs::dir_exists(full_target_path)) {
+  # Handle overwriting behavior
+  if (.overwrite && fs::dir_exists(full_target_path)) {
     fs::dir_delete(full_target_path)
   }
 
+  # Copy the folder if it does not already exist or if overwritten
   if (!fs::dir_exists(full_target_path)) {
-
-    # Copy the folder to the target directory
-    fs::dir_copy(full_source_path, target_dir, overwrite = .overwrite )
-
+    fs::dir_copy(full_source_path, full_target_path)
     # Inform the user of the successful copy
-    message(
-      green("Folder '", folder_name, "' successfully copied to: ",
-            target_dir))
+    message(crayon::green(
+     "Folder: '", folder_name, "' successfully created at: ", full_target_path
+    ))
+  } else {
+    # Inform the user that the folder already exists and was not overwritten
+    message(crayon::yellow(
+     "Folder '", folder_name, "' already exists, No changes made: ", full_target_path
+    ))
   }
-
-
-
 }
 
 
@@ -94,42 +96,45 @@
 #'
 #' Internal helper function to create a default `config.yaml` file in the specified directory.
 #'
-#' @param config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
-#' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
+#' @param .config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
+#' @param .key_value_list List. A named list of key-value pairs to set in the configuration file.
 #' @keywords internal
 .su_config_default_create <- function(
-    config_dir = "./inst/extdata",
-    key_value_list = NULL
+    .config_dir = .cn_root_dir_get(),
+    .key_value_list = NULL
 ) {
-  # Ensure the directory exists
-  if (!dir.exists(config_dir)) {
-    dir.create(config_dir, recursive = TRUE)
-    message("Directory created: ", config_dir)
-  }
 
   # Use default key-value pairs if none are provided
-  if (is.null(key_value_list)) {
-    key_value_list <- list(
+  if (is.null(.key_value_list)) {
+    .key_value_list <- list(
       # Project settings
       "project.name"          = "Pythia's Advice",
       "project.department"    = "EAISI",
 
+      # Data location
+      "data_dir"              = ".",
+      "environment"           = "sample_data",
+
       # CSV file specifications
       "csv_file_spec.delim"     = ";",
-      "csv_file_spec.date_format" = "%Y-%m-%d"
+      "csv_file_spec.date_format" = "%Y-%m-%d",
+
+      # Sales transformation settings
+      "sales.details.file_pattern" = "^DD_SALES_QTY_202[12345].*\\.csv$"
+
     )
   }
 
   # Set each key-value pair in the configuration file
-  for (key in names(key_value_list)) {
+  for (key in names(.key_value_list)) {
     pa_config_set_value(
-      .key       = key,
-      .value     = key_value_list[[key]],
-      config_dir = config_dir
+      .key         = key,
+      .value       = .key_value_list[[key]],
+      .config_path = .config_dir
     )
   }
 
-  message("Default config.yaml created in: ", config_dir)
+  message("Default config.yaml created in: ", .config_dir)
 }
 
 #' Create Default Config YAML File (Internal)
@@ -140,11 +145,11 @@
 #' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
 #' @keywords internal
 .su_config_default_write <- function(
-    config_dir     = "./inst/extdata/config",
-    key_value_list = NULL) {
+    .config_dir     = .cn_root_dir_get(),
+    .key_value_list = NULL) {
 
   # Define the path to the YAML file
-  config_file <- fs::path(config_dir, CONFIG_YAML)
+  config_file <- fs::path(.config_dir, CONFIG_YAML)
 
   # Delete the existing .config.yaml file if it exists
   if (file.exists(config_file)) {
@@ -153,8 +158,8 @@
   }
 
   # Use default key-value pairs if none are provided
-  if (is.null(key_value_list)) {
-    key_value_list <- list(
+  if (is.null(.key_value_list)) {
+    .key_value_list <- list(
       # Project settings
       "project.name"               = "Pythia's Advice",
       "project.department"         = "EAISI",
@@ -174,15 +179,66 @@
   }
 
   # Set each key-value pair in the configuration file
-  for (key in names(key_value_list)) {
+  for (key in names(.key_value_list)) {
     pa_config_set_value(
-      .key       = key,
-      .value     = key_value_list[[key]],
-      config_dir = config_dir
+      .key         = key,
+      .value       = .key_value_list[[key]],
+      .config_path = .config_dir
     )
   }
 
-  message("Default config.yaml created in: ", config_dir)
+  message("Default config.yaml created in: ", .config_dir)
 }
 
+#' Initialize the padt environment
+#'
+#' This function initializes the `.padt_env` environment for development or testing purposes.
+#' It mimics the `.onLoad` behavior to set up the `config.yaml` path, root directory, and any
+#' other necessary package-specific settings. Use this function during development without needing
+#' to reload the entire package.
+#'
+#' @details
+#' - For testing or `devtools::check()` contexts, it sets the root directory to a temporary folder.
+#' - For development within the package directory, it uses `inst/extdata` as the root directory.
+#' - For regular use, it copies the configuration folder to the user's project directory (`"."`).
+#'
+#' @return NULL. This function is used for side effects.
+#' @keywords internal
+.padt_env_initialize <- function() {
+  tryCatch(
+    {
+      prj_fldr <- "."
+
+      # Determine the root directory based on the context
+      if (testthat::is_testing() || Sys.getenv("R_CMD_CHECK") == "TRUE") {
+        # Use tempdir for testing or devtools::check()
+        temp_dir <- fs::path(tempdir(), .PACKAGE_NAME)
+        if (!fs::dir_exists(temp_dir)) {
+          fs::dir_create(temp_dir)
+        }
+        .su_package_folder_copy(CONFIG_FLDR, temp_dir, TRUE)
+        .su_package_folder_copy(PADEMO_FLDR, temp_dir, TRUE)
+        .padt_env$root_dir <- temp_dir
+      } else if (fs::dir_exists(fs::path("inst", "extdata"))) {
+        # Development context inside the package directory
+        .padt_env$root_dir <- fs::path("inst", "extdata")
+      } else {
+        # User's project directory
+        .su_package_folder_copy(CONFIG_FLDR, prj_fldr, FALSE)
+        .su_package_folder_copy(PADEMO_FLDR, prj_fldr, FALSE)
+        .padt_env$root_dir <- fs::path(prj_fldr)
+      }
+
+      # Add Ecotone brand colors
+      .cn_constants_color_generate(.ET_COLS)
+
+      # Inform the user
+      packageStartupMessage(
+        green(paste0("`", .PROJECT_NAME, "` initialized successfully.")))
+    },
+    error = function(e) {
+      warning("Initialization failed: ", conditionMessage(e))
+    }
+  )
+}
 

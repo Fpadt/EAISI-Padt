@@ -15,11 +15,11 @@ A `DBIConnection` object to DuckDB.
 }
 \description{
 Internal function that returns a `DBIConnection` to DuckDB. If no connection
-exists in the `.duckdb_env`, a new one is created using \code{\link[DBI]{dbConnect}}.
+exists in the `.padt_env`, a new one is created using \code{\link[DBI]{dbConnect}}.
 }
 \details{
 This internal helper function checks if there is an existing DuckDB connection in
-the environment `.duckdb_env$conn`. If none is found, it initializes a new one and
+the environment `.padt_env$conn`. If none is found, it initializes a new one and
 caches it. Subsequent calls will reuse the same connection.
 }
 \keyword{internal}

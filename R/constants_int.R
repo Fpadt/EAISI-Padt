@@ -1,3 +1,4 @@
+.PROJECT_NAME <- "Pythia's Advice"
 .PACKAGE_NAME <- "padt"
 
 fn_TRFN_ORG <- "transformation_rules_org.csv"
@@ -5,7 +6,7 @@ fn_TRFN_MOD <- "transformation_rules_mod.csv"
 
 CONFIG_YAML <- "_config.yaml"
 CONFIG_FLDR <- "_config"
-PADEMO_FLDR <- "demo"
+PADEMO_FLDR <- "sample_data"
 
 CM_MIN   <- '2021.01'
 CM_MAX   <- '2025.06'
@@ -19,8 +20,8 @@ DELIM       = "csv_file_spec.delim"
 HEADER      = "csv_file_spec.header"
 DATE_FORMAT = "csv_file_spec.date_format"
 
-# duckdb environment
-.duckdb_env <- new.env(parent = emptyenv())
+# Package-specific environment
+.padt_env <- new.env(parent = emptyenv())
 
 SCOPE_SORG <- c('FR30', 'NL10')
 SCOPE_PRDH <- c(
@@ -70,19 +71,10 @@ SCOPE_PRDH <- c(
 #' @keywords internal
 .cn_root_dir_get <- function() {
 
-  # Define the root directory path for testing or specific contexts
-  root_dir <- system.file("extdata", "", package = "padt", mustWork = FALSE)
-
-  # Determine the context and return the appropriate root directory
-  if (
-    testthat::is_testing()              ||    # If running in testthat environment
-    Sys.getenv("R_CMD_CHECK") == "TRUE" ||    # If running during devtools::check()
-    fs::dir_exists(root_dir)                  # If the directory inst/extdata exists
-  ) {
-    return(root_dir)
-  } else {
-    return(".")  # Default to current project directory
+  if (!exists("root_dir", envir = .padt_env)) {
+    stop("Config path is not initialized.")
   }
+  .padt_env$root_dir
 }
 
 #' Get config file path
@@ -127,7 +119,7 @@ SCOPE_PRDH <- c(
     assign(var_name, colors[[name]], envir = env)
   }
 
-  message(
+  packageStartupMessage(
     paste0(green("Color variables generated: ",
                  paste(paste0("col_", names(colors)), collapse = ", "))))
 }
