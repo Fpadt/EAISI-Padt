@@ -6,10 +6,12 @@
 #'
 #' @return Message indicating the installation process is completed.
 #' @examples
+#' \dontrun{
 #' # Run the installation process
-#' pa_initialize()
+#' pa_su_config_reset()
+#' }
 #' @export
-pa_initialize <- function() {
+pa_su_config_reset <- function() {
 
   # Helper function to ask a question and process the user's choice
   ask_question <- function(question, options) {
@@ -30,7 +32,7 @@ pa_initialize <- function() {
 
   # Question 1: create config folder
   choice1 <- ask_question(
-    "create 'config' in project root directory?",
+    "create '_config' in project root directory?",
     options = c(
       "create, with overwrite",
       "create, don't overwrite",
@@ -39,39 +41,31 @@ pa_initialize <- function() {
     )
   )
   if (choice1 == 1) {
-    .copy_package_folder(
-      folder_name = CONFIG_FLDR,
-      target_dir = ".",
-      .overwrite = TRUE)
+    # copy the default config folder to the user's project directory
+    .su_package_folder_copy(CONFIG_FLDR, ".", TRUE)
   } else if (choice1 == 2) {
-    .copy_package_folder(
-      folder_name = CONFIG_FLDR,
-      target_dir = ".",
-      .overwrite = FALSE)
+    # copy the default config folder to the user's project directory
+    .su_package_folder_copy(CONFIG_FLDR, ".", FALSE)
   } else if (choice1 == 4) {
-    stop("Initialization process stopped by user.")
+    message(crayon::red("Initialization process stopped by user."))
   }
 
   # Question 2: copy demo environment with data
   choice2 <- ask_question(
     "create demo environment in project root directory?",
     options = c(
-      "create with overwrite",
-      "create don't overwrite",
+      "create, with overwrite",
+      "create, don't overwrite",
       "skip, do nothing",
       "stop initialization process!"
     )
   )
   if (choice2 == 1) {
-    .copy_package_folder(
-      folder_name = PADEMO_FLDR,
-      target_dir = ".",
-      .overwrite = TRUE)
+    # copy demo data folder to the user's project directory
+    .su_package_folder_copy(PADEMO_FLDR, ".", TRUE)
   } else if (choice2 == 2) {
-    .copy_package_folder(
-      folder_name = PADEMO_FLDR,
-      target_dir = ".",
-      .overwrite = FALSE)
+    # copy demo data folder to the user's project directory
+    .su_package_folder_copy(PADEMO_FLDR, ".", FALSE)
   } else if (choice1 == 4) {
     message(crayon::red("Initialization process stopped by user."))
   }
@@ -85,7 +79,7 @@ pa_initialize <- function() {
     )
   )
   if (choice3 == 1) {
-    pa_config_set_value("environment", PADEMO_FLDR)
+    pa_config_set_value("environment", "demo")
     pa_config_set_value("data_dir"   , ".")
   }
 
@@ -98,7 +92,7 @@ pa_initialize <- function() {
     )
   )
   if (choice4 == 1) {
-    .generate_color_variables(.ET_COLS)
+    .cn_constants_color_generate(.ET_COLS)
   }
 
 

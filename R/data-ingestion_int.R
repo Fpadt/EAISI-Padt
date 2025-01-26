@@ -17,25 +17,25 @@
 #'         the trailing character (often a comma).
 #' }
 #'
-#' @param pipe_line A \code{data.table} (or similar) containing the fields for
+#' @param transformations A \code{data.table} (or similar) containing the fields for
 #'   transformations. Must include at least the columns referenced by
 #'   \code{filter_col} and \code{alignment_col}.
 #' @param filter_col A string specifying the column used to filter out empty rows.
 #' @param alignment_col A string specifying the column used to calculate spacing
 #'   for alignment.
 #' @param glue_template A string template passed to \code{glue_data}, referencing
-#'   columns in \code{pipe_line}. For example, \code{"'{FLDNM_IN}' : '{FIELDTP}',"}.
+#'   columns in \code{transformations}. For example, \code{"'{FLDNM_IN}' : '{FIELDTP}',"}.
 #'
 #' @return A single character string with the formatted field definitions.
 #'
 #' @keywords internal
-.gen_fields_generic <- function(
-    pipe_line,
+.di_fields_generic_get <- function(
+    transformations,
     filter_col,
     alignment_col,
     glue_template
 ) {
-  pipe_line %>%
+  transformations %>%
     # 1. Filter out empty rows based on filter_col
     .[get(filter_col) != ""] %>%
 
@@ -58,18 +58,18 @@
 #' Generate "Fields In" Using a Generic Template
 #'
 #' @description
-#' Internal wrapper function around \code{.gen_fields_generic} specifically for
+#' Internal wrapper function around \code{.di_fields_generic_get} specifically for
 #' fields that reference \code{FLDNM_IN} and \code{FIELDTP}.
 #'
-#' @param pipe_line A \code{data.table} (or similar) with columns
+#' @param transformations A \code{data.table} (or similar) with columns
 #'   \code{FLDNM_IN} and \code{FIELDTP} at least.
 #'
 #' @return A single character string with the formatted \code{FLDNM_IN} fields.
 #'
 #' @keywords internal
-.gen_fields_in <- function(pipe_line) {
-  .gen_fields_generic(
-    pipe_line     = pipe_line,
+.di_fields_in_get <- function(transformations) {
+  .di_fields_generic_get(
+    transformations     = transformations,
     filter_col    = "FLDNM_IN",
     alignment_col = "FLDNM_IN",
     glue_template = "'{FLDNM_IN}'{strrep(' ', no_spc)}: '{FIELDTP}',"
@@ -80,18 +80,18 @@
 #' Generate "Fields Out" Using a Generic Template
 #'
 #' @description
-#' Internal wrapper function around \code{.gen_fields_generic} specifically for
+#' Internal wrapper function around \code{.di_fields_generic_get} specifically for
 #' fields that reference \code{FLDNM_OUT} and \code{TRNSFRM}.
 #'
-#' @param pipe_line A \code{data.table} (or similar) with columns
+#' @param transformations A \code{data.table} (or similar) with columns
 #'   \code{FLDNM_OUT} and \code{TRNSFRM} at least.
 #'
 #' @return A single character string with the formatted \code{FLDNM_OUT} fields.
 #'
 #' @keywords internal
-.gen_fields_out <- function(pipe_line) {
-  .gen_fields_generic(
-    pipe_line     = pipe_line,
+.di_fields_out_get <- function(transformations) {
+  .di_fields_generic_get(
+    transformations     = transformations,
     filter_col    = "FLDNM_OUT",
     alignment_col = "FLDNM_OUT",
     glue_template = "{TRNSFRM}{strrep(' ', no_spc)}AS {FLDNM_OUT},"
@@ -101,8 +101,8 @@
 #' Generate a WHERE Clause Using the Generic Fields Function
 #'
 #' @description
-#' A wrapper around \code{.gen_fields_generic} to produce the same output as the
-#' original \code{.gen_where_clause()} function. Specifically, it filters out any
+#' A wrapper around \code{.di_fields_generic_get} to produce the same output as the
+#' original \code{.di_where_clause_get()} function. Specifically, it filters out any
 #' empty \code{WHERE_CLAUSE} rows, calculates alignment based on \code{WHERE_CLAUSE},
 #' and applies a glue template of the form:
 #'
@@ -118,21 +118,21 @@
 #'   \item Collapses them into one string with newlines, then strips the final comma.
 #' }
 #'
-#' @param pipe_line A \code{data.table} (or similar) that includes at least
+#' @param transformations A \code{data.table} (or similar) that includes at least
 #'   \code{FLDNM_OUT} and \code{WHERE_CLAUSE}.
 #'
 #' @return A single character string identical to what the original
-#'   \code{.gen_where_clause()} produced.
+#'   \code{.di_where_clause_get()} produced.
 #'
 #' @keywords internal
-.gen_where_clause <- function(pipe_line) {
+.di_where_clause_get <- function(transformations) {
 
 
-  if(nrow(pipe_line[get("WHERE_CLAUSE") != ""]) == 0){
+  if(nrow(transformations[get("WHERE_CLAUSE") != ""]) == 0){
     return("TRUE")
   } else {
-    .gen_fields_generic(
-      pipe_line     = pipe_line,
+    .di_fields_generic_get(
+      transformations     = transformations,
       filter_col    = "WHERE_CLAUSE",   # Filter out empty WHERE_CLAUSE rows
       alignment_col = "WHERE_CLAUSE",   # Align based on the length of WHERE_CLAUSE
       glue_template = "{FLDNM_OUT}{strrep(' ', no_spc)} {WHERE_CLAUSE},"
@@ -160,7 +160,7 @@
 #'   Parquet file should be written.
 #' @param file_spec      A list-like object with the CSV specifications (e.g.
 #'   delim, header, date format).
-#' @param pipe_line      A \code{data.table} (or similar) detailing how
+#' @param transformations      A \code{data.table} (or similar) detailing how
 #'   fields should be transformed.
 #' @param verbose        A logical indicating whether to print additional
 #'   information (\code{TRUE}) or not (\code{FALSE}).
@@ -170,11 +170,11 @@
 #' file in \code{output_path}.
 #'
 #' @keywords internal
-.transform_csv_to_parquet <- function(
+.di_transform_csv_to_parquet <- function(
     full_file_name,
     output_path,
     file_spec,
-    pipe_line,
+    transformations,
     verbose
 ) {
     file_name       <- fs::path_file(full_file_name)
@@ -206,12 +206,12 @@
         header     =  {file_spec$HEADER},
         dateformat = '{file_spec$DATE_FORMAT}',
         columns = {{
-          {.gen_fields_in(pipe_line)}
+          {.di_fields_in_get(transformations)}
         }}
       )
     ", .con = con ) %>% glue_sql("
       SELECT
-        {DBI::SQL(.gen_fields_out(pipe_line))}
+        {DBI::SQL(.di_fields_out_get(transformations))}
       FROM
         {DBI::SQL(sql_read_csv)}
       WHERE
@@ -223,7 +223,7 @@
         ALL
       ",
         sql_read_csv = .,
-        where_clause = .gen_where_clause(pipe_line),
+        where_clause = .di_where_clause_get(transformations),
         .con = con ) %>% glue("
       COPY ({sql_transformation_rules})
        TO '{output_pqt_file}'
@@ -267,7 +267,7 @@
 #' within this package. It relies on \code{pa_transformations_get()} to load the master pipeline data first.
 #'
 #' @keywords internal
-.transformation_rules_get <- function(ohdest) {
+.di_transformation_rules_get <- function(ohdest) {
   pa_transformations_get() %>%
     .[OHDEST == ohdest] %T>%
     setorder(OHDEST, POSIT)
@@ -285,13 +285,13 @@
 #'   \item{DATE_FORMAT}{Character. The date format used in the files (e.g., `\"\%Y-\%m-\%d\"`).}
 #' }
 #' @keywords internal
-.file_spec_get <- function() {
+.di_csv_file_spec_get <- function() {
 
   # Retrieve file specification from the YAML file
   FILE_SPEC <- list(
-    DELIM       = pa_config_get_value(.key = "DELIM"),      # Delimiter
-    HEADER      = pa_config_get_value(.key = "HEADER"),     # Header
-    DATE_FORMAT = pa_config_get_value(.key = "DATE_FORMAT") # Date format
+    DELIM       = pa_config_get_value(.key = DELIM),      # Delimiter
+    HEADER      = pa_config_get_value(.key = HEADER),     # Header
+    DATE_FORMAT = pa_config_get_value(.key = DATE_FORMAT) # Date format
   )
 
   # Validate the retrieved values

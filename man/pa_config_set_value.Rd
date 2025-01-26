@@ -4,21 +4,14 @@
 \alias{pa_config_set_value}
 \title{Set config value in YAML file with hierarchy support}
 \usage{
-pa_config_set_value(
-  .key,
-  .value,
-  config_file = CONFIG_YAML,
-  config_dir = file.path(".", CONFIG_FLDR)
-)
+pa_config_set_value(.key, .value, .config_path = .cn_config_file_path_get())
 }
 \arguments{
 \item{.key}{Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.pipeline").\cr}
 
 \item{.value}{Any. The value to associate with the given key.\cr}
 
-\item{config_file}{Character. The name of the YAML configuration file. Defaults to CONFIG_YAML.\cr}
-
-\item{config_dir}{Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr}
+\item{.config_path}{Character. The full file name to the config file\cr}
 }
 \value{
 Character. The normalized path of the updated configuration file.

@@ -26,7 +26,9 @@ Imports:
     magrittr,
     purrr,
     stringr,
+    testthat (>= 3.0.0),
     yaml
+Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 LazyData: true

@@ -1,9 +1,9 @@
 # prerequisite(s):
-#  - execute yaml_int::.config_default_write()
+#  - execute yaml_int::.su_config_default_write()
 #
 # Set Up - after package installation
-#  1. .copy_package_folder
-#  2. .create_data_folders()
+#  1. .su_package_folder_copy
+#  2. .su_data_folders_create()
 #  3. copy demo data to demo folder
 #  4. sync files
 
@@ -14,22 +14,18 @@
 #' defaults to the current working directory.
 #'
 #' @param folder_name Character. The folder within the package to copy. Defaults to `"extdata"`.
-#' @param source_dir Character. The base path within the package where the folder resides. Defaults to `"inst"`.
 #' @param target_dir Character. The directory where the folder will be copied. Defaults to the current working directory `"."`.
 #' @return NULL. The function copies the folder and provides a message upon success.
 #' @keywords internal
-.copy_package_folder <- function(
+.su_package_folder_copy <- function(
     folder_name,
-    source_dir = "extdata",
     target_dir = ".",
     .overwrite = TRUE
 ) {
 
-  # Get the package's installation path
-  package_path <- system.file(package = .PACKAGE_NAME, mustWork = TRUE)
-
   # Define the full source path (e.g., inst/extdata within the package)
-  full_source_path <- fs::path(package_path, source_dir, folder_name)
+  full_source_path <- fs::path(
+    system.file("extdata", folder_name, package = "padt"))
 
   # Validate the source path
   if (!fs::dir_exists(full_source_path)) {
@@ -41,21 +37,23 @@
   # Define the absolute target path
   full_target_path <- fs::path_abs(target_dir, folder_name)
 
-  # if overwrite delete folder if it exists
-  if (.overwrite && fs::dir_exists(full_target_path)) {
+  if (.overwrite == TRUE && fs::dir_exists(full_target_path)) {
     fs::dir_delete(full_target_path)
   }
 
-  # Ensure the target directory exists
-  fs::dir_create(full_target_path)
+  if (!fs::dir_exists(full_target_path)) {
 
-  # Copy the folder to the target directory
-  fs::dir_copy(full_source_path, full_target_path, overwrite = .overwrite)
+    # Copy the folder to the target directory
+    fs::dir_copy(full_source_path, target_dir, overwrite = .overwrite )
 
-  # Inform the user of the successful copy
-  message(
-    green("Folder '", folder_name, "' successfully copied to: ",
-          full_target_path))
+    # Inform the user of the successful copy
+    message(
+      green("Folder '", folder_name, "' successfully copied to: ",
+            target_dir))
+  }
+
+
+
 }
 
 
@@ -70,7 +68,7 @@
 #' @param .dtap Character vector. The DTAP stages, defaults to `.DTAP`.
 #' @return NULL. The function creates the directory structure and does not return anything.
 #' @keywords internal
-.create_data_folders <- function(
+.su_data_folders_create <- function(
     root_dir,
     .bsgp = .BSGP,
     .area = .AREA,
@@ -91,3 +89,100 @@
 
   message(green("Data folder structure created successfully in: ", root_dir))
 }
+
+#' Create Default Config YAML File (Internal)
+#'
+#' Internal helper function to create a default `config.yaml` file in the specified directory.
+#'
+#' @param config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
+#' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
+#' @keywords internal
+.su_config_default_create <- function(
+    config_dir = "./inst/extdata",
+    key_value_list = NULL
+) {
+  # Ensure the directory exists
+  if (!dir.exists(config_dir)) {
+    dir.create(config_dir, recursive = TRUE)
+    message("Directory created: ", config_dir)
+  }
+
+  # Use default key-value pairs if none are provided
+  if (is.null(key_value_list)) {
+    key_value_list <- list(
+      # Project settings
+      "project.name"          = "Pythia's Advice",
+      "project.department"    = "EAISI",
+
+      # CSV file specifications
+      "csv_file_spec.delim"     = ";",
+      "csv_file_spec.date_format" = "%Y-%m-%d"
+    )
+  }
+
+  # Set each key-value pair in the configuration file
+  for (key in names(key_value_list)) {
+    pa_config_set_value(
+      .key       = key,
+      .value     = key_value_list[[key]],
+      config_dir = config_dir
+    )
+  }
+
+  message("Default config.yaml created in: ", config_dir)
+}
+
+#' Create Default Config YAML File (Internal)
+#'
+#' Internal helper function to create a default `config.yaml` file in the specified directory.
+#'
+#' @param config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
+#' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
+#' @keywords internal
+.su_config_default_write <- function(
+    config_dir     = "./inst/extdata/config",
+    key_value_list = NULL) {
+
+  # Define the path to the YAML file
+  config_file <- fs::path(config_dir, CONFIG_YAML)
+
+  # Delete the existing .config.yaml file if it exists
+  if (file.exists(config_file)) {
+    file.remove(config_file)
+    message("Existing .config.yaml file deleted: ", config_file)
+  }
+
+  # Use default key-value pairs if none are provided
+  if (is.null(key_value_list)) {
+    key_value_list <- list(
+      # Project settings
+      "project.name"               = "Pythia's Advice",
+      "project.department"         = "EAISI",
+
+      # Data location
+      "data_dir"                   = "./data",
+      "environment"                = "production",
+
+      # CSV file specifications
+      "csv_file_spec.delim"        = ";",
+      "csv_file_spec.header"       = FALSE,
+      "csv_file_spec.date_format"  = "%Y-%m-%d",
+
+      # Sales pipeline settings
+      "sales.details.file_pattern" = "^DD_SALES_QTY_202[12345].*\\.csv$"
+    )
+  }
+
+  # Set each key-value pair in the configuration file
+  for (key in names(key_value_list)) {
+    pa_config_set_value(
+      .key       = key,
+      .value     = key_value_list[[key]],
+      config_dir = config_dir
+    )
+  }
+
+  message("Default config.yaml created in: ", config_dir)
+}
+
+

@@ -1,26 +1,22 @@
 #' Get config value from YAML file with hierarchy support
 #'
 #' Retrieves a value from a YAML configuration file based on a hierarchical
-#' key using dot notation (e.g., "sales.pipeline").
+#' key using dot notation (e.g., "sales.transformation").
 #'
 #' @param .key Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "sales.source_path").\cr
-#' @param config_file Character. The name of the YAML configuration file. Defaults to CONFIG_YAML.\cr
-#' @param config_dir Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr
+#' @param .config_path Character. The full file name to the config file
 #' @return The value associated with the given key, or NULL if the key does not exist.
+#' @examples
+#' # Get the value of a key from the configuration file
+#' pa_config_get_value("environment")
 #' @export
 pa_config_get_value <- function(
     .key,
-    config_file = CONFIG_YAML,
-    config_dir  = file.path(".", CONFIG_FLDR)
+    .config_path = .cn_config_file_path_get()
     ) {
 
-  # Load required package
-  if (!requireNamespace("yaml", quietly = TRUE)) {
-    stop("The 'yaml' package is required but not installed. Please install it using install.packages('yaml').")
-  }
-
   # Normalize and construct the full path to the configuration file
-  config_path <- fs::path_abs(fs::path(config_dir, config_file))
+  config_path <- fs::path_abs(.config_path)
 
   # Check if the config file exists
   if (!file.exists(config_path)) {
@@ -55,20 +51,17 @@ pa_config_get_value <- function(
 #'
 #' @param .key Character. The key to add or update in the YAML file. For nested keys, use dot notation (e.g., "SALES.pipeline").\cr
 #' @param .value Any. The value to associate with the given key.\cr
-#' @param config_file Character. The name of the YAML configuration file. Defaults to CONFIG_YAML.\cr
-#' @param config_dir Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr
+#' @param .config_path Character. The full file name to the config file\cr
 #' @return Character. The normalized path of the updated configuration file.
 #' @export
 pa_config_set_value <- function(
     .key,
     .value,
-    config_file = CONFIG_YAML,
-    config_dir  = file.path(".", CONFIG_FLDR)
+    .config_path = .cn_config_file_path_get()
     ) {
 
-
   # Normalize and construct the full path to the configuration file
-  config_path <- fs::path_abs(fs::path(config_dir, config_file))
+  config_path <- fs::path_abs(.config_path)
 
   # Initialize an empty config if the file does not exist
   if (!file.exists(config_path)) {

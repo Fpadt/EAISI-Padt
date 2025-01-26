@@ -4,6 +4,7 @@
 #' 18-character SAP material number format.
 #'
 #' @param x A character vector of material numbers.
+#' @param .width The desired width of the material number. Default is 18.
 #' Only numeric-like strings will be padded.
 #'
 #' @return A character vector where numeric strings are left-padded with
@@ -19,13 +20,13 @@
 #' # Returns: c("000000000000000123", "000000000000456789", "A123")
 #'
 #' @export
-pa_matn1_input <- function(x) {
+pa_matn1_input <- function(x, .width = 18) {
   # like SAP-CONVERSION_EXIT_MATN1_INPUT
   # only leftpad leading zero's in case it is a number
   is_num <- grepl("^[0-9]+$", x)
   ifelse(
     is_num,
-    stringr::str_pad(string = x, width = width, side = "left", pad = "0"),
+    stringr::str_pad(string = x, width = .width, side = "left", pad = "0"),
     x
   )
 }

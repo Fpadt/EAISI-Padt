@@ -1,4 +1,4 @@
-.sql_access_create_dyn <-
+.da_sql_sales_get <-
   function(
     .vtype       = NULL    , # NULL will get both 010 and 060
     .ftype       = NULL    , # NULL will get all ftypes

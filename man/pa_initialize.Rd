@@ -15,6 +15,8 @@ user can choose to create the 'config' folder, copy the demo environment
 and activate the demo environment.
 }
 \examples{
+\dontrun{
 # Run the installation process
 pa_initialize()
+}
 }

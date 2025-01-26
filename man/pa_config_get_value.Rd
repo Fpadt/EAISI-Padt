@@ -4,23 +4,21 @@
 \alias{pa_config_get_value}
 \title{Get config value from YAML file with hierarchy support}
 \usage{
-pa_config_get_value(
-  .key,
-  config_file = CONFIG_YAML,
-  config_dir = file.path(".", CONFIG_FLDR)
-)
+pa_config_get_value(.key, .config_path = .cn_config_file_path_get())
 }
 \arguments{
 \item{.key}{Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "sales.source_path").\cr}
 
-\item{config_file}{Character. The name of the YAML configuration file. Defaults to CONFIG_YAML.\cr}
-
-\item{config_dir}{Character. The directory where the configuration file is located. Defaults to the current directory `"."`.\cr}
+\item{.config_path}{Character. The full file name to the config file}
 }
 \value{
 The value associated with the given key, or NULL if the key does not exist.
 }
 \description{
 Retrieves a value from a YAML configuration file based on a hierarchical
-key using dot notation (e.g., "sales.pipeline").
+key using dot notation (e.g., "sales.transformation").
+}
+\examples{
+# Get the value of a key from the configuration file
+pa_config_get_value("environment")
 }

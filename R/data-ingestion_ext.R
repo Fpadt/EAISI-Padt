@@ -55,7 +55,7 @@ pa_transformations_get <- function() {
 #'   \item Checks whether both \code{source_path} and \code{output_path} exist.
 #'   \item Lists files matching \code{file_pattern} in \code{source_path}.
 #'   \item Retrieves the pipeline definition for the specified \code{ohdest}.
-#'   \item Invokes an internal function \code{.transform_csv_to_parquet} (called via \code{purrr::walk})
+#'   \item Invokes an internal function \code{.di_transform_csv_to_parquet} (called via \code{purrr::walk})
 #'         on each file to do the actual transformation.
 #' }
 #'
@@ -70,7 +70,7 @@ pa_transformations_get <- function() {
 #' Returns \code{NULL} invisibly. The side-effect is that new Parquet files are written to \code{output_path}.
 #'
 #' @seealso
-#' \code{\link{.transformation_rules_get}}, \code{\link{.transform_csv_to_parquet}}
+#' \code{\link{.di_transformation_rules_get}}, \code{\link{.di_transform_csv_to_parquet}}
 #'
 #' @export
 pa_transform <- function(
@@ -122,10 +122,10 @@ pa_transform <- function(
   }
 
   #--- Get Transformation Pipeline ---------------------------------------------
-  PIPE_LINE <- .transformation_rules_get(ohdest = ohdest)
+  TRFN_RULES <- .di_transformation_rules_get(ohdest = ohdest)
 
   #--- Check if the pipeline for the source exists -----------------------------
-  if (nrow(PIPE_LINE) == 0) {
+  if (nrow(TRFN_RULES) == 0) {
     stop(
       cat(
         crayon::white$bgRed$bold(
@@ -138,10 +138,10 @@ pa_transform <- function(
   #--- Run the main function to transform data from CSV to Parquet -------------
   purrr::walk(
     .x          = fls,
-    .f          = .transform_csv_to_parquet,
+    .f          = .di_transform_csv_to_parquet,
     output_path = output_path,
     file_spec   = file_spec,
-    pipe_line   = PIPE_LINE,
+    transformations   = TRFN_RULES,
     verbose     = verbose
   )
 

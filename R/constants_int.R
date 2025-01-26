@@ -3,10 +3,9 @@
 fn_TRFN_ORG <- "transformation_rules_org.csv"
 fn_TRFN_MOD <- "transformation_rules_mod.csv"
 
-CONFIG_YAML <- "_pa_config.yaml"
-CONFIG_FLDR <- "_pa_config"
-PADEMO_FLDR <- "_pa_demo"
-
+CONFIG_YAML <- "_config.yaml"
+CONFIG_FLDR <- "_config"
+PADEMO_FLDR <- "demo"
 
 CM_MIN   <- '2021.01'
 CM_MAX   <- '2025.06'
@@ -14,6 +13,11 @@ STEP_MIN <- 1
 STEP_MAX <- 24
 LAGG_MIN <- -999
 LAGG_MAX <- 999
+
+# file spec
+DELIM       = "csv_file_spec.delim"
+HEADER      = "csv_file_spec.header"
+DATE_FORMAT = "csv_file_spec.date_format"
 
 # duckdb environment
 .duckdb_env <- new.env(parent = emptyenv())
@@ -50,6 +54,55 @@ SCOPE_PRDH <- c(
   A = "acceptance" , P = "production"
 )
 
+#' Get root directory
+#'
+#' Determines the root directory of the project or package based on the execution context.
+#'
+#' This function dynamically identifies the root directory to be used in various execution contexts.
+#' If the code is executed in a testing environment (`testthat`), during a package check
+#' (`devtools::check()`), or if the directory `inst/extdata` exists, it will return the
+#' `inst/extdata` path. Otherwise, it defaults to the current working directory.
+#'
+#' @return A character string representing the root directory path:
+#' - `"./inst/extdata"` if the code is being executed in a testing environment, during `devtools::check()`, or if the directory `inst/extdata` exists.
+#' - `"."` (the current working directory) if the code is being executed in a normal project context.
+#'
+#' @keywords internal
+.cn_root_dir_get <- function() {
+
+  # Define the root directory path for testing or specific contexts
+  root_dir <- system.file("extdata", "", package = "padt", mustWork = FALSE)
+
+  # Determine the context and return the appropriate root directory
+  if (
+    testthat::is_testing()              ||    # If running in testthat environment
+    Sys.getenv("R_CMD_CHECK") == "TRUE" ||    # If running during devtools::check()
+    fs::dir_exists(root_dir)                  # If the directory inst/extdata exists
+  ) {
+    return(root_dir)
+  } else {
+    return(".")  # Default to current project directory
+  }
+}
+
+#' Get config file path
+#'
+#' Constructs the full path to the configuration YAML file based on the root directory
+#' determined by the `.cn_root_dir_get` function, the folder name, and the file name constants.
+#' The function uses the `fs` package to ensure robust and cross-platform compatibility.
+#'
+#' @return A character string representing the full path to the configuration YAML file.
+#' @keywords internal
+.cn_config_file_path_get <- function() {
+  # Root directory determined dynamically
+  root_dir <- .cn_root_dir_get()
+
+  # Construct the full path to the config file using fs::path
+  fs::path(root_dir, CONFIG_FLDR, CONFIG_YAML)
+}
+
+
+
 #' Generate Variables for Ecotone Brand Colors
 #'
 #' Dynamically creates variables named "col_<name>" in the specified environment.
@@ -65,7 +118,7 @@ SCOPE_PRDH <- c(
 #' [](https://coolors.co/3e074a-0f431c-fde8e9-f0f600)
 #'
 #' @keywords internal
-.generate_color_variables <- function(colors, env = globalenv()) {
+.cn_constants_color_generate <- function(colors, env = globalenv()) {
 
   for (name in names(colors)) {
     # Construct the variable name
@@ -152,10 +205,10 @@ SCOPE_PRDH <- c(
 #'
 #' @return NULL. This function creates constants dynamically in the global environment.
 #' @keywords internal
-.initialize_constants <- function() {
+.cn_constants_initialize <- function() {
 
   # Check if internal functions exist
-  if (!exists(".generate_color_variables")
+  if (!exists(".cn_constants_color_generate")
       # || !exists(".generate_functional_area_variables")
       # || !exists(".generate_stage_variables")
       # || !exists(".generate_environment_variables")
@@ -164,7 +217,7 @@ SCOPE_PRDH <- c(
   }
 
   # Call internal functions to generate constants
-  .generate_color_variables(.ET_COLS)
+  .cn_constants_color_generate(.ET_COLS)
   # .generate_functional_area_variables(.AREA)
   # .generate_stage_variables(.BSGP)
   # .generate_environment_variables(.DTAP)

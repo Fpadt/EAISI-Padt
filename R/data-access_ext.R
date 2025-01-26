@@ -164,7 +164,7 @@ pa_Get_DYN <-
   ){
 
     # construct Query
-    query <- .sql_access_create_dyn(
+    query <- .da_sql_sales_get(
       .vtype       = .vtype,
       .ftype       = .ftype,
       .material    = .material,
