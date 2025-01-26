@@ -47,12 +47,12 @@
   if (!fs::dir_exists(full_target_path)) {
     fs::dir_copy(full_source_path, full_target_path)
     # Inform the user of the successful copy
-    message(crayon::green(
+    packageStartupMessage(crayon::green(
      "Folder: '", folder_name, "' successfully created at: ", full_target_path
     ))
   } else {
     # Inform the user that the folder already exists and was not overwritten
-    message(crayon::yellow(
+    packageStartupMessage(crayon::yellow(
      "Folder '", folder_name, "' already exists, No changes made: ", full_target_path
     ))
   }
@@ -209,36 +209,47 @@
     {
       prj_fldr <- "."
 
-      # Determine the root directory based on the context
-      if (testthat::is_testing() || Sys.getenv("R_CMD_CHECK") == "TRUE") {
-        # Use tempdir for testing or devtools::check()
+      # 1) Prioritize testthat and R CMD check contexts
+      if (testthat::is_testing() || nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_"))) {
+        # Use a dedicated subdirectory inside tempdir for testing or check
         temp_dir <- fs::path(tempdir(), .PACKAGE_NAME)
         if (!fs::dir_exists(temp_dir)) {
           fs::dir_create(temp_dir)
         }
         .su_package_folder_copy(CONFIG_FLDR, temp_dir, TRUE)
         .su_package_folder_copy(PADEMO_FLDR, temp_dir, TRUE)
+
         .padt_env$root_dir <- temp_dir
+        packageStartupMessage("Root directory set to tempdir: ", temp_dir)
+
+        # 2) Check for a development context inside the package directory
       } else if (fs::dir_exists(fs::path("inst", "extdata"))) {
-        # Development context inside the package directory
         .padt_env$root_dir <- fs::path("inst", "extdata")
+        packageStartupMessage("Root directory set to inst/extdata.")
+
+        # 3) Otherwise, assume a normal user project directory
       } else {
-        # User's project directory
         .su_package_folder_copy(CONFIG_FLDR, prj_fldr, FALSE)
         .su_package_folder_copy(PADEMO_FLDR, prj_fldr, FALSE)
+
         .padt_env$root_dir <- fs::path(prj_fldr)
+        packageStartupMessage("Root directory set to project folder: ", prj_fldr)
       }
+
+      # Debug messages
+      packageStartupMessage("Tempdir used: ", tempdir())
+      packageStartupMessage("Final root_dir: ", .padt_env$root_dir)
 
       # Add Ecotone brand colors
       .cn_constants_color_generate(.ET_COLS)
 
       # Inform the user
       packageStartupMessage(
-        green(paste0("`", .PROJECT_NAME, "` initialized successfully.")))
+        crayon::green(paste0("`", .PACKAGE_NAME, "` initialized successfully."))
+      )
     },
     error = function(e) {
       warning("Initialization failed: ", conditionMessage(e))
     }
   )
 }
-
