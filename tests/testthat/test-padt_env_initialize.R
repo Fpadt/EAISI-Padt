@@ -1,6 +1,6 @@
 test_that("Debugging paths for initialization", {
   withr::with_envvar(c("R_CMD_CHECK" = "TRUE"), {
-    .padt_env_initialize()
+    .su_padt_initialize()
 
     # Build expected path
     expected_root <- fs::path(tempdir(), .PACKAGE_NAME)

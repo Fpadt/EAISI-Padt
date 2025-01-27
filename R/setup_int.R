@@ -92,104 +92,6 @@
   message(green("Data folder structure created successfully in: ", root_dir))
 }
 
-#' Create Default Config YAML File (Internal)
-#'
-#' Internal helper function to create a default `config.yaml` file in the specified directory.
-#'
-#' @param .config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
-#' @param .key_value_list List. A named list of key-value pairs to set in the configuration file.
-#' @keywords internal
-.su_config_default_create <- function(
-    .config_dir = .cn_root_dir_get(),
-    .key_value_list = NULL
-) {
-
-  # Use default key-value pairs if none are provided
-  if (is.null(.key_value_list)) {
-    .key_value_list <- list(
-      # Project settings
-      "project.name"          = "Pythia's Advice",
-      "project.department"    = "EAISI",
-
-      # Data location
-      "data_dir"              = ".",
-      "environment"           = "sample_data",
-
-      # CSV file specifications
-      "csv_file_spec.delim"     = ";",
-      "csv_file_spec.date_format" = "%Y-%m-%d",
-
-      # Sales transformation settings
-      "sales.details.file_pattern" = "^DD_SALES_QTY_202[12345].*\\.csv$"
-
-    )
-  }
-
-  # Set each key-value pair in the configuration file
-  for (key in names(.key_value_list)) {
-    pa_config_set_value(
-      .key         = key,
-      .value       = .key_value_list[[key]],
-      .config_path = .config_dir
-    )
-  }
-
-  message("Default config.yaml created in: ", .config_dir)
-}
-
-#' Create Default Config YAML File (Internal)
-#'
-#' Internal helper function to create a default `config.yaml` file in the specified directory.
-#'
-#' @param config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
-#' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
-#' @keywords internal
-.su_config_default_write <- function(
-    .config_dir     = .cn_root_dir_get(),
-    .key_value_list = NULL) {
-
-  # Define the path to the YAML file
-  config_file <- fs::path(.config_dir, CONFIG_YAML)
-
-  # Delete the existing .config.yaml file if it exists
-  if (file.exists(config_file)) {
-    file.remove(config_file)
-    message("Existing .config.yaml file deleted: ", config_file)
-  }
-
-  # Use default key-value pairs if none are provided
-  if (is.null(.key_value_list)) {
-    .key_value_list <- list(
-      # Project settings
-      "project.name"               = "Pythia's Advice",
-      "project.department"         = "EAISI",
-
-      # Data location
-      "data_dir"                   = "./data",
-      "environment"                = "production",
-
-      # CSV file specifications
-      "csv_file_spec.delim"        = ";",
-      "csv_file_spec.header"       = FALSE,
-      "csv_file_spec.date_format"  = "%Y-%m-%d",
-
-      # Sales pipeline settings
-      "sales.details.file_pattern" = "^DD_SALES_QTY_202[12345].*\\.csv$"
-    )
-  }
-
-  # Set each key-value pair in the configuration file
-  for (key in names(.key_value_list)) {
-    pa_config_set_value(
-      .key         = key,
-      .value       = .key_value_list[[key]],
-      .config_path = .config_dir
-    )
-  }
-
-  message("Default config.yaml created in: ", .config_dir)
-}
-
 #' Initialize the padt environment
 #'
 #' This function initializes the `.padt_env` environment for development or testing purposes.
@@ -204,44 +106,54 @@
 #'
 #' @return NULL. This function is used for side effects.
 #' @keywords internal
-.padt_env_initialize <- function() {
+.su_padt_initialize <- function() {
   tryCatch(
     {
       prj_fldr <- "."
 
       # 1) Prioritize testthat and R CMD check contexts
       if (testthat::is_testing() || nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_"))) {
-        # Use a dedicated subdirectory inside tempdir for testing or check
+        # Use a dedicated sub directory inside tempdir for testing or check
         temp_dir <- fs::path(tempdir(), .PACKAGE_NAME)
         if (!fs::dir_exists(temp_dir)) {
           fs::dir_create(temp_dir)
         }
+
+        # copy the configuration and demo data to the tempdir
         .su_package_folder_copy(CONFIG_FLDR, temp_dir, TRUE)
         .su_package_folder_copy(PADEMO_FLDR, temp_dir, TRUE)
 
-        .padt_env$root_dir <- temp_dir
-        packageStartupMessage("Root directory set to tempdir: ", temp_dir)
+        # set the root directory
+        .padt_env$root_dir  <- fs::path(temp_dir)
+        # packageStartupMessage("Root directory set to tempdir: ", temp_dir)
 
         # 2) Check for a development context inside the package directory
       } else if (fs::dir_exists(fs::path("inst", "extdata"))) {
+
+        # set the root directory
         .padt_env$root_dir <- fs::path("inst", "extdata")
-        packageStartupMessage("Root directory set to inst/extdata.")
+        # packageStartupMessage("Root directory set to inst/extdata.")
 
         # 3) Otherwise, assume a normal user project directory
       } else {
+
         .su_package_folder_copy(CONFIG_FLDR, prj_fldr, FALSE)
         .su_package_folder_copy(PADEMO_FLDR, prj_fldr, FALSE)
 
+        # set the root directory
         .padt_env$root_dir <- fs::path(prj_fldr)
-        packageStartupMessage("Root directory set to project folder: ", prj_fldr)
+        # packageStartupMessage("Root directory set to project folder: ", prj_fldr)
       }
 
-      # Debug messages
-      packageStartupMessage("Tempdir used: ", tempdir())
-      packageStartupMessage("Final root_dir: ", .padt_env$root_dir)
+      # load the configuration file
+      .padt_env$cfg_path  <- fs::path(.padt_env$root_dir, CONFIG_FLDR, CONFIG_YAML)
+      .padt_env$cfg       <- yaml::yaml.load_file(.padt_env$cfg_path)
+      .padt_env$cfg_mtime <- file.info(.padt_env$cfg_path)$mtime
 
-      # Add Ecotone brand colors
-      .cn_constants_color_generate(.ET_COLS)
+      # Debug messages
+      # packageStartupMessage("Tempdir used: ", tempdir())
+      # packageStartupMessage("Final root_dir: ", .padt_env$root_dir)
+
 
       # Inform the user
       packageStartupMessage(

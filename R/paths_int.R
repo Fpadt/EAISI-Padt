@@ -56,7 +56,7 @@
 
   # Validate root directory
   root_dir <- tryCatch({
-    pa_wd_get()
+    .fh_data_dir_get()
   }, error = function(e) {
     stop("Error retrieving root directory: ", e$message)
   })
@@ -86,18 +86,13 @@
 #'
 #' This internal function replaces an absolute path with a OneDrive root identifier
 #' (`OneDriveConsumer` or `OneDriveCommercial`) if the path belongs to the respective
-#' OneDrive directory. If the path does not belong to either directory, the original
-#' path is returned unchanged.
+#' OneDrive directory.
+#' If the path does not belong to either directory, the original path is returned unchanged.
 #'
 #' @param abs_path Character. The absolute path provided by the user.
 #' @return Character. The modified path with the OneDrive root identifier or the original path.
 #' @keywords internal
-.onedrive_reference <- function(abs_path) {
-
-  # Load required package
-  if (!requireNamespace("fs", quietly = TRUE)) {
-    stop("The 'fs' package is required but not installed. Please install it using install.packages('fs').")
-  }
+.pi_onedrive_set <- function(abs_path) {
 
   # Get OneDrive paths from environment variables
   onedrive_consumer <- fs::path_abs(Sys.getenv("OneDriveConsumer", ""))
@@ -116,5 +111,31 @@
     # Return the original path if it does not belong to OneDrive
     abs_path
   }
+}
+
+#' Resolves relative Path with OneDrive Root Identifier to absolute path
+#'
+#' This internal function replaces an relative path with a OneDrive root identifier
+#' (`OneDriveConsumer` or `OneDriveCommercial`)
+#'
+#' @param abs_path Character. The absolute path provided by the user.
+#' @return Character. The modified path with the OneDrive root identifier.
+#' @keywords internal
+.pi_onedrive_get <- function(rel_path) {
+
+  # Get OneDrive paths from environment variables
+  rel_path            <- fs::path_abs(rel_path)
+  onedrive_consumer   <- fs::path_abs(Sys.getenv("OneDriveConsumer"  , ""))
+  onedrive_commercial <- fs::path_abs(Sys.getenv("OneDriveCommercial", ""))
+
+  if (path_has_parent(rel_path, "OneDriveConsumer")) {
+    sub_path <- path_rel(rel_path, start = "OneDriveConsumer")
+    root_dir <- path(onedrive_consumer, sub_path)
+  } else if (path_has_parent(rel_path, "OneDriveBusiness")) {
+    sub_path <- path_rel(rel_path, start = "OneDriveBusiness")
+    root_dir <- path(onedrive_commercial, sub_path)
+  }
+
+  return(root_dir)
 }
 

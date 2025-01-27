@@ -79,22 +79,9 @@ pa_su_config_reset <- function() {
     )
   )
   if (choice3 == 1) {
-    pa_config_set_value("environment", "demo")
-    pa_config_set_value("data_dir"   , ".")
+    pa_config_value_set("environment", "demo")
+    pa_config_value_set("data_dir"   , ".")
   }
-
-  # Question 4: Ecotone Brand colors
-  choice4 <- ask_question(
-    "Add Ecotone Brand Colors?",
-    options = c(
-      "Yes",
-      "No"
-    )
-  )
-  if (choice4 == 1) {
-    .cn_constants_color_generate(.ET_COLS)
-  }
-
 
   message(green("Installation process completed."))
 }

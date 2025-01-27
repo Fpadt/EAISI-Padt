@@ -84,3 +84,47 @@
   return(files_to_sync)
 }
 
+#' get data directory
+#'
+#' Determines the working directory based on the project directory and the configuration file.
+#' resolves placeholders such as `"OneDriveConsumer"` or `"OneDriveBusiness"`
+#' back to real file paths, then appends the currently set environment to the path.
+#'
+#' @return Character. The absolute path to the working directory.
+#' @export
+.fh_data_dir_get <- function() {
+
+  # Define the path for the .config file
+  config_file <- .padt_env$cfg_path
+
+  # Retrieve root_dir and environment from the YAML file
+  root_dir    <- pa_config_value_get(.key = "data_dir"   )
+  environment <- pa_config_value_get(.key = "environment")
+
+
+
+  # Construct and return the normalized environment path
+  environment_path <- path(root_dir, environment)
+
+  return(path_abs(environment_path))
+}
+
+#' set data directory
+#'
+#' @export
+.fh_data_dir_get <- function() {
+
+  # Define the path for the .config file
+  config_file <- .padt_env$cfg_path
+
+  # Retrieve root_dir and environment from the YAML file
+  root_dir    <- pa_config_value_get(.key = "data_dir"   )
+  environment <- pa_config_value_get(.key = "environment")
+
+
+
+  # Construct and return the normalized environment path
+  environment_path <- path(root_dir, environment)
+
+  return(path_abs(environment_path))
+}

@@ -32,10 +32,10 @@ pa_transformations_get <- function() {
 
   rbind(
     fread(file = file.path(
-      pa_wd_get(), CONFIG_FLDR, fn_TRFN_ORG)) %>%
+      .fh_data_dir_get(), CONFIG_FLDR, fn_TRFN_ORG)) %>%
       .[, `:=`(SRC = "O", WHERE_CLAUSE = "")],
     fread(file = file.path(
-      pa_wd_get(), CONFIG_FLDR, fn_TRFN_MOD)) %>%
+      .fh_data_dir_get(), CONFIG_FLDR, fn_TRFN_MOD)) %>%
       .[, `:=`(SRC = "C")]
   ) %T>%
     setorder(SRC, OHDEST, POSIT) %>%
@@ -55,7 +55,7 @@ pa_transformations_get <- function() {
 #'   \item Checks whether both \code{source_path} and \code{output_path} exist.
 #'   \item Lists files matching \code{file_pattern} in \code{source_path}.
 #'   \item Retrieves the pipeline definition for the specified \code{ohdest}.
-#'   \item Invokes an internal function \code{.di_transform_csv_to_parquet} (called via \code{purrr::walk})
+#'   \item Invokes an internal function \code{.di_csv_to_parquet_transform} (called via \code{purrr::walk})
 #'         on each file to do the actual transformation.
 #' }
 #'
@@ -70,7 +70,7 @@ pa_transformations_get <- function() {
 #' Returns \code{NULL} invisibly. The side-effect is that new Parquet files are written to \code{output_path}.
 #'
 #' @seealso
-#' \code{\link{.di_transformation_rules_get}}, \code{\link{.di_transform_csv_to_parquet}}
+#' \code{\link{.di_transformation_rules_get}}, \code{\link{.di_csv_to_parquet_transform}}
 #'
 #' @export
 pa_transform <- function(
@@ -138,7 +138,7 @@ pa_transform <- function(
   #--- Run the main function to transform data from CSV to Parquet -------------
   purrr::walk(
     .x          = fls,
-    .f          = .di_transform_csv_to_parquet,
+    .f          = .di_csv_to_parquet_transform,
     output_path = output_path,
     file_spec   = file_spec,
     transformations   = TRFN_RULES,

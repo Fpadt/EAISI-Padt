@@ -59,3 +59,53 @@
     openXL(FFN)
 
   }
+
+#' Create Default Config YAML File (Internal)
+#'
+#' Internal helper function to create a default `config.yaml` file in the specified directory.
+#'
+#' @param config_dir Character. The directory where the `config.yaml` file will be created. Defaults to `"./inst/extdata"`.
+#' @param key_value_list List. A named list of key-value pairs to set in the configuration file.
+#' @keywords internal
+.su_config_default_write <- function() {
+
+  # Define the path to the YAML file
+  config_file <- .padt_env$cfg_path
+
+  # Delete the existing .config.yaml file if it exists
+  if (file.exists(config_file)) {
+    file.remove(config_file)
+    message("Existing .config.yaml file deleted: ", config_file)
+  }
+
+  # Use default key-value pairs if none are provided
+  key_value_list <- list(
+    # Project settings
+    "project.name"          = "Pythia's Advice",
+    "project.department"    = "EAISI",
+
+    # Data location
+    "data_dir"              = ".",
+    "environment"           = "sample_data",
+
+    # CSV file specifications
+    "csv_file_spec.delim"        = ";",
+    "csv_file_spec.header"       = FALSE,
+    "csv_file_spec.date_format"  = "%Y-%m-%d",
+
+    # Sales transformation settings
+    "sales.details.file_pattern" = "^DD_SALES_QTY_202[12345].*\\.csv$"
+  )
+
+
+  # Set each key-value pair in the configuration file
+  for (key in names(key_value_list)) {
+    pa_config_value_set(
+      .key         = key,
+      .value       = key_value_list[[key]],
+      .config_path = .padt_env$cfg_path
+    )
+  }
+
+  message("Default config.yaml created in: ", .padt_env$cfg_path)
+}

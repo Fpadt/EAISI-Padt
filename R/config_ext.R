@@ -4,42 +4,31 @@
 #' key using dot notation (e.g., "sales.transformation").
 #'
 #' @param .key Character. The key to retrieve from the YAML file. For nested keys, use dot notation (e.g., "sales.source_path").\cr
-#' @param .config_path Character. The full file name to the config file
 #' @return The value associated with the given key, or NULL if the key does not exist.
 #' @examples
 #' # Get the value of a key from the configuration file
-#' pa_config_get_value("environment")
+#' pa_config_value_get("environment")
 #' @export
-pa_config_get_value <- function(
-    .key,
-    .config_path = .cn_config_file_path_get()
-    ) {
+pa_config_value_get <- function(.key) {
 
-  # Normalize and construct the full path to the configuration file
-  config_path <- fs::path_abs(.config_path)
-
-  # Check if the config file exists
-  if (!file.exists(config_path)) {
-    stop("Configuration file not found: ", config_path)
-  }
-
-  # Read the YAML file
-  config <- yaml::read_yaml(config_path)
+  # reload config into cache if needed
+  .hl_config_reload()
 
   # Split the hierarchical .key into parts
   key_parts <- unlist(strsplit(.key, "\\."))
 
   # Navigate the hierarchy to retrieve the value
-  current <- config
+  config <- .padt_env$cfg
   for (part in key_parts) {
-    if (!is.list(current) || is.null(current[[part]])) {
-      warning("Key '", .key, "' not found in configuration file: ", config_path)
+    if (!is.list(config) || is.null(config[[part]])) {
+      warning("Key '", .key, "' not found in configuration file: ",
+              .padt_env$cfg_path)
       return(NULL)
     }
-    current <- current[[part]]
+    config <- config[[part]]
   }
 
-  return(current)
+  return(config)
 }
 
 
@@ -54,10 +43,10 @@ pa_config_get_value <- function(
 #' @param .config_path Character. The full file name to the config file\cr
 #' @return Character. The normalized path of the updated configuration file.
 #' @export
-pa_config_set_value <- function(
+pa_config_value_set <- function(
     .key,
     .value,
-    .config_path = .cn_config_file_path_get()
+    .config_path = .padt_env$cfg_path
     ) {
 
   # Normalize and construct the full path to the configuration file
@@ -112,6 +101,9 @@ pa_config_set_value <- function(
     collapse = "\n"
   )
   writeLines(yaml_content, config_path)
+
+  # reload config into cache
+  .hl_config_reload(.reload = TRUE)
 
   # Return the normalized path and print a message
   message(

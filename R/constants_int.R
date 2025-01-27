@@ -1,4 +1,3 @@
-.PROJECT_NAME <- "Pythia's Advice"
 .PACKAGE_NAME <- "padt"
 
 fn_TRFN_ORG <- "transformation_rules_org.csv"
@@ -15,14 +14,6 @@ STEP_MAX <- 24
 LAGG_MIN <- -999
 LAGG_MAX <- 999
 
-# file spec
-DELIM       = "csv_file_spec.delim"
-HEADER      = "csv_file_spec.header"
-DATE_FORMAT = "csv_file_spec.date_format"
-
-# Package-specific environment
-.padt_env <- new.env(parent = emptyenv())
-
 SCOPE_SORG <- c('FR30', 'NL10')
 SCOPE_PRDH <- c(
   '07',  # ALTER ECO
@@ -33,12 +24,13 @@ SCOPE_PRDH <- c(
   '65'   # NATURELA
 )
 
+#' [](https://coolors.co/3e074a-0f431c-fde8e9-f0f600)
 # Predefined data for colors, functional areas, stages, and environments
-.ET_COLS <- c(
-  WT = "#FFFFFF"    , CG = "#0f5e3c",
-  FG = "#089b35"    , LG = "#38e56d",
-  YL = "#fff200"    , BL = "#000000"
-)
+# .ET_COLS <- c(
+#   WT = "#FFFFFF"    , CG = "#0f5e3c",
+#   FG = "#089b35"    , LG = "#38e56d",
+#   YL = "#fff200"    , BL = "#000000"
+# )
 
 .AREA <- c(
   SLS = "sales"     , STK = "stock",
@@ -54,76 +46,6 @@ SCOPE_PRDH <- c(
   D = "development", T = "test",
   A = "acceptance" , P = "production"
 )
-
-#' Get root directory
-#'
-#' Determines the root directory of the project or package based on the execution context.
-#'
-#' This function dynamically identifies the root directory to be used in various execution contexts.
-#' If the code is executed in a testing environment (`testthat`), during a package check
-#' (`devtools::check()`), or if the directory `inst/extdata` exists, it will return the
-#' `inst/extdata` path. Otherwise, it defaults to the current working directory.
-#'
-#' @return A character string representing the root directory path:
-#' - `"./inst/extdata"` if the code is being executed in a testing environment, during `devtools::check()`, or if the directory `inst/extdata` exists.
-#' - `"."` (the current working directory) if the code is being executed in a normal project context.
-#'
-#' @keywords internal
-.cn_root_dir_get <- function() {
-
-  if (!exists("root_dir", envir = .padt_env)) {
-    stop("Config path is not initialized.")
-  }
-  .padt_env$root_dir
-}
-
-#' Get config file path
-#'
-#' Constructs the full path to the configuration YAML file based on the root directory
-#' determined by the `.cn_root_dir_get` function, the folder name, and the file name constants.
-#' The function uses the `fs` package to ensure robust and cross-platform compatibility.
-#'
-#' @return A character string representing the full path to the configuration YAML file.
-#' @keywords internal
-.cn_config_file_path_get <- function() {
-  # Root directory determined dynamically
-  root_dir <- .cn_root_dir_get()
-
-  # Construct the full path to the config file using fs::path
-  fs::path(root_dir, CONFIG_FLDR, CONFIG_YAML)
-}
-
-
-
-#' Generate Variables for Ecotone Brand Colors
-#'
-#' Dynamically creates variables named "col_<name>" in the specified environment.
-#'
-#' @param env The environment where the variables should be created. Defaults to the global environment.
-#' @return NULL. The function creates variables dynamically.
-#'
-#' @details authorized colours for the logo.
-#' Castle Green will only be used for the housing of the logo.
-#' The colours for the leaves are Forest Green, Light Green and Yellow.
-#' The ecotone wordmark colour is White.
-#' For the tagline only Jet Black or White can be used.
-#' [](https://coolors.co/3e074a-0f431c-fde8e9-f0f600)
-#'
-#' @keywords internal
-.cn_constants_color_generate <- function(colors, env = globalenv()) {
-
-  for (name in names(colors)) {
-    # Construct the variable name
-    var_name <- paste0("col_", name)
-    # Assign the color value to the variable in the specified environment
-    assign(var_name, colors[[name]], envir = env)
-  }
-
-  packageStartupMessage(
-    paste0(green("Color variables generated: ",
-                 paste(paste0("col_", names(colors)), collapse = ", "))))
-}
-
 
 # R/constants.R
 
@@ -190,30 +112,4 @@ SCOPE_PRDH <- c(
                  paste(paste0("fun_", names(areas)), collapse = ", "))))
 }
 
-
-#' initialize global constants
-#'
-#' Creates global constants for colors, functional areas, stages, and environments by calling internal functions.
-#'
-#' @return NULL. This function creates constants dynamically in the global environment.
-#' @keywords internal
-.cn_constants_initialize <- function() {
-
-  # Check if internal functions exist
-  if (!exists(".cn_constants_color_generate")
-      # || !exists(".generate_functional_area_variables")
-      # || !exists(".generate_stage_variables")
-      # || !exists(".generate_environment_variables")
-  ) {
-    stop("One or more internal functions are missing.")
-  }
-
-  # Call internal functions to generate constants
-  .cn_constants_color_generate(.ET_COLS)
-  # .generate_functional_area_variables(.AREA)
-  # .generate_stage_variables(.BSGP)
-  # .generate_environment_variables(.DTAP)
-
-  message(green("Global constants have been initialized successfully."))
-}
 

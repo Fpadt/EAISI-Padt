@@ -339,3 +339,29 @@
   paste(.clauses, collapse = " AND ")
 }
 
+#' Internal function to retrieve or reload the config
+#'
+#' This function checks if the configuration file should be reloaded based on
+#' the `.reload` flag or if the file modification time is newer than the cached time.
+#'
+#' @param .reload Logical, whether to force reload the config file. Default is FALSE.
+#' @return The current or reloaded configuration as a list.
+.hl_config_reload <- function(.reload = FALSE) {
+
+  # Ensure the required path is available
+  if (is.null(.padt_env$cfg_path) || !file.exists(.padt_env$cfg_path)) {
+    stop("Config file path is not set or does not exist.")
+  }
+
+  # Reload the config if .reload is TRUE or the file is newer than the cached version
+  if (.reload ||
+      file.info(.padt_env$cfg_path)$mtime > .padt_env$cfg_mtime) {
+    # Reload the config file
+    .padt_env$cfg       <- yaml::read_yaml(.padt_env$cfg_path)
+    .padt_env$cfg_mtime <- file.info(.padt_env$cfg_path)$mtime
+    # message("Configuration reloaded from ", .padt_env$cfg_path)
+  }
+
+  # Return the cached or reloaded config
+  .padt_env$cfg
+}

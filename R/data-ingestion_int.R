@@ -170,7 +170,7 @@
 #' file in \code{output_path}.
 #'
 #' @keywords internal
-.di_transform_csv_to_parquet <- function(
+.di_csv_to_parquet_transform <- function(
     full_file_name,
     output_path,
     file_spec,
@@ -199,12 +199,15 @@
     # Ensure the connection is closed when the function exits
     on.exit(.duckdb_close_conn(), add = TRUE)
 
+    # csv file specification
+    file_spec <- pa_config_value_get("csv_file_spec")
+
     # Generate duckdb SQL to transform_csv_to_parquet
     sql_transform_csv_to_parquet <- glue("
       read_csv('{input_csv_file}',
-        delim      = '{file_spec$DELIM}',
-        header     =  {file_spec$HEADER},
-        dateformat = '{file_spec$DATE_FORMAT}',
+        delim      = '{file_spec$delim}',
+        header     =  {file_spec$header},
+        dateformat = '{file_spec$date_format}',
         columns = {{
           {.di_fields_in_get(transformations)}
         }}
@@ -273,37 +276,3 @@
     setorder(OHDEST, POSIT)
 }
 
-#' Get File Specification from YAML Configuration (Internal)
-#'
-#' Internal function to retrieve the file specification from the YAML configuration file
-#' stored in the specified project directory.
-#'
-#' @return A list with the following elements:
-#' \describe{
-#'   \item{DELIM}{Character. The delimiter used in the files (e.g., `";"`).}
-#'   \item{HEADER}{Logical. Whether the files have a header (`TRUE` or `FALSE`).}
-#'   \item{DATE_FORMAT}{Character. The date format used in the files (e.g., `\"\%Y-\%m-\%d\"`).}
-#' }
-#' @keywords internal
-.di_csv_file_spec_get <- function() {
-
-  # Retrieve file specification from the YAML file
-  FILE_SPEC <- list(
-    DELIM       = pa_config_get_value(.key = DELIM),      # Delimiter
-    HEADER      = pa_config_get_value(.key = HEADER),     # Header
-    DATE_FORMAT = pa_config_get_value(.key = DATE_FORMAT) # Date format
-  )
-
-  # Validate the retrieved values
-  if (is.null(FILE_SPEC$DELIM) || FILE_SPEC$DELIM == "") {
-    stop("The `DELIM` key is missing or empty in the configuration file.")
-  }
-  if (is.null(FILE_SPEC$HEADER)) {
-    stop("The `HEADER` key is missing in the configuration file.")
-  }
-  if (is.null(FILE_SPEC$DATE_FORMAT) || FILE_SPEC$DATE_FORMAT == "") {
-    stop("The `DATE_FORMAT` key is missing or empty in the configuration file.")
-  }
-
-  return(FILE_SPEC)
-}

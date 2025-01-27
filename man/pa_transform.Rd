@@ -39,10 +39,10 @@ The function performs the following steps:
   \item Checks whether both \code{source_path} and \code{output_path} exist.
   \item Lists files matching \code{file_pattern} in \code{source_path}.
   \item Retrieves the pipeline definition for the specified \code{ohdest}.
-  \item Invokes an internal function \code{.di_transform_csv_to_parquet} (called via \code{purrr::walk})
+  \item Invokes an internal function \code{.di_csv_to_parquet_transform} (called via \code{purrr::walk})
         on each file to do the actual transformation.
 }
 }
 \seealso{
-\code{\link{.di_transformation_rules_get}}, \code{\link{.di_transform_csv_to_parquet}}
+\code{\link{.di_transformation_rules_get}}, \code{\link{.di_csv_to_parquet_transform}}
 }
