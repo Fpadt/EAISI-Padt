@@ -118,7 +118,7 @@
 #' This internal function replaces an relative path with a OneDrive root identifier
 #' (`OneDriveConsumer` or `OneDriveCommercial`)
 #'
-#' @param abs_path Character. The absolute path provided by the user.
+#' @param rel_path Character. The absolute path provided by the user.
 #' @return Character. The modified path with the OneDrive root identifier.
 #' @keywords internal
 .pi_onedrive_get <- function(rel_path) {

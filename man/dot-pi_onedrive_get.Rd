@@ -7,7 +7,7 @@
 .pi_onedrive_get(rel_path)
 }
 \arguments{
-\item{abs_path}{Character. The absolute path provided by the user.}
+\item{rel_path}{Character. The absolute path provided by the user.}
 }
 \value{
 Character. The modified path with the OneDrive root identifier.
