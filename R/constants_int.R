@@ -24,6 +24,20 @@ SCOPE_PRDH <- c(
   '65'   # NATURELA
 )
 
+.BSGP <- c(
+  B = "bronze"     ,
+  S = "silver"     ,
+  G = "gold"       ,
+  P = "platinum"
+)
+
+.DTAP <- c(
+  D = "development",
+  T = "test"       ,
+  A = "acceptance" ,
+  P = "production"
+)
+
 #' [](https://coolors.co/3e074a-0f431c-fde8e9-f0f600)
 # Predefined data for colors, functional areas, stages, and environments
 # .ET_COLS <- c(
@@ -36,80 +50,3 @@ SCOPE_PRDH <- c(
 #   SLS = "sales"     , STK = "stock",
 #   PRM = "promotions", MD  = "master_data"
 # )
-
-.BSGP <- c(
-  B = "bronze"     , S = "silver",
-  G = "gold"       , P = "platinum"
-)
-
-.DTAP <- c(
-  D = "development", T = "test",
-  A = "acceptance" , P = "production"
-)
-
-# R/constants.R
-
-#' Generate Variables for DTAP Environments
-#'
-#' Dynamically creates variables named "env_<name>" based on the given list of DTAP environments.
-#'
-#' @param env The environment where the variables should be created. Defaults to the global environment.
-#' @return NULL. The function creates variables dynamically.
-#' @keywords internal
-.generate_environment_variables <- function(environments, env = globalenv()) {
-
-  for (name in names(environments)) {
-    # Construct the variable name
-    var_name <- paste0("env_", name)
-    # Assign the environment value to the variable in the specified environment
-    assign(var_name, environments[[name]], envir = env)
-  }
-
-  message(
-    paste0(green("Environment variables generated: ",
-                 paste(paste0("env_", names(environments)), collapse = ", "))))
-}
-
-#' Generate Variables for Stages
-#'
-#' Dynamically creates variables named "stg_<name>" based on the given list of stages.
-#'
-#' @param env The environment where the variables should be created. Defaults to the global environment.
-#' @return NULL. The function creates variables dynamically.
-#' @keywords internal
-.generate_stage_variables <- function(stages, env = globalenv()) {
-
-  for (name in names(stages)) {
-    # Construct the variable name
-    var_name <- paste0("stg_", name)
-    # Assign the stage value to the variable in the specified environment
-    assign(var_name, stages[[name]], envir = env)
-  }
-
-  message(
-    paste0(green("Stage variables generated: ",
-                 paste(paste0("stg_", names(stages)), collapse = ", "))))
-}
-
-#' Generate Variables for Functional Areas
-#'
-#' Dynamically creates variables named "fun_<name>" based on the given list of functional areas.
-#'
-#' @param env The environment where the variables should be created. Defaults to the global environment.
-#' @return NULL. The function creates variables dynamically.
-#' @keywords internal
-.generate_functional_area_variables <- function(areas, env = globalenv()) {
-
-  for (name in names(areas)) {
-    # Construct the variable name
-    var_name <- paste0("fun_", name)
-    # Assign the area value to the variable in the specified environment
-    assign(var_name, areas[[name]], envir = env)
-  }
-
-  message(
-    paste0(green("Functional area variables generated: ",
-                 paste(paste0("fun_", names(areas)), collapse = ", "))))
-}
-
-

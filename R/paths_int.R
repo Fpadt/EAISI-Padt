@@ -92,10 +92,10 @@
 #' @param abs_path Character. The absolute path provided by the user.
 #' @return Character. The modified path with the OneDrive root identifier or the original path.
 #' @keywords internal
-.pi_onedrive_set <- function(abs_path) {
+.pi_onedrive_rel <- function(abs_path) {
 
   # Get OneDrive paths from environment variables
-  onedrive_consumer <- fs::path_abs(Sys.getenv("OneDriveConsumer", ""))
+  onedrive_consumer   <- fs::path_abs(Sys.getenv("OneDriveConsumer"  , ""))
   onedrive_commercial <- fs::path_abs(Sys.getenv("OneDriveCommercial", ""))
 
   # Check if the absolute path belongs to OneDriveConsumer or OneDriveCommercial
@@ -121,7 +121,7 @@
 #' @param rel_path Character. The absolute path provided by the user.
 #' @return Character. The modified path with the OneDrive root identifier.
 #' @keywords internal
-.pi_onedrive_get <- function(rel_path) {
+.pi_onedrive_abs <- function(rel_path) {
 
   # Get OneDrive paths from environment variables
   rel_path            <- fs::path_abs(rel_path)
@@ -130,12 +130,12 @@
 
   if (path_has_parent(rel_path, "OneDriveConsumer")) {
     sub_path <- path_rel(rel_path, start = "OneDriveConsumer")
-    root_dir <- path(onedrive_consumer, sub_path)
+    rel_path <- path(onedrive_consumer, sub_path)
   } else if (path_has_parent(rel_path, "OneDriveBusiness")) {
     sub_path <- path_rel(rel_path, start = "OneDriveBusiness")
-    root_dir <- path(onedrive_commercial, sub_path)
+    rel_path <- path(onedrive_commercial, sub_path)
   }
 
-  return(root_dir)
+  return(rel_path)
 }
 

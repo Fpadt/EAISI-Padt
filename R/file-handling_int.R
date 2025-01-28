@@ -92,7 +92,7 @@
 #'
 #' @return Character. The absolute path to the working directory.
 #' @export
-.fh_data_dir_get <- function() {
+.fh_data_dir_abs <- function() {
 
   # Define the path for the .config file
   config_file <- .padt_env$cfg_path
@@ -112,7 +112,7 @@
 #' set data directory
 #'
 #' @export
-.fh_data_dir_get <- function() {
+.fh_data_dir_rel <- function() {
 
   # Define the path for the .config file
   config_file <- .padt_env$cfg_path
