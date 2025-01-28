@@ -139,3 +139,16 @@
   return(rel_path)
 }
 
+.pi_data_file_path_get <-
+  function(.area, .sub) {
+
+    dat <- .pi_onedrive_abs(pa_config_value_get("data.root"))
+    env <- pa_config_value_get("environment")
+    fld <-
+      pa_config_value_get(paste("data", .area, "folder", sep = "."))
+    bsn <-
+      pa_config_value_get(paste("data", .area, .sub, "basename", sep = "."))
+
+    fs::path_abs(file.path(dat, env, fld, bsn))
+
+  }
