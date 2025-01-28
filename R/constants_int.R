@@ -32,10 +32,10 @@ SCOPE_PRDH <- c(
 #   YL = "#fff200"    , BL = "#000000"
 # )
 
-.AREA <- c(
-  SLS = "sales"     , STK = "stock",
-  PRM = "promotions", MD  = "master_data"
-)
+# .AREA <- c(
+#   SLS = "sales"     , STK = "stock",
+#   PRM = "promotions", MD  = "master_data"
+# )
 
 .BSGP <- c(
   B = "bronze"     , S = "silver",
