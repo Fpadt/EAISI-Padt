@@ -84,47 +84,178 @@
   return(files_to_sync)
 }
 
-#' get data directory
+#' Construct Staging Path with Environment
 #'
-#' Determines the working directory based on the project directory and the configuration file.
-#' resolves placeholders such as `"OneDriveConsumer"` or `"OneDriveBusiness"`
-#' back to real file paths, then appends the currently set environment to the path.
+#' @description
+#' Creates a folder path of the form:
+#'   \code{root / environment / staging / directory}.
 #'
-#' @return Character. The absolute path to the working directory.
-#' @export
-.fh_data_dir_abs <- function() {
+#' @param config A list representing your YAML configuration (already read via
+#'   \code{\link[yaml]{yaml.load_file}}).
+#' @param functional_area A character string (e.g., \code{"sales"}).
+#' @param dataset A character string (e.g., \code{"rtp"}).
+#' @param staging A character string for the staging level, commonly
+#'   \code{"bronze"}, \code{"silver"}, or \code{"platinum"}.
+#' @param environment A character string specifying the environment,
+#'   e.g., \code{"Production"}, \code{"Test"}, \code{"Development"}.
+#'   Defaults to \code{"Production"}.
+#'
+#' @return
+#' A string with the full path to the specified staging folder (without file name).
+#'
+#' @details
+#' This function assumes your YAML structure looks like this:
+#' \preformatted{
+#'   root: OneDriveConsumer/ET/pythia/data
+#'   functional_areas:
+#'     sales:
+#'       datasets:
+#'         rtp:
+#'           directory: sales_rtp
+#'           ...
+#' }
+#'
+#' and appends \code{environment} and \code{staging} before the
+#' \code{directory} name:
+#' \code{file.path(root, environment, staging, directory)}.
+#'
+#'
+#' @examples
+#' \dontrun{
+#'   # Suppose 'cfg' is your loaded YAML list
+#'   # e.g. cfg <- yaml::yaml.load_file("path/to/config.yaml")
+#'
+#'   # Construct path for sales_rtp in 'bronze' under 'Production':
+#'   bronze_path <- construct_staging_path(
+#'     config = cfg,
+#'     functional_area = "sales",
+#'     dataset = "rtp",
+#'     staging = "bronze",
+#'     environment = "Production"
+#'   )
+#'   # "OneDriveConsumer/ET/pythia/data/Production/bronze/sales_rtp"
+#' }
+#'
+#' @keywords internal
+.fh_path_dataset_get <- function(
+    environment = c("development", "test"  , "acceptance", "production"),
+    staging     = c("bronze"     , "silver", "gold"      , "platinum"),
+    functional_area,
+    dataset,
+    config      = .hl_config_get()
+) {
 
-  # Define the path for the .config file
-  config_file <- .padt_env$cfg_path
+  sales_datasets <- config$datasets$functional_areas[[functional_area]]$datasets
 
-  # Retrieve root_dir and environment from the YAML file
-  root_dir    <- pa_config_value_get(.key = "data_dir"   )
-  environment <- pa_config_value_get(.key = "environment")
+  for (ds in sales_datasets) {
+    cat("Name:", ds$name, "\n")
+    cat("Directory:", ds$directory, "\n")
+    cat("Pattern:"  , ds$staging$bronze$pattern  , "\n")
+    cat("Extension:", ds$staging$bronze$extension, "\n")
+    # ...
+  }
 
+  # browser()
+  # If environment is unspecified or partial, match with available choices
+  environment <- match.arg(environment)
 
+  # If staging is unspecified or partial, match with available choices
+  staging <- match.arg(staging)
 
-  # Construct and return the normalized environment path
-  environment_path <- path(root_dir, environment)
+  # Extract the root from YAML
+  # root_path <- config[["root"]]
 
-  return(path_abs(environment_path))
+  # If you have environment keys in the YAML, use that structure instead:
+  root_path <- config[["dtap"]][[tolower(environment)]][["root"]]
+
+  # Extract the specific directory for the dataset
+  dir_name <-
+    config                  %>%
+    .[["datasets"]]         %>%
+    .[["functional_areas"]] %>%
+    .[[functional_area]]    %>%
+    .[["datasets"]]         %>%
+    .[[dataset]]            %>%
+    .[["directory"]]
+
+  # Build final path: root / environment / staging / directory
+  full_path <- file.path(root_path, environment, staging, dir_name)
+
+  return(full_path)
 }
 
-#' set data directory
+#' Replace Absolute Path with OneDrive Root Identifier
 #'
-#' @export
-.fh_data_dir_rel <- function() {
+#' This internal function replaces an absolute path with a OneDrive root identifier
+#' (`OneDriveConsumer` or `OneDriveCommercial`) if the path belongs to the respective
+#' OneDrive directory.
+#' If the path does not belong to either directory, the original path is returned unchanged.
+#'
+#' @param abs_path Character. The absolute path provided by the user.
+#' @return Character. The modified path with the OneDrive root identifier or the original path.
+#' @keywords internal
+.fh_onedrive_rel <- function(abs_path) {
 
-  # Define the path for the .config file
-  config_file <- .padt_env$cfg_path
+  # Get OneDrive paths from environment variables
+  onedrive_consumer   <- fs::path_abs(Sys.getenv("OneDriveConsumer"  , ""))
+  onedrive_commercial <- fs::path_abs(Sys.getenv("OneDriveCommercial", ""))
 
-  # Retrieve root_dir and environment from the YAML file
-  root_dir    <- pa_config_value_get(.key = "data_dir"   )
-  environment <- pa_config_value_get(.key = "environment")
-
-
-
-  # Construct and return the normalized environment path
-  environment_path <- path(root_dir, environment)
-
-  return(path_abs(environment_path))
+  # Check if the absolute path belongs to OneDriveConsumer or OneDriveCommercial
+  if (fs::path_has_parent(abs_path, onedrive_consumer)) {
+    # Replace the consumer path
+    rel_path <- fs::path_rel(abs_path, start = onedrive_consumer)
+    fs::path("OneDriveConsumer", rel_path)
+  } else if (fs::path_has_parent(abs_path, onedrive_commercial)) {
+    # Replace the commercial path
+    rel_path <- fs::path_rel(abs_path, start = onedrive_commercial)
+    fs::path("OneDriveCommercial", rel_path)
+  } else {
+    # Return the original path if it does not belong to OneDrive
+    abs_path
+  }
 }
+
+#' Resolves relative Path with OneDrive Root Identifier to absolute path
+#'
+#' This internal function replaces an relative path with a OneDrive root identifier
+#' (`OneDriveConsumer` or `OneDriveCommercial`)
+#'
+#' @param rel_path Character. The absolute path provided by the user.
+#' @return Character. The modified path with the OneDrive root identifier.
+#' @keywords internal
+.fh_onedrive_abs <- function(rel_path) {
+
+  # Get OneDrive paths from environment variables
+  rel_path            <- fs::path_abs(rel_path)
+  onedrive_consumer   <- fs::path_abs(Sys.getenv("OneDriveConsumer"  , ""))
+  onedrive_commercial <- fs::path_abs(Sys.getenv("OneDriveCommercial", ""))
+
+  if (path_has_parent(rel_path, "OneDriveConsumer")) {
+    sub_path <- path_rel(rel_path, start = "OneDriveConsumer")
+    rel_path <- path(onedrive_consumer, sub_path)
+  } else if (path_has_parent(rel_path, "OneDriveBusiness")) {
+    sub_path <- path_rel(rel_path, start = "OneDriveBusiness")
+    rel_path <- path(onedrive_commercial, sub_path)
+  }
+
+  return(rel_path)
+}
+
+.fh_data_file_pattern_get <-
+  function(.area, .set, .dir = c("i", "a")) {
+
+    # basename full part ext
+    # filepattern <- pa_config_value_get(paste("data", .area, .sect, "filepattern", sep = "."))
+
+    dat <- .pi_onedrive_abs(pa_config_value_get("data.root"))
+    env <- pa_config_value_get("environment")
+    set <- pa_config_value_get(paste("data", .area, .sub, sep = "."))
+
+    fs::path_abs(
+      file.path(
+        dat, env,
+        setfld, bsn))
+
+  }
+
+

@@ -14,13 +14,13 @@ pa_config_value_get <- function(
     ) {
 
   # reload config into cache if needed
-  .hl_config_reload()
+  .hl_config_get()
 
   # Split the hierarchical .key into parts
   key_parts <- unlist(strsplit(.key, "\\."))
 
   # Navigate the hierarchy to retrieve the value
-  config <- .padt_env$cfg
+  config <- .hl_config_get()
   for (part in key_parts) {
     if (!is.list(config) || is.null(config[[part]])) {
       warning("Key '", .key, "' not found in configuration file: ",
@@ -105,7 +105,7 @@ pa_config_value_set <- function(
   writeLines(yaml_content, config_path)
 
   # reload config into cache
-  .hl_config_reload(.reload = TRUE)
+  .hl_config_get(.reload = TRUE)
 
   # Return the normalized path and print a message
   message(
@@ -154,9 +154,7 @@ pa_config_level_values_get <- function(
     ) {
 
   # reload config into cache if needed
-  .hl_config_reload()
-
-  .config <- .padt_env$cfg
+  config <- .hl_config_get()
 
   # Recursive helper function to search at the specified level
   find_entries_at_level <- function(config, key, current_level, target_level) {

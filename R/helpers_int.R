@@ -150,9 +150,10 @@
   }
 
   # Get the list of files to query for the first file type in .ftype
+  # This is the material master data file MD_MATERIAL
   FN_MATL <- .data_full_file_names_get(
-    .bsgp  = 2,
-    .area  = 4,
+    .bsgp  = 2, # silver
+    .area  = 4, # master data
     .vtype = '010',
     .ftype = 1,
     .etype = "parquet"
@@ -339,14 +340,14 @@
   paste(.clauses, collapse = " AND ")
 }
 
-#' Internal function to retrieve or reload the config
+#' Internal function to retrieve most recent config file
 #'
 #' This function checks if the configuration file should be reloaded based on
-#' the `.reload` flag or if the file modification time is newer than the cached time.
+#' the file modification time or forced by the `.reload` flag.
 #'
 #' @param .reload Logical, whether to force reload the config file. Default is FALSE.
-#' @return The current or reloaded configuration as a list.
-.hl_config_reload <- function(.reload = FALSE) {
+#' @return The most recent configuration as a list.
+.hl_config_get <- function(.reload = FALSE) {
 
   # Ensure the required path is available
   if (is.null(.padt_env$cfg_path) || !file.exists(.padt_env$cfg_path)) {
@@ -356,6 +357,7 @@
   # Reload the config if .reload is TRUE or the file is newer than the cached version
   if (.reload ||
       file.info(.padt_env$cfg_path)$mtime > .padt_env$cfg_mtime) {
+
     # Reload the config file
     .padt_env$cfg       <- yaml::read_yaml(.padt_env$cfg_path)
     .padt_env$cfg_mtime <- file.info(.padt_env$cfg_path)$mtime

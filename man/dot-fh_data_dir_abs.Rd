@@ -14,3 +14,4 @@ Determines the working directory based on the project directory and the configur
 resolves placeholders such as `"OneDriveConsumer"` or `"OneDriveBusiness"`
 back to real file paths, then appends the currently set environment to the path.
 }
+\keyword{internal}

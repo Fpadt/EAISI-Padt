@@ -70,7 +70,7 @@
 .su_config_default_write <- function() {
 
   # Define the path to the YAML file
-  config_file <- .padt_env$cfg_path
+  config <- .hl_config_get()
 
   # Delete the existing .config.yaml file if it exists
   if (file.exists(config_file)) {
