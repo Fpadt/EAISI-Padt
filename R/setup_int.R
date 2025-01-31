@@ -62,29 +62,29 @@
 #' Create Data Folder Structure (Internal)
 #'
 #' Internal helper function to create a folder structure based on the root directory,
-#' BS(GP) tiers, functional areas, and DTAP stages.
+#' staging levels, functional areas, and environments.
 #'
 #' @param root_dir Character. The root directory where the folder structure will be created.
-#' @param .bsgp Character vector. The Bronze, Silver, Gold, Platinum tiers, defaults to `.BGSP`.
+#' @param .stag Character vector. The staging-levels from the config
 #' @param .area Character vector. The functional areas, defaults to `.AREA`.
-#' @param .dtap Character vector. The DTAP stages, defaults to `.DTAP`.
+#' @param .envr Character vector. The environments from the config.
 #' @return NULL. The function creates the directory structure and does not return anything.
 #' @keywords internal
 .su_data_folders_create <- function(
     root_dir,
-    .bsgp = .BSGP,
+    .stag = .fh_staging_value_get(.key = "name"),
     .area = .AREA,
-    .dtap = .DTAP
+    .envr = .fh_environment_value_get(.key = "name")
 ) {
 
   # Ensure root directory exists, existing directories are left unchanged
   fs::dir_create(root_dir)
 
   # Create the directory structure, existing directories are left unchanged
-  for (dtap in .dtap) {
-    for (bsgp in .bsgp) {
+  for (envr in .envr) {
+    for (stag in .stag) {
       for (area in .area) {
-        fs::dir_create(fs::path(root_dir, dtap, bsgp, area))
+        fs::dir_create(fs::path(root_dir, envr, stag, area))
       }
     }
   }
@@ -167,112 +167,5 @@
 }
 
 
-#' Create DTAP Folder Structure
-#'
-#' @description
-#' An internal helper function that creates the required folder structure
-#' for a given environment (e.g., production) based on the YAML configuration.
-#'
-#' @param config A nested list representing your YAML configuration
-#'   (already read via \code{\link[yaml]{yaml.load_file}}).
-#' @param environment A character string specifying the environment in DTAP
-#'   (e.g., \code{"production"}, \code{"development"}, \code{"test"}, \code{"acceptance"}).
-#' @param create_platinum Logical indicating whether to create platinum folders
-#'   for new forecast outputs. Defaults to \code{TRUE}.
-#' @param verbose Logical; if \code{TRUE}, messages about created folders
-#'   are printed.
-#'
-#' @details
-#' This function assumes the YAML has a structure similar to:
-#' \preformatted{
-#'   root: OneDriveConsumer/ET/pythia/data
-#'   environment: production
-#'   functional_areas:
-#'     sales:
-#'       datasets:
-#'         rtp:
-#'           directory: sales_rtp
-#'           ...
-#'           staging:
-#'             bronze:
-#'               pattern: ...
-#'               extension: csv
-#'             silver:
-#'               pattern: ...
-#'               extension: parquet
-#'             platinum:
-#'               ...
-#' }
-#'
-#' The function iterates through each functional area, dataset, and staging level,
-#' constructing folder paths of the form:
-#' \code{file.path(root, <staging_level>, <directory>)}.
-#'
-#' @return
-#' Returns \code{TRUE} (invisibly) if successful. Creates folders on disk as a side effect.
-#'
-#' @examples
-#' \dontrun{
-#'   # Suppose you have read your YAML config into 'cfg':
-#'   # cfg <- yaml::yaml.load_file("path/to/your_config.yaml")
-#'
-#'   # Create folder structure in 'production'
-#'   create_dtap_folders(cfg, environment = "production")
-#' }
-#'
-#' @keywords internal
-.si_create_dtap_folders <- function(config,
-                                environment = "production",
-                                create_platinum = TRUE,
-                                verbose = TRUE) {
-  # 1. Get root path for the specified environment:
-  #    If your YAML is nested as "dtap: production: root: ...",
-  #    adjust the extraction code accordingly.
-  root_path <- config[["root"]]
-
-  # 2. Access functional areas
-  functional_areas <- config[["functional_areas"]]
-  if (is.null(functional_areas)) {
-    if (verbose) message("No functional areas found in config.")
-    return(invisible(TRUE))
-  }
-
-  # 3. Loop over each functional area
-  for (fa_name in names(functional_areas)) {
-    area <- functional_areas[[fa_name]]
-
-    # 3a. Loop over datasets
-    datasets <- area[["datasets"]]
-    if (is.null(datasets)) next
-
-    for (ds_name in names(datasets)) {
-      dataset <- datasets[[ds_name]]
-
-      # Directory name (subfolder under staging)
-      dir_name <- dataset[["directory"]]
-
-      # 3b. Loop over staging levels
-      staging_list <- dataset[["staging"]]
-      if (is.null(staging_list)) next
-
-      for (stg_name in names(staging_list)) {
-        # Optionally skip platinum if create_platinum = FALSE
-        if (stg_name == "platinum" && !create_platinum) next
-
-        # Construct the full folder path
-        # e.g., "<root>/<stg_name>/<dir_name>"
-        folder_path <- file.path(root_path, stg_name, dir_name)
-
-        # Create folders if they don't exist
-        if (!dir.exists(folder_path)) {
-          dir.create(folder_path, recursive = TRUE, showWarnings = FALSE)
-          if (verbose) message("Created folder: ", folder_path)
-        }
-      }
-    }
-  }
-
-  invisible(TRUE)
-}
 
 

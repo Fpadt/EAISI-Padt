@@ -9,7 +9,8 @@ pa_Get_MAT(
   .salesorg = NULL,
   .scope_matl = TRUE,
   .scope_sorg = NULL,
-  .ftype = c(1, 2, 3),
+  .dataset_name = .fh_dataset_field_get(.functional_area = "master_data", .field =
+    "name"),
   .n = Inf
 )
 }
@@ -22,13 +23,8 @@ pa_Get_MAT(
 
 \item{.scope_sorg}{Logical. If \code{TRUE}, restricts the query to sales organizations within the Pythia scope. Defaults to \code{TRUE}.}
 
-\item{.ftype}{Integer vector. Specifies the file types to query:
-\itemize{
-  \item \code{1}: Global material master data (MATL)
-  \item \code{2}: Material master data per sales organization (MATS)
-  \item \code{3}: Material master data per plant (MATP)
-}
-Defaults to \code{c(1, 2, 3)}.}
+\item{.dataset_name}{character, one of teh entries in master data in teh config file, e.g.
+"material", "mat_sales", "mat_plant"....}
 
 \item{.n}{Numeric or \code{Inf}. The maximum number of rows to return. Defaults to \code{Inf}.}
 }

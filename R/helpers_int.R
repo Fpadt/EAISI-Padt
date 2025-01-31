@@ -124,7 +124,7 @@
 #' @details
 #' This function dynamically constructs a SQL query using \code{glue::glue_sql},
 #' ensuring that inputs are safely parameterized. The parquet file path for material
-#' data is determined internally via \code{.data_full_file_names_get}.
+#' data is determined internally via \code{.fh_datasets_path_get}.
 #'
 #' The returned SQL defines a Common Table Expression (CTE) named \code{SCOPE_MATL},
 #' which filters materials from a parquet file based on the specified \code{PRDH1} values.
@@ -142,22 +142,22 @@
 #' @import glue
 #' @importFrom DBI SQL
 #' @keywords internal
-.get_scope_matl <- function(.scope_prdh = SCOPE_PRDH, .con) {
+.get_scope_matl <- function(
+    .scope_prdh = SCOPE_PRDH,
+    .con
+) {
 
   # Validate input parameters
   if (missing(.con)) {
     stop("DuckDB connection .con must be provided.")
   }
 
-  # Get the list of files to query for the first file type in .ftype
-  # This is the material master data file MD_MATERIAL
-  FN_MATL <- .data_full_file_names_get(
-    .bsgp  = 2, # silver
-    .area  = 4, # master data
-    .vtype = '010',
-    .ftype = 1,
-    .etype = "parquet"
-  )
+  # get file pattern to get master data
+  FN_MATL <- .fh_datasets_path_get(
+    .environment     = .hl_config_get()$project$active_environment,
+    .staging         = "silver",
+    .functional_area = "master_data"
+    )["material"]
 
   # Construct the SQL string using glue_sql
   sql_query <- glue::glue_sql("
@@ -170,8 +170,6 @@
 
   return(sql_query)
 }
-
-
 
 #' Build a SQL WHERE Clause with Scope Materials
 #'

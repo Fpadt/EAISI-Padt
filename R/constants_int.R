@@ -23,30 +23,3 @@ SCOPE_PRDH <- c(
   '53',  # TANOSHI
   '65'   # NATURELA
 )
-
-.BSGP <- c(
-  B = "bronze"     ,
-  S = "silver"     ,
-  G = "gold"       ,
-  P = "platinum"
-)
-
-.DTAP <- c(
-  D = "development",
-  T = "test"       ,
-  A = "acceptance" ,
-  P = "production"
-)
-
-#' [](https://coolors.co/3e074a-0f431c-fde8e9-f0f600)
-# Predefined data for colors, functional areas, stages, and environments
-# .ET_COLS <- c(
-#   WT = "#FFFFFF"    , CG = "#0f5e3c",
-#   FG = "#089b35"    , LG = "#38e56d",
-#   YL = "#fff200"    , BL = "#000000"
-# )
-
-# .AREA <- c(
-#   SLS = "sales"     , STK = "stock",
-#   PRM = "promotions", MD  = "master_data"
-# )

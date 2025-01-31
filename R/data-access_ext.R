@@ -6,13 +6,8 @@
 #' @param .salesorg Character vector. An optional list of sales organizations to filter on. If \code{NULL}, no sales organization filtering is applied beyond scope constraints.
 #' @param .scope_matl Logical. If \code{TRUE}, restricts the query to materials within the Pythia scope. Defaults to \code{TRUE}.
 #' @param .scope_sorg Logical. If \code{TRUE}, restricts the query to sales organizations within the Pythia scope. Defaults to \code{TRUE}.
-#' @param .ftype Integer vector. Specifies the file types to query:
-#'   \itemize{
-#'     \item \code{1}: Global material master data (MATL)
-#'     \item \code{2}: Material master data per sales organization (MATS)
-#'     \item \code{3}: Material master data per plant (MATP)
-#'   }
-#'   Defaults to \code{c(1, 2, 3)}.
+#' @param .dataset_name character, one of teh entries in master data in teh config file, e.g.
+#' "material", "mat_sales", "mat_plant"....
 #' @param .n Numeric or \code{Inf}. The maximum number of rows to return. Defaults to \code{Inf}.
 #'
 #' @return A \code{data.table} containing the requested material master data. Each row represents a material, with columns reflecting the dataset schema.
@@ -48,18 +43,26 @@
 #' @importFrom glue glue_sql
 #' @export
 pa_Get_MAT <- function(
-    .material    = NULL,       # Optional user-supplied material
-    .salesorg    = NULL,       # Optional user-supplied salesorg
-    .scope_matl  = TRUE,       # restrict to Pythia Scope
-    .scope_sorg  = NULL,       # restrict to Pythia Scope
-    .ftype       = c(1, 2, 3), # File type: 1 = MATL, 2 = MATS, 3 = MATP
+    .material     = NULL,       # Optional user-supplied material
+    .salesorg     = NULL,       # Optional user-supplied salesorg
+    .scope_matl   = TRUE,       # restrict to Pythia Scope
+    .scope_sorg   = NULL,       # restrict to Pythia Scope
+    .dataset_name = .fh_dataset_field_get(
+      .functional_area = "master_data", .field = "name"
+      ),
     .n           = Inf         # number of rows to return
 ) {
 
-  # Validate .ftype input
-  if (!all(.ftype %in% c(1, 2, 3))) {
-    stop("Invalid value for .ftype. Must be one of: 1 (MATL), 2 (MATS), 3 (MATP).")
-  }
+  # match argument
+  dataset_name <- match.arg(.dataset_name)
+
+  # retrieve file pattern string
+  file_list <- .fh_dataset_paths_get(
+    .environment     = .hl_config_get()$project$active_environment,
+    .staging         = "silver"  ,
+    .functional_area = "master_data",
+    .dataset_names   = dataset_name
+  )
 
   # Retrieve configuration for the query
   config <- .duckdb_get_parts(
@@ -67,15 +70,6 @@ pa_Get_MAT <- function(
     .salesorg    = .salesorg,
     .scope_matl  = .scope_matl,
     .scope_sorg  = .scope_sorg
-  )
-
-  # Get the list of files to query for the first file type in .ftype
-  file_list <- .data_full_file_names_get(
-    .bsgp  = 2,
-    .area  = 4,
-    .vtype = '010',
-    .ftype = .ftype[1], # Use the first file type in .ftype
-    .etype = "parquet"
   )
 
   # Construct the SQL query using the glue package

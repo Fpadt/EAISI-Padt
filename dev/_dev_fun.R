@@ -1,3 +1,23 @@
+.open_as_xlsx <-
+  function(pDT, pPath = tempdir(), pFN, pasTable = TRUE){
+
+    library(lubridate)
+    library(openxlsx)
+
+    if (!dir.exists(pPath)) {
+      dir.create(pPath)
+    }
+
+    if (missing(pFN) == TRUE) {
+      pFN <- paste0("~", format(now(), "%Y%m%d-%H%M%S"), ".xlsx")
+    }
+
+    FFN <- file.path(pPath, pFN)
+    write.xlsx(x = pDT, file = FFN, asTable = pasTable,
+               tableStyle = "TableStyleMedium4")
+    openXL(FFN)
+
+  }
 
 #' Get All Objects in the Package Namespace (Internal)
 #'
@@ -14,10 +34,6 @@
 #' .get_functions()
 #' @keywords internal
 .get_functions <- function() {
-  # Ensure required packages are loaded
-  if (!requireNamespace("data.table", quietly = TRUE)) {
-    stop("The 'data.table' package is required but not installed. Please install it using install.packages('data.table').")
-  }
 
   # Load data.table
   library(data.table)
@@ -39,26 +55,7 @@
   .open_as_xlsx(DT)
 }
 
-.open_as_xlsx <-
-  function(pDT, pPath = tempdir(), pFN, pasTable = TRUE){
 
-    library(lubridate)
-    library(openxlsx)
-
-    if (!dir.exists(pPath)) {
-      dir.create(pPath)
-    }
-
-    if (missing(pFN) == TRUE) {
-      pFN <- paste0("~", format(now(), "%Y%m%d-%H%M%S"), ".xlsx")
-    }
-
-    FFN <- file.path(pPath, pFN)
-    write.xlsx(x = pDT, file = FFN, asTable = pasTable,
-               tableStyle = "TableStyleMedium4")
-    openXL(FFN)
-
-  }
 
 #' Create Default Config YAML File (Internal)
 #'

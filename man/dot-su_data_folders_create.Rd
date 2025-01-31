@@ -4,22 +4,27 @@
 \alias{.su_data_folders_create}
 \title{Create Data Folder Structure (Internal)}
 \usage{
-.su_data_folders_create(root_dir, .bsgp = .BSGP, .area = .AREA, .dtap = .DTAP)
+.su_data_folders_create(
+  root_dir,
+  .stag = .fh_staging_value_get(.key = "name"),
+  .area = .AREA,
+  .envr = .fh_environment_value_get(.key = "name")
+)
 }
 \arguments{
 \item{root_dir}{Character. The root directory where the folder structure will be created.}
 
-\item{.bsgp}{Character vector. The Bronze, Silver, Gold, Platinum tiers, defaults to `.BGSP`.}
+\item{.stag}{Character vector. The staging-levels from the config}
 
 \item{.area}{Character vector. The functional areas, defaults to `.AREA`.}
 
-\item{.dtap}{Character vector. The DTAP stages, defaults to `.DTAP`.}
+\item{.envr}{Character vector. The environments from the config.}
 }
 \value{
 NULL. The function creates the directory structure and does not return anything.
 }
 \description{
 Internal helper function to create a folder structure based on the root directory,
-BS(GP) tiers, functional areas, and DTAP stages.
+staging levels, functional areas, and environments.
 }
 \keyword{internal}

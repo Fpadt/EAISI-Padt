@@ -32,7 +32,10 @@
 
     # Determine Files to read
     file_list <- .data_full_file_names_get(
-      .bsgp  = 2, .area = 1, .vtype = .vtype, .ftype = .ftype,
+      .bsgp  = 2,
+      .area  = 1,
+      .vtype = .vtype,
+      .ftype = .ftype,
       .etype = "parquet"
     )
 
