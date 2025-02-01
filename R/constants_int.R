@@ -4,8 +4,8 @@ fn_TRFN_ORG <- "transformation_rules_org.csv"
 fn_TRFN_MOD <- "transformation_rules_mod.csv"
 
 CONFIG_YAML <- "_config.yaml"
-CONFIG_FLDR <- "_config"
-PADEMO_FLDR <- "sample_data"
+CONFIG_FLDR <- "padt_cfg"
+PADEMO_FLDR <- "padt_dat"
 
 CM_MIN   <- '2021.01'
 CM_MAX   <- '2025.06'
