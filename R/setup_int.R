@@ -125,14 +125,14 @@
 
         # set the root directory
         .padt_env$root_dir  <- fs::path(temp_dir)
-        packageStartupMessage("Root directory set to tempdir: ", temp_dir)
+        # packageStartupMessage("Root directory set to tempdir: ", temp_dir)
 
         # 2) Check for a development context inside the package directory
       } else if (fs::dir_exists(fs::path("inst", "extdata"))) {
 
         # set the root directory
         .padt_env$root_dir <- fs::path("inst", "extdata")
-        packageStartupMessage("Root directory set to inst/extdata.")
+        # packageStartupMessage("Root directory set to inst/extdata.")
 
         # 3) Otherwise, assume a normal user project directory
       } else {
@@ -142,7 +142,7 @@
 
         # set the root directory
         .padt_env$root_dir <- fs::path(prj_fldr)
-        packageStartupMessage("Root directory set to project folder: ", prj_fldr)
+        # packageStartupMessage("Root directory set to project folder: ", prj_fldr)
       }
 
       # load the configuration file
