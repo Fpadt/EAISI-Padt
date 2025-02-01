@@ -111,7 +111,7 @@
     {
       prj_fldr <- "."
 
-      # 1) Prioritize testthat and R CMD check contexts
+      # Prioritize testthat and R CMD check contexts
       if (testthat::is_testing() || nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_"))) {
         # Use a dedicated sub directory inside tempdir for testing or check
         temp_dir <- fs::path(tempdir(), .PACKAGE_NAME)
@@ -125,14 +125,14 @@
 
         # set the root directory
         .padt_env$root_dir  <- fs::path(temp_dir)
-        # packageStartupMessage("Root directory set to tempdir: ", temp_dir)
+        packageStartupMessage("Root directory set to tempdir: ", temp_dir)
 
         # 2) Check for a development context inside the package directory
       } else if (fs::dir_exists(fs::path("inst", "extdata"))) {
 
         # set the root directory
         .padt_env$root_dir <- fs::path("inst", "extdata")
-        # packageStartupMessage("Root directory set to inst/extdata.")
+        packageStartupMessage("Root directory set to inst/extdata.")
 
         # 3) Otherwise, assume a normal user project directory
       } else {
@@ -142,7 +142,7 @@
 
         # set the root directory
         .padt_env$root_dir <- fs::path(prj_fldr)
-        # packageStartupMessage("Root directory set to project folder: ", prj_fldr)
+        packageStartupMessage("Root directory set to project folder: ", prj_fldr)
       }
 
       # load the configuration file
@@ -151,8 +151,8 @@
       .padt_env$cfg_mtime <- file.info(.padt_env$cfg_path)$mtime
 
       # Debug messages
-      # packageStartupMessage("Tempdir used: ", tempdir())
-      # packageStartupMessage("Final root_dir: ", .padt_env$root_dir)
+      packageStartupMessage("Tempdir used: ", tempdir())
+      packageStartupMessage("Final root_dir: ", .padt_env$root_dir)
 
 
       # Inform the user
