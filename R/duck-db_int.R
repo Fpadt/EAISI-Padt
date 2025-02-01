@@ -111,7 +111,7 @@
   con <- .dd_duckdb_open_conn()
 
   # -- 2) Build the CTE snippet for scope materials --
-  cte_scope_materials <- .get_cte_scope_materials(
+  cte_scope_materials <- .dd_matl_scope_cte_get(
     .scope_matl = .scope_matl,
     .con        = con
   )
@@ -204,55 +204,4 @@
   ", .scope_prdh = .scope_prdh, .con = .con)
 
   return(sql_query)
-}
-
-#' Construct a SQL CTE Clause for Scope Materials
-#'
-#' Internal helper function that generates a Common Table Expression (CTE) SQL snippet
-#' for scope materials. If \code{.scope_matl} is \code{TRUE}, the function constructs
-#' the CTE SQL snippet using the \code{.dd_matl_scope_get} function. If \code{.scope_matl}
-#' is \code{FALSE}, an empty string is returned.
-#'
-#' @param .scope_matl Logical. Determines whether the scope materials CTE should
-#'   be included in the query. If \code{TRUE}, the function constructs the SQL snippet.
-#' @param .con A database connection object. Required for safely constructing
-#'   the SQL snippet using \code{glue::glue_sql}.
-#'
-#' @return A character string containing the SQL snippet for the scope materials CTE
-#'   if \code{.scope_matl} is \code{TRUE}. Returns an empty string otherwise.
-#'
-#' @details
-#' This function relies on the \code{.dd_matl_scope_get} function to dynamically generate
-#' the SQL snippet for the scope materials CTE. The snippet is constructed using
-#' \code{glue::glue_sql} for safe parameterization of inputs. If the \code{.scope_matl}
-#' parameter is \code{FALSE}, the function avoids constructing the CTE and instead
-#' returns an empty string.
-#'
-#' @examples
-#' \dontrun{
-#' # Example usage
-#' cte_sql <- .get_cte_scope_materials(
-#'   .scope_matl = TRUE,
-#'   .con = my_db_connection
-#' )
-#' print(cte_sql)
-#' }
-#'
-#' @import glue
-#' @importFrom DBI SQL
-#' @keywords internal
-.get_cte_scope_materials <- function(.scope_matl, .con) {
-
-  # Retrieve the scope materials CTE SQL
-  matl_scope <- .dd_matl_scope_get(.con = .con)
-
-  # Initialize the CTE SQL as empty
-  cte_scope_materials <- ""
-
-  # Generate the CTE SQL if .scope_matl is TRUE
-  if (isTRUE(.scope_matl)) {
-    cte_scope_materials <- glue::glue_sql(matl_scope, .con = .con)
-  }
-
-  return(cte_scope_materials)
 }

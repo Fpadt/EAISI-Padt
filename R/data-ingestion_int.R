@@ -194,10 +194,10 @@
     }
 
     # Establish a connection to DuckDB
-    con <- .duckdb_open_conn()
+    con <- .dd_duckdb_open_conn()
 
     # Ensure the connection is closed when the function exits
-    on.exit(.duckdb_close_conn(), add = TRUE)
+    on.exit(.dd_duckdb_close_conn(), add = TRUE)
 
     # csv file specification
     file_spec <- pa_config_value_get("csv_file_spec")

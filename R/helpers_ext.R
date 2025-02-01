@@ -14,9 +14,9 @@
 pa_parquet_head <-
   function(.fn, .n = 1000){
 
-    con <- .duckdb_open_conn()
+    con <- .dd_duckdb_open_conn()
 
-    on.exit( .duckdb_close_conn())
+    on.exit( .dd_duckdb_close_conn())
 
     query <- glue_sql("
     SELECT
@@ -53,7 +53,7 @@ pa_parquet_describe <-
   ){
 
     # Establish a connection to DuckDB
-    con <- .duckdb_open_conn()
+    con <- .dd_duckdb_open_conn()
 
     # construct Query
     query <-

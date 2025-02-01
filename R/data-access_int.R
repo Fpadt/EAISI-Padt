@@ -15,7 +15,7 @@
   ) {
 
     # # Get Centralized config
-    # config <- .duckdb_get_parts(
+    # config <- .dd_duckdb_get_parts(
     #   .vtype       = .vtype,
     #   .ftype       = .ftype,
     #   .material    = .material,

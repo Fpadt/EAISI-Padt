@@ -54,7 +54,7 @@
 #'
 #' Internal helper function that generates a Common Table Expression (CTE) SQL snippet
 #' for scope materials. If \code{.scope_matl} is \code{TRUE}, the function constructs
-#' the CTE SQL snippet using the \code{.get_scope_matl} function. If \code{.scope_matl}
+#' the CTE SQL snippet using the \code{.dd_matl_scope_get} function. If \code{.scope_matl}
 #' is \code{FALSE}, an empty string is returned.
 #'
 #' @param .scope_matl Logical. Determines whether the scope materials CTE should
@@ -66,7 +66,7 @@
 #'   if \code{.scope_matl} is \code{TRUE}. Returns an empty string otherwise.
 #'
 #' @details
-#' This function relies on the \code{.get_scope_matl} function to dynamically generate
+#' This function relies on the \code{.dd_matl_scope_get} function to dynamically generate
 #' the SQL snippet for the scope materials CTE. The snippet is constructed using
 #' \code{glue::glue_sql} for safe parameterization of inputs. If the \code{.scope_matl}
 #' parameter is \code{FALSE}, the function avoids constructing the CTE and instead
@@ -75,7 +75,7 @@
 #' @examples
 #' \dontrun{
 #' # Example usage
-#' cte_sql <- .get_cte_scope_materials(
+#' cte_sql <- .dd_matl_scope_cte_get(
 #'   .scope_matl = TRUE,
 #'   .con = my_db_connection
 #' )
@@ -85,10 +85,10 @@
 #' @import glue
 #' @importFrom DBI SQL
 #' @keywords internal
-.get_cte_scope_materials <- function(.scope_matl, .con) {
+.dd_matl_scope_cte_get <- function(.scope_matl, .con) {
 
   # Retrieve the scope materials CTE SQL
-  matl_scope <- .get_scope_matl(.con = .con)
+  matl_scope <- .dd_matl_scope_get(.con = .con)
 
   # Initialize the CTE SQL as empty
   cte_scope_materials <- ""
@@ -132,7 +132,7 @@
 #' @examples
 #' \dontrun{
 #' # Example usage
-#' sql <- .get_scope_matl(
+#' sql <- .dd_matl_scope_get(
 #'   .scope_prdh = c("PRDH001", "PRDH002"),
 #'   .con = my_db_connection
 #' )
@@ -142,7 +142,7 @@
 #' @import glue
 #' @importFrom DBI SQL
 #' @keywords internal
-.get_scope_matl <- function(
+.dd_matl_scope_get <- function(
     .scope_prdh = SCOPE_PRDH,
     .con
 ) {
@@ -153,11 +153,12 @@
   }
 
   # get file pattern to get master data
-  FN_MATL <- .fh_datasets_path_get(
+  FN_MATL <- .fh_dataset_paths_get(
     .environment     = .hl_config_get()$project$active_environment,
     .staging         = "silver",
-    .functional_area = "master_data"
-    )["material"]
+    .functional_area = "master_data",
+    .dataset_names   = "material"
+    )
 
   # Construct the SQL string using glue_sql
   sql_query <- glue::glue_sql("
@@ -238,7 +239,7 @@
     .con         = NULL     # Database connection
 ) {
 
-  # matl_scope <- .get_scope_matl(.con = .con)
+  # matl_scope <- .dd_matl_scope_get(.con = .con)
 
   # Ensure "TRUE" is the initial condition
   if (!any(vapply(.clauses, function(x) identical(x, "TRUE"), logical(1)))) {

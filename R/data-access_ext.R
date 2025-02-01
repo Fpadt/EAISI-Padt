@@ -15,7 +15,7 @@
 #' @details
 #' This function performs the following steps:
 #' \enumerate{
-#'   \item Retrieves configuration details, such as Common Table Expression (CTE) for scope materials and WHERE clause filters, using \code{.duckdb_get_parts()}.
+#'   \item Retrieves configuration details, such as Common Table Expression (CTE) for scope materials and WHERE clause filters, using \code{.dd_duckdb_get_parts()}.
 #'   \item Dynamically determines the list of parquet files to query based on the specified file type (\code{.ftype}).
 #'   \item Constructs and executes an SQL query in DuckDB to fetch the requested material master data, applying the provided filters.
 #' }
@@ -65,7 +65,7 @@ pa_Get_MAT <- function(
   )
 
   # Retrieve configuration for the query
-  config <- .duckdb_get_parts(
+  config <- .dd_duckdb_get_parts(
     .material    = .material,
     .salesorg    = .salesorg,
     .scope_matl  = .scope_matl,
@@ -174,7 +174,7 @@ pa_Get_DYN <-
     )
 
     # fetch .n results and return as data.table
-    dbGetQuery(.duckdb_open_conn(), query, n = .n) %>%
+    dbGetQuery(.dd_duckdb_open_conn(), query, n = .n) %>%
       setDT()
 
   }
@@ -231,7 +231,7 @@ pa_Get_RTP <-
   ){
 
     # Get Centralized config
-    config <- .duckdb_get_parts(
+    config <- .dd_duckdb_get_parts(
       .material   = .material,
       .salesorg   = .salesorg,
       .scope_matl = .scope_matl,
@@ -273,7 +273,7 @@ pa_Get_RTP <-
       ", .con = config$duckdb_con)
 
     # fetch .n results and return as data.table
-    dbGetQuery(.duckdb_open_conn(), query, n = .n) %>%
+    dbGetQuery(.dd_duckdb_open_conn(), query, n = .n) %>%
       setDT()
 
   }
@@ -330,7 +330,7 @@ pa_Get_IPM <-
   ){
 
     # Get Centralized config
-    config <- .duckdb_get_parts(
+    config <- .dd_duckdb_get_parts(
       .material   = .material,
       .salesorg   = .salesorg,
       .scope_matl = .scope_matl,
@@ -372,7 +372,7 @@ pa_Get_IPM <-
       ", .con = config$duckdb_con)
 
     # fetch .n results and return as data.table
-    dbGetQuery(.duckdb_open_conn(), query, n = .n) %>%
+    dbGetQuery(.dd_duckdb_open_conn(), query, n = .n) %>%
       setDT()
 
   }
