@@ -112,7 +112,7 @@
       prj_fldr <- "."
 
       # Prioritize testthat and R CMD check contexts
-      if (FALSE & (testthat::is_testing() || nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_"))) {
+      if (testthat::is_testing() || nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_"))) {
         # Use a dedicated sub directory inside tempdir for testing or check
         temp_dir <- fs::path(tempdir(), .PACKAGE_NAME)
         if (!fs::dir_exists(temp_dir)) {
