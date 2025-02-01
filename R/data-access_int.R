@@ -14,21 +14,21 @@
     .lagg_max    = NULL      # maximal diff. between VERSMON & MONTH
   ) {
 
-    # # Get Centralized config
-    # config <- .dd_duckdb_get_parts(
-    #   .vtype       = .vtype,
-    #   .ftype       = .ftype,
-    #   .material    = .material,
-    #   .salesorg    = .salesorg,
-    #   .scope_matl  = .scope_matl,
-    #   .scope_sorg  = .scope_sorg,
-    #   .cm_min      = .cm_min,
-    #   .cm_max      = .cm_max,
-    #   .step_min    = .step_min,
-    #   .step_max    = .step_max,
-    #   .lagg_min    = .lagg_min,
-    #   .lagg_max    = .lagg_max
-    # )
+    # Get Centralized config
+    config <- .dd_duckdb_get_parts(
+      .vtype       = .vtype,
+      .ftype       = .ftype,
+      .material    = .material,
+      .salesorg    = .salesorg,
+      .scope_matl  = .scope_matl,
+      .scope_sorg  = .scope_sorg,
+      .cm_min      = .cm_min,
+      .cm_max      = .cm_max,
+      .step_min    = .step_min,
+      .step_max    = .step_max,
+      .lagg_min    = .lagg_min,
+      .lagg_max    = .lagg_max
+    )
 
     # # match argument
     # dataset_name <- match.arg(.dataset_name)
@@ -71,3 +71,4 @@
 
     return(query)
   }
+

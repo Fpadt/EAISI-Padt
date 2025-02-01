@@ -81,8 +81,8 @@
 
 
 .hl_convert_type <- function(
-    .ftype = NULL,  # If NULL, return all
-    .vtype = NULL,  # If NULL, return all
+    .ftype  = NULL,  # If NULL, return all
+    .vtype  = NULL,  # If NULL, return all
     .config = NULL  # Reserved for future use (optional)
 ) {
 
@@ -104,7 +104,7 @@
 
   # 2. Return all values for a given .vtype if .ftype is NULL
   if (is.null(.ftype)) {
-    return(conversion_table[vtype %in% .vtype, output])
+    return(conversion_table[vtype %chin% .vtype, output])
   }
 
   # 3. Return all values for a given .ftype if .vtype is NULL
@@ -112,17 +112,9 @@
     return(conversion_table[ftype %in% .ftype, output])
   }
 
-  # 4. Ensure both parameters are valid
-  if (!.vtype %in% unique(conversion_table$vtype)) {
-    stop("Invalid VTYPE. Must be one of: ", paste(unique(conversion_table$vtype), collapse = ", "))
-  }
 
-  if (!.ftype %in% unique(conversion_table$ftype)) {
-    stop("Invalid FTYPE. Must be one of: ", paste(unique(conversion_table$ftype), collapse = ", "))
-  }
-
-  # 5. Retrieve the corresponding value
-  result <- conversion_table[ftype == .ftype & vtype == .vtype, output]
+  # Retrieve the corresponding value
+  result <- conversion_table[ftype %in% .ftype & vtype %chin% .vtype, output]
 
   if (length(result) == 0) {
     stop("No matching entry found for the given FTYPE and VTYPE.")

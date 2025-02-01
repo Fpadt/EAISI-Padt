@@ -2,7 +2,7 @@
 % Please edit documentation in R/data-access_ext.R
 \name{pa_td_ipm_get}
 \alias{pa_td_ipm_get}
-\title{Fetch IPM Data from DuckDB}
+\title{Retrieve IPM Sales Data from SAP BW to Dynasys 2018}
 \usage{
 pa_td_ipm_get(
   .material = NULL,

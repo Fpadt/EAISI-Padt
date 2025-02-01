@@ -423,3 +423,4 @@
   # Combine clauses into a single WHERE clause
   paste(.clauses, collapse = " AND ")
 }
+

@@ -60,93 +60,93 @@ datasets:
       datasets:
         - name: rtp
           transformation: DSCP_TRAN
-          directory: sales_rtp
+          directory: sales
           staging:
             bronze:
               pattern: DD_SALES_QTY_202[12345]
               extension: csv
             silver:
-              pattern: DD_SALES_QTY.*
+              pattern: DD_SALES_QTY*
               extension: parquet
 
         - name: ipm
           transformation: ZSOP_ASLS
-          directory: sales_ipm
+          directory: sales
           staging:
             bronze:
               pattern: DD_HISTO_QTY_202[12345]
               extension: csv
             silver:
-              pattern: DD_HISTO_QTY.*
+              pattern: DD_HISTO_QTY*
               extension: parquet
 
         - name: abr
           transformation: OH_FRPR2
-          directory: sales_abr
+          directory: sales
           staging:
             bronze:
               pattern: SDSFRPR1__202[12345]
               extension: csv
             silver:
-              pattern: SDSFRPR1.*
+              pattern: SDSFRPR1*
               extension: parquet
 
         - name: aar
           transformation: OH_FRPR2
-          directory: sales_aar
+          directory: sales
           staging:
             bronze:
               pattern: SDSFRPR3__202[12345]
               extension: csv
             silver:
-              pattern: SDSFRPR3.*
+              pattern: SDSFRPR3*
               extension: parquet
 
         - name: lbr
           transformation: OH_FRPR3
-          directory: sales_lbr
+          directory: sales
           staging:
             bronze:
               pattern: SDSFRLV1_202[45]
               extension: csv
             silver:
-              pattern: SDSFRLV1.*
+              pattern: SDSFRLV1*
               extension: parquet
 
         - name: lar
           transformation: OH_FRPR3
-          directory: sales_lar
+          directory: sales
           staging:
             bronze:
               pattern: SDSFRLV3__202[45]
               extension: csv
             silver:
-              pattern: SDSFRLV3.*
+              pattern: SDSFRLV3*
               extension: parquet
 
         - name: fbr
           transformation: OH_FRPR1
-          directory: sales_fbr
+          directory: sales
           staging:
             bronze:
               pattern: SDSFRPR2_202(412|501)
               extension: csv
             silver:
-              pattern: SDSFRPR2.*
+              pattern: SDSFRPR2*
               extension: parquet
             platinum:  # new forecast CSV
-              pattern: SDSFRPR2.*
+              pattern: SDSFRPR2*
               extension: csv
 
         - name: far
           transformation: OH_FRPR1
-          directory: sales_far
+          directory: sales
           staging:
             bronze:
               pattern: SDSFRPR4_202(412|501)
               extension: csv
             silver:
-              pattern: SDSFRPR4.*
+              pattern: SDSFRPR4*
               extension: parquet
 
         - name: res
@@ -167,7 +167,7 @@ datasets:
               pattern: IMP03SM1.*
               extension: csv
             silver:
-              pattern: IMP03SM1.*
+              pattern: IMP03SM1*
               extension: parquet
 
     master_data:

@@ -179,7 +179,7 @@ pa_td_dyn_get <-
 
   }
 
-#' Retrieve RTP Sales Data from SAP BW to Dynasys Cloud
+#' Retrieve outbound Sales Data from SAP BW to Dynasys
 #'
 #' This function retrieves RTP (Real-Time Planning) data based on specified filters
 #' such as material, sales organization, and calendar month range. It fetches data
@@ -219,15 +219,16 @@ pa_td_dyn_get <-
 #' @examples
 #' # Fetch RTP data for all materials and sales organizations in the Pythia scope
 #' @export
-pa_td_rtp_get <-
+pa_td_ob_get <-
   function(
-    .material    = NULL    , # Optional user-supplied material
-    .salesorg    = NULL    , # Optional user-supplied salesorg
-    .scope_matl  = TRUE   , # restrict to Pythia Scope
-    .scope_sorg  = TRUE    , # restrict to Pythia Scope
-    .cm_min      = '202101', # no data available before this date
-    .cm_max      = '202506', # no data available after this date
-    .n           = Inf       # number of materials to return
+    .dataset_name = c("rtp", "ipm"), # defaults to rtp
+    .material     = NULL           , # Optional user-supplied material
+    .salesorg     = NULL           , # Optional user-supplied salesorg
+    .scope_matl   = TRUE           , # restrict to Pythia Scope
+    .scope_sorg   = TRUE           , # restrict to Pythia Scope
+    .cm_min       = '202101'       , # no data available before this date
+    .cm_max       = '202506'       , # no data available after this date
+    .n            = Inf              # number of materials to return
   ){
 
     # Get Centralized config
@@ -239,6 +240,23 @@ pa_td_rtp_get <-
       .cm_min     = .cm_min,
       .cm_max     = .cm_max
     )
+
+    # # match argument
+    # dataset_name <- match.arg(.dataset_name)
+
+    # TODO: replace by transformation etc
+    # TODO ; Move to data-access_int
+
+    dataset_name_ <- .dataset_name[1]
+    # retrieve file pattern string
+    file_list <- .fh_dataset_paths_get(
+      .environment     = .hl_config_get()$project$active_environment,
+      .staging         = "silver"  ,
+      .functional_area = "sales",
+      .dataset_names   = dataset_name_
+    )
+
+    ftype <- ifelse(dataset_name_ == "rtp", "4", "3")
 
     # construct Query
     query <-
@@ -252,7 +270,7 @@ pa_td_rtp_get <-
        -- SOLDTO,
           -1                          AS STEP,
           CALMONTH,
-          '4'                         AS FTYPE,
+          '{ftype}'                   AS FTYPE,
           '010'                       AS VTYPE,
           sum(SLS_QT_SO + SLS_QT_FOC) AS Q,
           sum(SLS_QT_SO)              AS SLS,
@@ -263,7 +281,7 @@ pa_td_rtp_get <-
           sum(SLS_QT_IC)              AS ICS,
           sum(MSQTBUO)                AS MSL
         FROM
-          read_parquet([{`FN_IRTP`}])
+      read_parquet([{DBI::SQL(file_list)}])
         WHERE
           {DBI::SQL(config$where_clause)}
         GROUP BY
@@ -339,6 +357,21 @@ pa_td_ipm_get <-
       .cm_max     = .cm_max
     )
 
+    # # match argument
+    # dataset_name <- match.arg(.dataset_name)
+
+    # TODO: replace by transformation etc
+    # TODO ; Move to data-access_int
+
+    dataset_name_ <- "ipm"
+    # retrieve file pattern string
+    file_list <- .fh_dataset_paths_get(
+      .environment     = .hl_config_get()$project$active_environment,
+      .staging         = "silver"  ,
+      .functional_area = "sales",
+      .dataset_names   = dataset_name_
+    )
+
     # construct Query
     query <-
       glue_sql("
@@ -362,7 +395,7 @@ pa_td_ipm_get <-
           sum(SLS_QT_IC)              AS ICS,
           sum(MSQTBUO)                AS MSL
         FROM
-          read_parquet([{`FN_IIPM`}])
+      read_parquet([{DBI::SQL(file_list)}])
         WHERE
           {DBI::SQL(config$where_clause)}
         GROUP BY

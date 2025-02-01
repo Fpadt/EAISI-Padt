@@ -2,7 +2,7 @@
 % Please edit documentation in R/data-access_ext.R
 \name{pa_td_dyn_get}
 \alias{pa_td_dyn_get}
-\title{Retrieve DYN Data from Dynasys}
+\title{Retrieve DYN Sales Data from Dynasys}
 \usage{
 pa_td_dyn_get(
   .vtype = NULL,
