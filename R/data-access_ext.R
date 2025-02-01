@@ -25,24 +25,24 @@
 #' @examples
 #' \dontrun{
 #' # Fetch all material master data
-#' materials <- pa_Get_MAT()
+#' materials <- pa_md_mat_get()
 #'
 #' # Fetch material data filtered by material and sales organization
-#' materials <- pa_Get_MAT(
+#' materials <- pa_md_mat_get(
 #'   .material = c("MAT001", "MAT002"),
 #'   .salesorg = c("SORG001", "SORG002"),
 #'   .n = 100
 #' )
 #'
 #' # Fetch only material master data per plant
-#' materials <- pa_Get_MAT(.ftype = 3)
+#' materials <- pa_md_mat_get(.ftype = 3)
 #' }
 #'
 #' @import data.table
 #' @importFrom DBI dbGetQuery
 #' @importFrom glue glue_sql
 #' @export
-pa_Get_MAT <- function(
+pa_md_mat_get <- function(
     .material     = NULL,       # Optional user-supplied material
     .salesorg     = NULL,       # Optional user-supplied salesorg
     .scope_matl   = TRUE,       # restrict to Pythia Scope
@@ -89,7 +89,7 @@ pa_Get_MAT <- function(
 }
 
 
-#' Retrieve DYN Data from Dynasys
+#' Retrieve DYN Sales Data from Dynasys
 #'
 #' Fetches DYN (Dynamic) data from Dynasys using a DuckDB query. This function allows filtering based on various parameters such as version types, forecast types, materials, sales organizations, calendar months, forecast steps, and more.
 #'
@@ -121,16 +121,16 @@ pa_Get_MAT <- function(
 #' @examples
 #' \dontrun{
 #' # Fetch all DYN data
-#' dyn_data <- pa_Get_DYN()
+#' dyn_data <- pa_td_dyn_get()
 #'
 #' # Fetch data filtered by material and sales organization
-#' dyn_data <- pa_Get_DYN(
+#' dyn_data <- pa_td_dyn_get(
 #'   .material = c("MAT001", "MAT002"),
 #'   .salesorg = c("SORG001", "SORG002")
 #' )
 #'
 #' # Fetch data for a specific version type and calendar month range
-#' dyn_data <- pa_Get_DYN(
+#' dyn_data <- pa_td_dyn_get(
 #'   .vtype = "FORECAST",
 #'   .cm_min = "202301",
 #'   .cm_max = "202312"
@@ -140,7 +140,7 @@ pa_Get_MAT <- function(
 #' @import data.table
 #' @importFrom DBI dbGetQuery
 #' @export
-pa_Get_DYN <-
+pa_td_dyn_get <-
   function(
     .vtype       = NULL    , # NULL will get all vtypes
     .ftype       = NULL    , # NULL will get all ftypes
@@ -179,7 +179,7 @@ pa_Get_DYN <-
 
   }
 
-#' Fetch RTP Data from DuckDB
+#' Retrieve RTP Sales Data from SAP BW to Dynasys Cloud
 #'
 #' This function retrieves RTP (Real-Time Planning) data based on specified filters
 #' such as material, sales organization, and calendar month range. It fetches data
@@ -219,7 +219,7 @@ pa_Get_DYN <-
 #' @examples
 #' # Fetch RTP data for all materials and sales organizations in the Pythia scope
 #' @export
-pa_Get_RTP <-
+pa_td_rtp_get <-
   function(
     .material    = NULL    , # Optional user-supplied material
     .salesorg    = NULL    , # Optional user-supplied salesorg
@@ -278,7 +278,7 @@ pa_Get_RTP <-
 
   }
 
-#' Fetch IPM Data from DuckDB
+#' Retrieve IPM Sales Data from SAP BW to Dynasys 2018
 #'
 #' This function retrieves IPM (Inventory Planning Management) data based on specified filters
 #' such as material, sales organization, and calendar month range. It fetches data
@@ -318,7 +318,7 @@ pa_Get_RTP <-
 #' @examples
 #' # Fetch IPM data for all materials and sales organizations in the Pythia scope
 #' @export
-pa_Get_IPM <-
+pa_td_ipm_get <-
   function(
     .material    = NULL    , # Optional user-supplied material
     .salesorg    = NULL    , # Optional user-supplied salesorg

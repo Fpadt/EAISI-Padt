@@ -180,7 +180,7 @@ datasets:
               pattern: MD_MATERIAL
               extension: csv
             silver:
-              pattern: MD_MATERIAL.*
+              pattern: MD_MATERIAL
               extension: parquet
 
         - name: mat_sales
@@ -191,7 +191,7 @@ datasets:
               pattern: MD_MATERIAL_SALES_ORG
               extension: csv
             silver:
-              pattern: MD_MATERIAL_SALES_ORG.*
+              pattern: MD_MATERIAL_SALES_ORG
               extension: parquet
 
         - name: mat_plant
@@ -202,7 +202,7 @@ datasets:
               pattern: MD_MATERIAL_PLANT
               extension: csv
             silver:
-              pattern: MD_MATERIAL_PLANT.*
+              pattern: MD_MATERIAL_PLANT
               extension: parquet
 
         - name: bomx
@@ -213,7 +213,7 @@ datasets:
               pattern: MD_BOM
               extension: csv
             silver:
-              pattern: MD_BOM.*
+              pattern: MD_BOM
               extension: parquet
 
     promotions:
