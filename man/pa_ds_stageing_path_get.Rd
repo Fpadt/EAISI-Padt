@@ -44,4 +44,3 @@ print(path)
 \seealso{
 \code{\link{.fh_dataset_paths_get}}, \code{\link{fs::path_dir}}
 }
-\keyword{internal}

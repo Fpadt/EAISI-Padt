@@ -123,7 +123,7 @@ pa_folder_open <-
 #'
 #' @seealso \code{\link{.fh_dataset_paths_get}}, \code{\link{fs::path_dir}}
 #'
-#' @keywords internal
+#' @export
 pa_ds_stageing_path_get <-
   function(
     .staging,
