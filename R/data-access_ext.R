@@ -268,7 +268,7 @@ pa_td_sap_get <-
        -- SOLDTO,
           STEP,
           CALMONTH,
-       -- VERSMON,
+          VERSMON,
           FTYPE,
           VTYPE,
           sum(SLS_QT_SO + SLS_QT_FOC) AS Q,

@@ -58,7 +58,7 @@
       VERSMON,
       FTYPE,
       VTYPE,
-      BASE_UOM,
+   -- BASE_UOM,
       SUM(Q) AS Q
     FROM
       read_parquet([{DBI::SQL(file_list)}])
