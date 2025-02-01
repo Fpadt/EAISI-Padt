@@ -14,9 +14,9 @@
 
 ## Overview
 
-### PADT
+### EAISI-Padt
 
-Pythia’s Advice - Datascience Tooling (PADT) is a collection of tools
+Pythia’s Advice - Datascience Tooling (padt) is a collection of tools
 and functions that are used in the context of the Pythia’s Advice
 project. This project is the final module representing the pinnacle of
 the program [Master Data &
