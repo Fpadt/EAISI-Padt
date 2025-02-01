@@ -50,96 +50,7 @@
   }
 }
 
-#' Retrieve DuckDB Config Parts
-#'
-#' This internal helper function returns a list of three elements:
-#' \enumerate{
-#'   \item \code{duckdb_con} - The DuckDB connection.
-#'   \item \code{cte_scope_materials} - The CTE (common table expression) snippet
-#'         for scope materials, constructed if needed.
-#'   \item \code{where_clause} - A character vector of one or more WHERE clauses,
-#'         built according to the provided parameters.
-#' }
-#'
-#' @param .material A character vector of materials to filter on. If \code{NULL},
-#'   no material-based filter is applied (beyond scope constraints).
-#' @param .salesorg A character vector of sales organizations to filter on. If \code{NULL},
-#'   no salesorg-based filter is applied (beyond scope constraints).
-#' @param .scope_matl Logical. If \code{TRUE}, the returned \code{cte_scope_materials}
-#'   (and any relevant WHERE clauses) will restrict to materials in the scope definition.
-#' @param .scope_sorg Logical. If \code{TRUE}, where clauses will restrict to
-#'   the provided sales organization scope (if \code{.salesorg} is not \code{NULL}).
-#' @param .cm_min Character. Minimum YYYYMM to apply in date-based filtering. Defaults to
-#'   \code{NULL}.
-#' @param .cm_max Character. Maximum YYYYMM to apply in date-based filtering. Defaults to
-#'   \code{NULL}.
-#' @param .step_min Numeric. Minimum step filter. Defaults to \code{NULL}.
-#' @param .step_max Numeric. Maximum step filter. Defaults to \code{NULL}.
-#' @param .lagg_min Numeric. Minimum lag filter. Defaults to \code{NULL}.
-#' @param .lagg_max Numeric. Maximum lag filter. Defaults to \code{NULL}.
-#'
-#' @return A named \code{list} with three elements:
-#'   \itemize{
-#'     \item \code{duckdb_con} - The active DuckDB connection.
-#'     \item \code{cte_scope_materials} - SQL snippet for scope materials (may be an
-#'            empty string if \code{.scope_matl=FALSE}).
-#'     \item \code{where_clause} - A character vector of WHERE clauses.
-#'   }
-#'
-#' @details
-#' This function centralizes the logic of creating a DuckDB connection,
-#' constructing the \code{cte_scope_materials} snippet, and building the \code{where_clause}.
-#' Other functions can call this to avoid repeating code.
-#'
-#' @keywords internal
-.dd_duckdb_get_parts <- function(
-    .vtype       = NULL,
-    .ftype       = NULL,
-    .material    = NULL,
-    .salesorg    = NULL,
-    .scope_matl  = NULL,
-    .scope_sorg  = FALSE,
-    .cm_min      = NULL,
-    .cm_max      = NULL,
-    .step_min    = NULL,
-    .step_max    = NULL,
-    .lagg_min    = NULL,
-    .lagg_max    = NULL
-) {
 
-  # -- 1) Get or create a DuckDB connection --
-  con <- .dd_duckdb_open_conn()
-
-  # -- 2) Build the CTE snippet for scope materials --
-  cte_scope_materials <- .dd_matl_scope_cte_get(
-    .scope_matl = .scope_matl,
-    .con        = con
-  )
-
-  # -- 3) Build the WHERE clause according to the given parameters --
-  where_clause <- .dd_where_clause_get(
-    .vtype      = .vtype,
-    .ftype      = .ftype,
-    .material   = .material,
-    .salesorg   = .salesorg,
-    .scope_matl = .scope_matl,
-    .scope_sorg = .scope_sorg,
-    .cm_min     = .cm_min,
-    .cm_max     = .cm_max,
-    .step_min   = .step_min,
-    .step_max   = .step_max,
-    .lagg_min   = .lagg_min,
-    .lagg_max   = .lagg_max,
-    .con        = con
-  )
-
-  # Return as a named list
-  list(
-    duckdb_con          = con,
-    cte_scope_materials = cte_scope_materials,
-    where_clause        = where_clause
-  )
-}
 
 
 #' Generate SQL for Scope Materials CTE
@@ -166,7 +77,7 @@
 #' @examples
 #' \dontrun{
 #' # Example usage
-#' sql <- .dd_matl_scope_get(
+#' sql <- .da_matl_scope_get(
 #'   .scope_prdh = c("PRDH001", "PRDH002"),
 #'   .con = my_db_connection
 #' )
@@ -176,7 +87,7 @@
 #' @import glue
 #' @importFrom DBI SQL
 #' @keywords internal
-.dd_matl_scope_get <- function(
+.da_matl_scope_get <- function(
     .scope_prdh = SCOPE_PRDH,
     .con
 ) {

@@ -15,7 +15,7 @@
 #' @details
 #' This function performs the following steps:
 #' \enumerate{
-#'   \item Retrieves configuration details, such as Common Table Expression (CTE) for scope materials and WHERE clause filters, using \code{.dd_duckdb_get_parts()}.
+#'   \item Retrieves configuration details, such as Common Table Expression (CTE) for scope materials and WHERE clause filters, using \code{.da_duckdb_components_get()}.
 #'   \item Dynamically determines the list of parquet files to query based on the specified file type (\code{.ftype}).
 #'   \item Constructs and executes an SQL query in DuckDB to fetch the requested material master data, applying the provided filters.
 #' }
@@ -65,7 +65,7 @@ pa_md_mat_get <- function(
   )
 
   # Retrieve configuration for the query
-  config <- .dd_duckdb_get_parts(
+  components_ <- .da_duckdb_components_get(
     .material    = .material,
     .salesorg    = .salesorg,
     .scope_matl  = .scope_matl,
@@ -74,17 +74,17 @@ pa_md_mat_get <- function(
 
   # Construct the SQL query using the glue package
   query <- glue_sql("
-          {DBI::SQL(config$cte_scope_materials)}
+          {DBI::SQL(ddb_comp$cte_scope_materials)}
           SELECT
             *
           FROM
             read_parquet([{DBI::SQL(file_list)}])
           WHERE
-            {DBI::SQL(config$where_clause)}
+            {DBI::SQL(ddb_comp$where_clause)}
         ", .con = config$duckdb_con)
 
   # Execute the query and return the results as a data.table
-  dbGetQuery(config$duckdb_con, query, n = .n) %>%
+  dbGetQuery(ddb_comp$duckdb_con, query, n = .n) %>%
     setDT()
 }
 
@@ -232,8 +232,8 @@ pa_td_sap_get <-
     .n            = Inf              # number of materials to return
   ){
 
-    # Get Centralized config
-    config <- .dd_duckdb_get_parts(
+    # Get DuckDB components, conn, whereclasue and CTE
+    components_ <- .da_duckdb_components_get(
       .material   = .material,
       .salesorg   = .salesorg,
       .scope_matl = .scope_matl,
@@ -259,7 +259,7 @@ pa_td_sap_get <-
     # construct Query
     query <-
       glue_sql("
-        {DBI::SQL(config$cte_scope_materials)}
+        {DBI::SQL(ddb_comp$cte_scope_materials)}
 
         SELECT
           SALESORG,
@@ -282,12 +282,12 @@ pa_td_sap_get <-
         FROM
       read_parquet([{DBI::SQL(file_list)}])
         WHERE
-          {DBI::SQL(config$where_clause)}
+          {DBI::SQL(ddb_comp$where_clause)}
         GROUP BY
           ALL
         ORDER BY
           ALL
-      ", .con = config$duckdb_con)
+      ", .con = ddb_comp$duckdb_con)
 
     # fetch .n results and return as data.table
     dbGetQuery(.dd_duckdb_open_conn(), query, n = .n) %>%
