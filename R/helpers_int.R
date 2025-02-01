@@ -365,3 +365,57 @@
   # Return the cached or reloaded config
   .padt_env$cfg
 }
+
+
+
+.hl_convert_type <- function(
+    .ftype = NULL,  # If NULL, return all
+    .vtype = NULL,  # If NULL, return all
+    .config = NULL  # Reserved for future use (optional)
+) {
+
+  # Define the mapping as a data.table
+  conversion_table <- fread(text = "
+    ftype,vtype,output, description
+    1    , 010, abr   , Actuals  for Accuracy PreDR from 202401
+    2    , 010, aar   , Actuals  for Accuracy PstDR from 202401
+    3    , 010, lbr   , Actuals  Last Version PreDR from 202101
+    4    , 010, lar   , Actuals  Last Version PstDR from 202101
+    1    , 060, fbr   , Forecast for Accuracy PreDR from 202401
+    2    , 060, far   , Forecast for Accuracy PstDR from 202401
+  ",colClasses = c("vtype" = "character"))
+
+  # 1. Return all values if both .ftype and .vtype are NULL
+  if (is.null(.ftype) & is.null(.vtype)) {
+    return(unique(conversion_table$output))
+  }
+
+  # 2. Return all values for a given .vtype if .ftype is NULL
+  if (is.null(.ftype)) {
+    return(conversion_table[vtype %in% .vtype, output])
+  }
+
+  # 3. Return all values for a given .ftype if .vtype is NULL
+  if (is.null(.vtype)) {
+    return(conversion_table[ftype %in% .ftype, output])
+  }
+
+  # 4. Ensure both parameters are valid
+  if (!.vtype %in% unique(conversion_table$vtype)) {
+    stop("Invalid VTYPE. Must be one of: ", paste(unique(conversion_table$vtype), collapse = ", "))
+  }
+
+  if (!.ftype %in% unique(conversion_table$ftype)) {
+    stop("Invalid FTYPE. Must be one of: ", paste(unique(conversion_table$ftype), collapse = ", "))
+  }
+
+  # 5. Retrieve the corresponding value
+  result <- conversion_table[ftype == .ftype & vtype == .vtype, output]
+
+  if (length(result) == 0) {
+    stop("No matching entry found for the given FTYPE and VTYPE.")
+  }
+
+  return(result)
+}
+

@@ -14,29 +14,34 @@
     .lagg_max    = NULL      # maximal diff. between VERSMON & MONTH
   ) {
 
-    # Get Centralized config
-    config <- .duckdb_get_parts(
-      .vtype       = .vtype,
-      .ftype       = .ftype,
-      .material    = .material,
-      .salesorg    = .salesorg,
-      .scope_matl  = .scope_matl,
-      .scope_sorg  = .scope_sorg,
-      .cm_min      = .cm_min,
-      .cm_max      = .cm_max,
-      .step_min    = .step_min,
-      .step_max    = .step_max,
-      .lagg_min    = .lagg_min,
-      .lagg_max    = .lagg_max
-    )
+    # # Get Centralized config
+    # config <- .duckdb_get_parts(
+    #   .vtype       = .vtype,
+    #   .ftype       = .ftype,
+    #   .material    = .material,
+    #   .salesorg    = .salesorg,
+    #   .scope_matl  = .scope_matl,
+    #   .scope_sorg  = .scope_sorg,
+    #   .cm_min      = .cm_min,
+    #   .cm_max      = .cm_max,
+    #   .step_min    = .step_min,
+    #   .step_max    = .step_max,
+    #   .lagg_min    = .lagg_min,
+    #   .lagg_max    = .lagg_max
+    # )
 
-    # Determine Files to read
-    file_list <- .data_full_file_names_get(
-      .bsgp  = 2,
-      .area  = 1,
-      .vtype = .vtype,
-      .ftype = .ftype,
-      .etype = "parquet"
+    # # match argument
+    # dataset_name <- match.arg(.dataset_name)
+
+    # TODO: replace by transformation etc
+    dataset_name_ <-  .hl_convert_type(.ftype = .ftype, .vtype = .vtype)
+
+    # retrieve file pattern string
+    file_list <- .fh_dataset_paths_get(
+      .environment     = .hl_config_get()$project$active_environment,
+      .staging         = "silver"  ,
+      .functional_area = "sales",
+      .dataset_names   = dataset_name_
     )
 
     # Construct the query using glue_sql()
