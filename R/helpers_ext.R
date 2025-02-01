@@ -45,7 +45,10 @@ pa_parquet_head <-
 #' @details
 #' This function uses DuckDB to describe the structure of a Parquet file. The results are printed to the console.
 #'
-#'
+#'@examples
+#' dontrun{
+#'  pa_parquet_describe("C:/PW/OneDrive/ET/pythia/data/production/silver/sales/DD_HISTO_QTY_2023.parquet")
+#' }
 #' @export
 pa_parquet_describe <-
   function(
@@ -86,5 +89,17 @@ pa_folder_open <-
     shell.exec(normalizePath(path))
   }
 
-
-
+# TODO: replace this temp function
+pa_ds_stageing_path_get <-
+  function(
+    .staging,
+    .functional_area,
+    .dataset_name
+  ){
+    .fh_dataset_paths_get(
+      .environment     = .hl_config_get()$project$active_environment,
+      .staging         = .staging  ,
+      .functional_area = .functional_area,
+      .dataset_names   = .dataset_name
+    ) %>% gsub("'", "", .) %>% fs::path_dir()
+  }

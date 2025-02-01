@@ -77,7 +77,6 @@ pa_transform <- function(
     source_path,
     output_path,
     file_pattern,
-    file_spec,
     ohdest,
     verbose
 ) {
@@ -140,7 +139,6 @@ pa_transform <- function(
     .x          = fls,
     .f          = .di_csv_to_parquet_transform,
     output_path = output_path,
-    file_spec   = file_spec,
     transformations   = TRFN_RULES,
     verbose     = verbose
   )

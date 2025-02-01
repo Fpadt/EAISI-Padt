@@ -173,7 +173,6 @@
 .di_csv_to_parquet_transform <- function(
     full_file_name,
     output_path,
-    file_spec,
     transformations,
     verbose
 ) {

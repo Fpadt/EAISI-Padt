@@ -270,7 +270,7 @@ pa_td_ob_get <-
        -- SOLDTO,
           -1                          AS STEP,
           CALMONTH,
-          '{ftype}'                   AS FTYPE,
+          {ftype}                     AS FTYPE,
           '010'                       AS VTYPE,
           sum(SLS_QT_SO + SLS_QT_FOC) AS Q,
           sum(SLS_QT_SO)              AS SLS,
@@ -372,6 +372,7 @@ pa_td_ipm_get <-
       .dataset_names   = dataset_name_
     )
 
+
     # construct Query
     query <-
       glue_sql("
@@ -386,13 +387,13 @@ pa_td_ipm_get <-
           CALMONTH,
           '3'                         AS FTYPE,
           '010'                       AS VTYPE,
-          sum(SLS_QT_SO + SLS_QT_FOC) AS Q,
-          sum(SLS_QT_SO)              AS SLS,
-          sum(SLS_QT_RET)             AS RET,
-          sum(SLS_QT_FOC)             AS FOC,
-          sum(SLS_QT_DIR)             AS DIR,
-       -- sum(SLS_QT_PRO)             AS PRO,
-          sum(SLS_QT_IC)              AS ICS,
+          sum(IS_QT_SO + IS_QT_RET)   AS Q,
+          sum(IS_QT_SO)               AS SLS,
+          sum(IS_QT_RET)              AS RET,
+          sum(IS_QT_FOC)              AS FOC,
+          sum(IS_QT_DIR)              AS DIR,
+       -- sum(IS_QT_PRO)              AS PRO,
+          sum(IS_QT_IC)               AS ICS,
           sum(MSQTBUO)                AS MSL
         FROM
       read_parquet([{DBI::SQL(file_list)}])

@@ -18,3 +18,8 @@ Retrieves metadata information about a Parquet file by describing its structure 
 \details{
 This function uses DuckDB to describe the structure of a Parquet file. The results are printed to the console.
 }
+\examples{
+dontrun{
+ pa_parquet_describe("C:/PW/OneDrive/ET/pythia/data/production/silver/sales/DD_HISTO_QTY_2023.parquet")
+}
+}

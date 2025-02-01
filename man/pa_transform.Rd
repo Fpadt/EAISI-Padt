@@ -4,14 +4,7 @@
 \alias{pa_transform}
 \title{transform CSV files to parquet}
 \usage{
-pa_transform(
-  source_path,
-  output_path,
-  file_pattern,
-  file_spec,
-  ohdest,
-  verbose
-)
+pa_transform(source_path, output_path, file_pattern, ohdest, verbose)
 }
 \arguments{
 \item{source_path}{A character string specifying the path to the source directory containing CSV files.}
@@ -20,11 +13,11 @@ pa_transform(
 
 \item{file_pattern}{A character string with a regex pattern to filter which source CSV files to include.}
 
-\item{file_spec}{A list or object defining file specifications (e.g., delimiter, headers).}
-
 \item{ohdest}{A character string indicating which “ohdest” pipeline configuration to retrieve and use.}
 
 \item{verbose}{A logical indicating whether to print verbose messages (\code{TRUE}) or not (\code{FALSE}).}
+
+\item{file_spec}{A list or object defining file specifications (e.g., delimiter, headers).}
 }
 \value{
 Returns \code{NULL} invisibly. The side-effect is that new Parquet files are written to \code{output_path}.

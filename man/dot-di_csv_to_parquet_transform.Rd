@@ -7,7 +7,6 @@
 .di_csv_to_parquet_transform(
   full_file_name,
   output_path,
-  file_spec,
   transformations,
   verbose
 )
@@ -18,14 +17,14 @@
 \item{output_path}{A character string with the directory path where the
 Parquet file should be written.}
 
-\item{file_spec}{A list-like object with the CSV specifications (e.g.
-delim, header, date format).}
-
 \item{transformations}{A \code{data.table} (or similar) detailing how
 fields should be transformed.}
 
 \item{verbose}{A logical indicating whether to print additional
 information (\code{TRUE}) or not (\code{FALSE}).}
+
+\item{file_spec}{A list-like object with the CSV specifications (e.g.
+delim, header, date format).}
 }
 \value{
 Returns \code{NULL} invisibly. The side effect is creation of a Parquet
