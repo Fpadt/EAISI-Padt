@@ -5,7 +5,6 @@
 \title{Retrieve outbound Sales Data from SAP BW to Dynasys}
 \usage{
 pa_td_sap_get(
-  .vtype = c("010"),
   .ftype = c(5, 6),
   .material = NULL,
   .salesorg = NULL,
@@ -17,8 +16,6 @@ pa_td_sap_get(
 )
 }
 \arguments{
-\item{.vtype}{Character scalar, default = '010'}
-
 \item{.ftype}{Character scalar, mandatory rtp = 5, ipm = 6}
 
 \item{.material}{[character] (default: `NULL`)
