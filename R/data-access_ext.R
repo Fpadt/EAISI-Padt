@@ -185,7 +185,6 @@ pa_td_dyn_get <-
 #' such as material, sales organization, and calendar month range. It fetches data
 #' from a DuckDB connection and returns it as a `data.table` object.
 #'
-#' @param .vtype Character scalar, default = '010'
 #' @param .ftype Character scalar, mandatory rtp = 5, ipm = 6
 #' @param .material [character] (default: `NULL`)
 #'   Optional user-supplied material filter. If not specified, all materials are included.
@@ -223,7 +222,6 @@ pa_td_dyn_get <-
 #' @export
 pa_td_sap_get <-
   function(
-    .vtype        = c('010')       , # rtp: .hl_convert_type(5,'010')
     .ftype        = c(5 ,6)        , # ipm: .hl_convert_type(6,'010')
     .material     = NULL           , # Optional user-supplied material
     .salesorg     = NULL           , # Optional user-supplied salesorg
@@ -244,11 +242,11 @@ pa_td_sap_get <-
       .cm_max     = .cm_max
     )
 
-    # TODO: replace by transformation etc
-    # TODO ; Move to data-access_int
+    # TODO: replace by transformation rtp -> ftype = 5, ipm ftype = 6
+    # TODO: remove {ftype} from sql
 
     ftype         <- .ftype[1]
-    dataset_name_ <-  .hl_convert_type(.ftype = ftype, .vtype = .vtype)
+    dataset_name_ <-  .hl_convert_type(.ftype = ftype, .vtype = '010')
 
     # retrieve file pattern string
     file_list <- .fh_dataset_paths_get(
@@ -270,8 +268,8 @@ pa_td_sap_get <-
        -- SOLDTO,
           -1                          AS STEP,
           CALMONTH,
-          {ftype}                     AS FTYPE,
-          '010'                       AS VTYPE,
+          FTYPE,
+          VTYPE,
           sum(SLS_QT_SO + SLS_QT_FOC) AS Q,
           sum(SLS_QT_SO)              AS SLS,
           sum(SLS_QT_RET)             AS RET,

@@ -36,21 +36,21 @@
     glue_template
 ) {
   transformations %>%
-    # 1. Filter out empty rows based on filter_col
+    # Filter out empty rows based on filter_col
     .[get(filter_col) != ""] %>%
 
-    # # 2. Calculate spacing for alignment
+    # Calculate spacing for alignment
     .[, `:=`(no_spc = max(nchar(get(alignment_col))) - nchar(get(alignment_col)) + 3)] %>%
-    # # 2. Calculate spacing for alignment
+    # Calculate spacing for alignment
     # .[, .no_spc := max(nchar(get(alignment_col))) - nchar(get(alignment_col)) + 3] %>%
 
-    # 3. Generate the formatted strings via glue_data
+    # Generate the formatted strings via glue_data
     .[, glue_data(.SD, glue_template)] %>%
 
-    # 4. Collapse into a single string with newlines
+    # Collapse into a single string with newlines
     glue_collapse(sep = "\n") %>%
 
-    # 5. Remove the trailing character (comma or otherwise)
+    # Remove the trailing character (comma or otherwise)
     {\(txt) substr(txt, 1, nchar(txt) - 1)}()
 }
 
