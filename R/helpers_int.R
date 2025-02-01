@@ -93,6 +93,8 @@
     2    , 010, aar   , Actuals  for Accuracy PstDR from 202401
     3    , 010, lbr   , Actuals  Last Version PreDR from 202101
     4    , 010, lar   , Actuals  Last Version PstDR from 202101
+    5    , 010, rtp   , Actuals  for forecasting dynasys Cloud
+    6    , 010, ipm   , Actuals  for forecasting dynasys 2018
     1    , 060, fbr   , Forecast for Accuracy PreDR from 202401
     2    , 060, far   , Forecast for Accuracy PstDR from 202401
   ",colClasses = c("vtype" = "character"))

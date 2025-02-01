@@ -185,6 +185,8 @@ pa_td_dyn_get <-
 #' such as material, sales organization, and calendar month range. It fetches data
 #' from a DuckDB connection and returns it as a `data.table` object.
 #'
+#' @param .vtype Character scalar, default = '010'
+#' @param .ftype Character scalar, mandatory rtp = 5, ipm = 6
 #' @param .material [character] (default: `NULL`)
 #'   Optional user-supplied material filter. If not specified, all materials are included.
 #' @param .salesorg [character] (default: `NULL`)
@@ -219,15 +221,16 @@ pa_td_dyn_get <-
 #' @examples
 #' # Fetch RTP data for all materials and sales organizations in the Pythia scope
 #' @export
-pa_td_ob_get <-
+pa_td_sap_get <-
   function(
-    .dataset_name = c("rtp", "ipm"), # defaults to rtp
+    .vtype        = c('010')       , # rtp: .hl_convert_type(5,'010')
+    .ftype        = c(5 ,6)        , # ipm: .hl_convert_type(6,'010')
     .material     = NULL           , # Optional user-supplied material
     .salesorg     = NULL           , # Optional user-supplied salesorg
     .scope_matl   = TRUE           , # restrict to Pythia Scope
     .scope_sorg   = TRUE           , # restrict to Pythia Scope
-    .cm_min       = '202101'       , # no data available before this date
-    .cm_max       = '202506'       , # no data available after this date
+    .cm_min       = CM_MIN         , # no data available before this date
+    .cm_max       = CM_MAX         , # no data available after this date
     .n            = Inf              # number of materials to return
   ){
 
@@ -241,13 +244,12 @@ pa_td_ob_get <-
       .cm_max     = .cm_max
     )
 
-    # # match argument
-    # dataset_name <- match.arg(.dataset_name)
-
     # TODO: replace by transformation etc
     # TODO ; Move to data-access_int
 
-    dataset_name_ <- .dataset_name[1]
+    ftype         <- .ftype[1]
+    dataset_name_ <-  .hl_convert_type(.ftype = ftype, .vtype = .vtype)
+
     # retrieve file pattern string
     file_list <- .fh_dataset_paths_get(
       .environment     = .hl_config_get()$project$active_environment,
@@ -255,8 +257,6 @@ pa_td_ob_get <-
       .functional_area = "sales",
       .dataset_names   = dataset_name_
     )
-
-    ftype <- ifelse(dataset_name_ == "rtp", "4", "3")
 
     # construct Query
     query <-
@@ -296,117 +296,3 @@ pa_td_ob_get <-
 
   }
 
-#' Retrieve IPM Sales Data from SAP BW to Dynasys 2018
-#'
-#' This function retrieves IPM (Inventory Planning Management) data based on specified filters
-#' such as material, sales organization, and calendar month range. It fetches data
-#' from a DuckDB connection and returns it as a `data.table` object.
-#'
-#' @param .material [character] (default: `NULL`)
-#'   Optional user-supplied material filter. If not specified, all materials are included.
-#' @param .salesorg [character] (default: `NULL`)
-#'   Optional user-supplied sales organization filter. If not specified, all sales organizations are included.
-#' @param .scope_matl [logical] (default: `TRUE`)
-#'   If `TRUE`, restricts data to materials within the Pythia scope.
-#' @param .scope_sorg [logical] (default: `TRUE`)
-#'   If `TRUE`, restricts data to sales organizations within the Pythia scope.
-#' @param .cm_min [character] (default: `'202101'`)
-#'   Specifies the earliest calendar month for which data is available, formatted as `YYYYMM`.
-#' @param .cm_max [character] (default: `'202506'`)
-#'   Specifies the latest calendar month for which data is available, formatted as `YYYYMM`.
-#' @param .n [numeric] (default: `Inf`)
-#'   The maximum number of materials to return. Use `Inf` to return all matching records.
-#'
-#' @return A `data.table` object containing IPM data with the following columns:
-#'   - `SALESORG`: Sales organization code.
-#'   - `PLANT`: Plant code.
-#'   - `MATERIAL`: Material code.
-#'   - `STEP`: Processing step (fixed as `-1`).
-#'   - `CALMONTH`: Calendar month in `YYYYMM` format.
-#'   - `FTYPE`: Fixed as `'3'`.
-#'   - `VTYPE`: Fixed as `'010'`.
-#'   - `Q`: Sum of sales and free-of-charge quantities.
-#'   - `SLS`: Sum of sales quantities.
-#'   - `RET`: Sum of return quantities.
-#'   - `FOC`: Sum of free-of-charge quantities.
-#'   - `DIR`: Sum of direct sales quantities.
-#'   - `ICS`: Sum of intercompany sales quantities.
-#'   - `MSL`: Sum of MSL quantities.
-#'
-#' @examples
-#' # Fetch IPM data for all materials and sales organizations in the Pythia scope
-#' @export
-pa_td_ipm_get <-
-  function(
-    .material    = NULL    , # Optional user-supplied material
-    .salesorg    = NULL    , # Optional user-supplied salesorg
-    .scope_matl  = TRUE   , # restrict to Pythia Scope
-    .scope_sorg  = TRUE    , # restrict to Pythia Scope
-    .cm_min      = '202101', # no data available before this date
-    .cm_max      = '202506', # no data available after this date
-    .n           = Inf       # number of materials to return
-  ){
-
-    # Get Centralized config
-    config <- .dd_duckdb_get_parts(
-      .material   = .material,
-      .salesorg   = .salesorg,
-      .scope_matl = .scope_matl,
-      .scope_sorg = .scope_sorg,
-      .cm_min     = .cm_min,
-      .cm_max     = .cm_max
-    )
-
-    # # match argument
-    # dataset_name <- match.arg(.dataset_name)
-
-    # TODO: replace by transformation etc
-    # TODO ; Move to data-access_int
-
-    dataset_name_ <- "ipm"
-    # retrieve file pattern string
-    file_list <- .fh_dataset_paths_get(
-      .environment     = .hl_config_get()$project$active_environment,
-      .staging         = "silver"  ,
-      .functional_area = "sales",
-      .dataset_names   = dataset_name_
-    )
-
-
-    # construct Query
-    query <-
-      glue_sql("
-        {DBI::SQL(config$cte_scope_materials)}
-
-        SELECT
-          SALESORG,
-          PLANT,
-          MATERIAL,
-       -- SOLDTO,
-          -1                          AS STEP,
-          CALMONTH,
-          '3'                         AS FTYPE,
-          '010'                       AS VTYPE,
-          sum(IS_QT_SO + IS_QT_RET)   AS Q,
-          sum(IS_QT_SO)               AS SLS,
-          sum(IS_QT_RET)              AS RET,
-          sum(IS_QT_FOC)              AS FOC,
-          sum(IS_QT_DIR)              AS DIR,
-       -- sum(IS_QT_PRO)              AS PRO,
-          sum(IS_QT_IC)               AS ICS,
-          sum(MSQTBUO)                AS MSL
-        FROM
-      read_parquet([{DBI::SQL(file_list)}])
-        WHERE
-          {DBI::SQL(config$where_clause)}
-        GROUP BY
-          ALL
-        ORDER BY
-          ALL
-      ", .con = config$duckdb_con)
-
-    # fetch .n results and return as data.table
-    dbGetQuery(.dd_duckdb_open_conn(), query, n = .n) %>%
-      setDT()
-
-  }

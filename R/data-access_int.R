@@ -6,8 +6,8 @@
     .salesorg    = NULL    , # NULL wont apply any filter
     .scope_matl  = FALSE   , # FALSE wont apply any filter
     .scope_sorg  = FALSE   , # FALSE wont apply any filter
-    .cm_min      = '202101', # minimal Cal Month
-    .cm_max      = '202506', # maximal Cal Month
+    .cm_min      = CM_MIN  , # minimal Cal Month
+    .cm_max      = CM_MAX  , # maximal Cal Month
     .step_min    = NULL    , # minimal forecast step ahead
     .step_max    = NULL    , # maximal forecast step ahead
     .lagg_min    = NULL    , # minimal diff. between VERSMON & MONTH
