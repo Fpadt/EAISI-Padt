@@ -15,7 +15,7 @@
   ) {
 
     # Get Centralized config
-    ddb_comp- .da_duckdb_components_get(
+    ddb_comp <- .da_duckdb_components_get(
       .vtype       = .vtype,
       .ftype       = .ftype,
       .material    = .material,
