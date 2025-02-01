@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# padt <a href="https://www.smart-r.net" target="_blank" rel="noopener noreferrer"><img src="man/figures/padt_wtxt.png.png" align="right" height="138" /></a>
+# Pythia's Advice - Datascience Tooling <a href="https://www.smart-r.net" target="_blank" rel="noopener noreferrer"><img src="man/figures/padt_wtxt.png" align="right" height="138" /></a>
 
 *Under Development*
 
@@ -27,65 +27,69 @@ knitr::opts_chunk$set(
 
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 #| label      = 'padt',
 #| fig.align  = 'left',
-#| fig.cap    = 'padt - Pythia's Advice Data science Tooling',
-#| fig.link   = 'https://raw.githubusercontent.com/Fpadt/sapyr/main/man/figures/sapyr_apps.png?token=GHSAT0AAAAAACBTLHAXU2VU2NCHXCTHJGA2ZCQ6XGQ',
+#| fig.cap    = "padt - Pythia's Advice Data science Tooling",
+#| fig.link   = 'https://raw.githubusercontent.com/Fpadt/EAISI-Padt/main/man/figures/padt_wtxt.png?token=GHSAT0AAAAAACBTLHAXU2VU2NCHXCTHJGA2ZCQ6XGQ',
 #| out.width  = '80%'
 
-knitr::include_graphics("man/figures/sapyr_apps.png")
+knitr::include_graphics("man/figures/padt_wtxt.png")
 
 ```
 
-### RSAP
+### PADT
 
-The SAPYR package fills the gap for R version > 3.5.2, which resulted after Piers Harding's decision to stop maintaining his great [RSAP package - An R interface to SAP NetWeaver R/3 systems using the RFC protocol][RSAP] which can still be used for R <= 3.5.2. 
+Pythia's Advice - Datascience Tooling (PADT) is a collection of tools and 
+functions that are used in the context of the Pythia's Advice project. 
+This project is the final module representing the pinnacle of the program 
+[Master Data & AI][MDAI] at [EAISI][EAISI]. 
 
-### pyRFC
+The project aims to provide a set 
+of tools and functions to demand planners to perform data analysis and 
+time-series forecasting on data sets in csv format which are tranformed 
+in parquet files using [Duck DB][DUCKDB] providing lightning fast data access.
 
-SAPYR wouldn't be possbile without [Srdjan Boskovic's][bsrdjan] great python package [pyRFC - Asynchronous, non-blocking SAP NetWeawer RFC SDK bindings for Python][pyRFC].  
-
-### Reticulate
-
-The python bindings to SAP can be leveraged in R using [Reticulate - calling python from R][reticulate], another great package from [Posit | The Open-Source Data Science Company][POSIT].
-
-### SAP 
-
-The SAP NetWeaver RFC SDK 7.50 provides RFC communication with SAP systems of Release 4.6C and higher. This Software Development Kit is maintained by SAP.  
-
-Information on where to download can be found here [SAP NetWeaver Remote Function Call (RFC)
-Software Development Kit (SDK)][nwrfcsdk] or on [me.sap.com/notes/2573790][2573790] (requires a SAP account).
-
-The relevant ABAP modules can be found in SAP using transaction code ```SE16``` for table TFDIR filtered for TFDIR-FMODE = ```R```.
-A typical SAP system has about 18K+ remote enabled function modules. 
+The project is developed in R and Python and is maintained by [smart-R][smart-R].
 
 ## Installation
 
-You can install the development version of SAPYR from GitHub using:
+The development version of EAISI-Padt can be installed from GitHub using:
 
 ``` r
 # not released on CRAN yet!!
 
 # the development version from GitHub:
-remotes::install_github("fpadt/padt")
+remotes::install_github("Fpadt/EAISI-Padt")
 ```
 
-### prerequisites
+### Prerequisites
 
 The following software needs to be installed as prerequisite 
 (preferably the lastest version):
 
 1. [The R Project for Statistical Computing][CRAN]
-2. 
+2. Config file maintained!!!, see directory ```./padt_config```
 
 
 ## Example
 
-This is a basic example which shows you how to read data from a SAP table:
+This is a basic example which shows you how to access data:
 
 ```{r example, eval=FALSE}
 library(padt)
+
+IPM <-
+  pa_td_sap_get(
+    .ftype        = 6              , # 5 = rtp, 6 = ipm  
+    .material     = '10023'        , # Optional user-supplied material
+    .salesorg     = 'FR30'         , # Optional user-supplied salesorg
+    .scope_matl   = TRUE           , # restrict to Pythia Scope
+    .scope_sorg   = TRUE           , # restrict to Pythia Scope
+    .cm_min       = '202101'       , # minimal Cal Month
+    .cm_max       = '202506'       , # maximal Cal Month,
+    .n            = Inf
+  )
 
 ```
 
@@ -97,4 +101,7 @@ library(padt)
 [POSIT]: https://posit.co/
 [CRAN]: https://cran.r-project.org/
 [Python]: https://www.python.org/downloads/
-
+[smart-R]: https://www.smart-r.net/
+[MDAI]:https://www.tue.nl/en/research/institutes/eindhoven-artificial-intelligence-systems-institute/ai-education/professional-education/programs-voor-professionals/mastering-data-ai-mdai
+[EAISI]:https://www.tue.nl/en/research/institutes/eindhoven-artificial-intelligence-systems-institute
+[DUCKDB]: https://duckdb.org/
