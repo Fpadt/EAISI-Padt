@@ -117,7 +117,7 @@
   )
 
   # -- 3) Build the WHERE clause according to the given parameters --
-  where_clause <- .get_where_clause(
+  where_clause <- .dd_where_clause_get(
     .vtype      = .vtype,
     .ftype      = .ftype,
     .material   = .material,
