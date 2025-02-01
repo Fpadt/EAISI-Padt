@@ -151,8 +151,8 @@
       .padt_env$cfg_mtime <- file.info(.padt_env$cfg_path)$mtime
 
       # Debug messages
-      packageStartupMessage("Tempdir used: ", tempdir())
-      packageStartupMessage("Final root_dir: ", .padt_env$root_dir)
+      # packageStartupMessage("Tempdir used: ", tempdir())
+      # packageStartupMessage("Final root_dir: ", .padt_env$root_dir)
 
 
       # Inform the user
