@@ -89,7 +89,41 @@ pa_folder_open <-
     shell.exec(normalizePath(path))
   }
 
-# TODO: replace this temp function
+#' [TEMPORARY] Retrieve the Staging Path for a Dataset
+#'
+#' @description
+#' This function retrieves the full staging path for a given dataset within a functional area,
+#' removes any single quotes from the path, and returns the directory path.
+#'
+#' @param .staging A character string specifying the staging level (e.g., `"bronze"`, `"silver"`, `"gold"`, `"platinum"`).
+#' @param .functional_area A character string indicating the functional area (e.g., `"sales"`, `"master_data"`).
+#' @param .dataset_name A character string specifying the dataset name.
+#'
+#' @return A character vector containing the cleaned directory path for the specified dataset and staging level.
+#'
+#' @details
+#' This function:
+#' \itemize{
+#'   \item Calls \code{\link{.fh_dataset_paths_get}} to retrieve the dataset's full path.
+#'   \item Removes single quotes using \code{gsub("'", "", .)} to ensure a clean file path.
+#'   \item Extracts the directory path using \code{fs::path_dir()}.
+#' }
+#' The function automatically determines the active environment using \code{.hl_config_get()$project$active_environment}.
+#'
+#' @examples
+#' \dontrun{
+#' # Retrieve the path for the "rtp" dataset in the "sales" functional area at the "bronze" staging level.
+#' path <- pa_ds_stageing_path_get(
+#'   .staging = "bronze",
+#'   .functional_area = "sales",
+#'   .dataset_name = "rtp"
+#' )
+#' print(path)
+#' }
+#'
+#' @seealso \code{\link{.fh_dataset_paths_get}}, \code{\link{fs::path_dir}}
+#'
+#' @keywords internal
 pa_ds_stageing_path_get <-
   function(
     .staging,
@@ -98,8 +132,10 @@ pa_ds_stageing_path_get <-
   ){
     .fh_dataset_paths_get(
       .environment     = .hl_config_get()$project$active_environment,
-      .staging         = .staging  ,
+      .staging         = .staging,
       .functional_area = .functional_area,
       .dataset_names   = .dataset_name
-    ) %>% gsub("'", "", .) %>% fs::path_dir()
+    ) %>%
+      gsub("'", "", .) %>%
+      fs::path_dir()
   }
