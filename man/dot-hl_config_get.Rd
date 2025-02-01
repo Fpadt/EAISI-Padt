@@ -16,3 +16,4 @@ The most recent configuration as a list.
 This function checks if the configuration file should be reloaded based on
 the file modification time or forced by the `.reload` flag.
 }
+\keyword{internal}

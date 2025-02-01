@@ -57,6 +57,7 @@
 #'
 #' @param .reload Logical, whether to force reload the config file. Default is FALSE.
 #' @return The most recent configuration as a list.
+#' @keywords internal
 .hl_config_get <- function(.reload = FALSE) {
 
   # Ensure the required path is available
