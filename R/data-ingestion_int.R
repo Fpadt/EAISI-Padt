@@ -158,8 +158,6 @@
 #' @param full_file_name A character string with the full path to the CSV file.
 #' @param output_path    A character string with the directory path where the
 #'   Parquet file should be written.
-#' @param file_spec      A list-like object with the CSV specifications (e.g.
-#'   delim, header, date format).
 #' @param transformations      A \code{data.table} (or similar) detailing how
 #'   fields should be transformed.
 #' @param verbose        A logical indicating whether to print additional

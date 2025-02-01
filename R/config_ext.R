@@ -124,29 +124,13 @@ pa_config_value_set <- function(
 #' same level in the hierarchy.
 #'
 #' @param .key Character. The key to search for within the YAML configuration.
-#' @param .config List. The parsed YAML configuration (default is `.padt_env$cfg`).
 #' @param .level Integer. The hierarchy level to search for keys (default is 0 for root).
 #' @return A list or vector of all matching values for the specified key from the same level.
 #'         Returns an empty list if no matches are found.
 #' @examples
-#' # Example YAML structure:
-#' # sales:
-#' #   system1:
-#' #     folder: "folder1"
-#' #   system2:
-#' #     folder: "folder2"
-#' # inventory:
-#' #   items:
-#' #     folder: "folder3"
-#' #   warehouse:
-#' #     details:
-#' #       folder: "folder4"
-#' #
-#' # .yaml_entries_same_level_get("folder") will return:
-#' # list("folder1", "folder2") or list("folder3") depending on where the search starts.
-#'
-#' .yaml_entries_same_level_get("folder")
-#'
+#' \dontrun{
+#' # Retrieve all values with the key "source_path" from the same hierarchy level
+#' }
 #' @export
 pa_config_level_values_get <- function(
     .key,

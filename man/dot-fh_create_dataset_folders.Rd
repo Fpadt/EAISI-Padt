@@ -9,15 +9,6 @@
 \arguments{
 \item{config}{A nested list representing your YAML configuration
 (already read via \code{\link[yaml]{yaml.load_file}}).}
-
-\item{environment}{A character string specifying the environment in DTAP
-(e.g., \code{"production"}, \code{"development"}, \code{"test"}, \code{"acceptance"}).}
-
-\item{create_platinum}{Logical indicating whether to create platinum folders
-for new forecast outputs. Defaults to \code{TRUE}.}
-
-\item{verbose}{Logical; if \code{TRUE}, messages about created folders
-are printed.}
 }
 \value{
 Returns \code{TRUE} (invisibly) if successful. Creates folders on disk as a side effect.

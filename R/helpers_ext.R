@@ -45,9 +45,10 @@ pa_parquet_head <-
 #' @details
 #' This function uses DuckDB to describe the structure of a Parquet file. The results are printed to the console.
 #'
-#'@examples
-#' dontrun{
-#'  pa_parquet_describe("C:/PW/OneDrive/ET/pythia/data/production/silver/sales/DD_HISTO_QTY_2023.parquet")
+#'@examples{
+#' \dontrun{
+#'  pa_parquet_describe("./DD_HISTO_QTY_2023.parquet")
+#'  }
 #' }
 #' @export
 pa_parquet_describe <-
@@ -89,7 +90,7 @@ pa_folder_open <-
     shell.exec(normalizePath(path))
   }
 
-#' [TEMPORARY] Retrieve the Staging Path for a Dataset
+#' TEMPORARY Retrieve the Staging Path for a Dataset
 #'
 #' @description
 #' This function retrieves the full staging path for a given dataset within a functional area,
@@ -106,22 +107,23 @@ pa_folder_open <-
 #' \itemize{
 #'   \item Calls \code{\link{.fh_dataset_paths_get}} to retrieve the dataset's full path.
 #'   \item Removes single quotes using \code{gsub("'", "", .)} to ensure a clean file path.
-#'   \item Extracts the directory path using \code{fs::path_dir()}.
+#'   \item Extracts the directory path .
 #' }
 #' The function automatically determines the active environment using \code{.hl_config_get()$project$active_environment}.
 #'
 #' @examples
 #' \dontrun{
-#' # Retrieve the path for the "rtp" dataset in the "sales" functional area at the "bronze" staging level.
+#'
+#' # Retrieve the path for the "rtp" dataset in "bronze" staging level for the "sales" functional area.
 #' path <- pa_ds_stageing_path_get(
-#'   .staging = "bronze",
+#'   .staging         = "bronze",
 #'   .functional_area = "sales",
-#'   .dataset_name = "rtp"
+#'   .dataset_name    = "rtp"
 #' )
 #' print(path)
-#' }
 #'
-#' @seealso \code{\link{.fh_dataset_paths_get}}, \code{\link{fs::path_dir}}
+#' }
+#' @seealso \code{\link{.fh_dataset_paths_get}}, \code{\link[fs]{path_dir}}
 #'
 #' @export
 pa_ds_stageing_path_get <-

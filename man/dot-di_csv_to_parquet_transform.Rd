@@ -22,9 +22,6 @@ fields should be transformed.}
 
 \item{verbose}{A logical indicating whether to print additional
 information (\code{TRUE}) or not (\code{FALSE}).}
-
-\item{file_spec}{A list-like object with the CSV specifications (e.g.
-delim, header, date format).}
 }
 \value{
 Returns \code{NULL} invisibly. The side effect is creation of a Parquet

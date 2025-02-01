@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers_ext.R
 \name{pa_ds_stageing_path_get}
 \alias{pa_ds_stageing_path_get}
-\title{[TEMPORARY] Retrieve the Staging Path for a Dataset}
+\title{TEMPORARY Retrieve the Staging Path for a Dataset}
 \usage{
 pa_ds_stageing_path_get(.staging, .functional_area, .dataset_name)
 }
@@ -25,22 +25,23 @@ This function:
 \itemize{
   \item Calls \code{\link{.fh_dataset_paths_get}} to retrieve the dataset's full path.
   \item Removes single quotes using \code{gsub("'", "", .)} to ensure a clean file path.
-  \item Extracts the directory path using \code{fs::path_dir()}.
+  \item Extracts the directory path .
 }
 The function automatically determines the active environment using \code{.hl_config_get()$project$active_environment}.
 }
 \examples{
 \dontrun{
-# Retrieve the path for the "rtp" dataset in the "sales" functional area at the "bronze" staging level.
+
+# Retrieve the path for the "rtp" dataset in "bronze" staging level for the "sales" functional area.
 path <- pa_ds_stageing_path_get(
-  .staging = "bronze",
+  .staging         = "bronze",
   .functional_area = "sales",
-  .dataset_name = "rtp"
+  .dataset_name    = "rtp"
 )
 print(path)
-}
 
 }
+}
 \seealso{
-\code{\link{.fh_dataset_paths_get}}, \code{\link{fs::path_dir}}
+\code{\link{.fh_dataset_paths_get}}, \code{\link[fs]{path_dir}}
 }

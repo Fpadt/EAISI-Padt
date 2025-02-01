@@ -519,12 +519,6 @@
 #'
 #' @param config A nested list representing your YAML configuration
 #'   (already read via \code{\link[yaml]{yaml.load_file}}).
-#' @param environment A character string specifying the environment in DTAP
-#'   (e.g., \code{"production"}, \code{"development"}, \code{"test"}, \code{"acceptance"}).
-#' @param create_platinum Logical indicating whether to create platinum folders
-#'   for new forecast outputs. Defaults to \code{TRUE}.
-#' @param verbose Logical; if \code{TRUE}, messages about created folders
-#'   are printed.
 #'
 #' @details
 #' This function assumes the YAML has a structure similar to:

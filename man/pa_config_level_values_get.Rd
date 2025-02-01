@@ -10,8 +10,6 @@ pa_config_level_values_get(.key, .level = 0)
 \item{.key}{Character. The key to search for within the YAML configuration.}
 
 \item{.level}{Integer. The hierarchy level to search for keys (default is 0 for root).}
-
-\item{.config}{List. The parsed YAML configuration (default is `.padt_env$cfg`).}
 }
 \value{
 A list or vector of all matching values for the specified key from the same level.
@@ -23,22 +21,7 @@ matching a specific key. It ensures that all matching entries come from the
 same level in the hierarchy.
 }
 \examples{
-# Example YAML structure:
-# sales:
-#   system1:
-#     folder: "folder1"
-#   system2:
-#     folder: "folder2"
-# inventory:
-#   items:
-#     folder: "folder3"
-#   warehouse:
-#     details:
-#       folder: "folder4"
-#
-# .yaml_entries_same_level_get("folder") will return:
-# list("folder1", "folder2") or list("folder3") depending on where the search starts.
-
-.yaml_entries_same_level_get("folder")
-
+\dontrun{
+# Retrieve all values with the key "source_path" from the same hierarchy level
+}
 }

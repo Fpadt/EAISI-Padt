@@ -16,8 +16,6 @@ pa_transform(source_path, output_path, file_pattern, ohdest, verbose)
 \item{ohdest}{A character string indicating which “ohdest” pipeline configuration to retrieve and use.}
 
 \item{verbose}{A logical indicating whether to print verbose messages (\code{TRUE}) or not (\code{FALSE}).}
-
-\item{file_spec}{A list or object defining file specifications (e.g., delimiter, headers).}
 }
 \value{
 Returns \code{NULL} invisibly. The side-effect is that new Parquet files are written to \code{output_path}.

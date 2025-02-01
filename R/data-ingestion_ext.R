@@ -62,7 +62,6 @@ pa_transformations_get <- function() {
 #' @param source_path  A character string specifying the path to the source directory containing CSV files.
 #' @param output_path  A character string specifying the path to the output directory where Parquet files will be saved.
 #' @param file_pattern A character string with a regex pattern to filter which source CSV files to include.
-#' @param file_spec    A list or object defining file specifications (e.g., delimiter, headers).
 #' @param ohdest       A character string indicating which “ohdest” pipeline configuration to retrieve and use.
 #' @param verbose      A logical indicating whether to print verbose messages (\code{TRUE}) or not (\code{FALSE}).
 #'
