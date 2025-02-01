@@ -107,16 +107,16 @@
     .lagg_max    = NULL
 ) {
 
-  # -- 1) Get or create a DuckDB connection --
+  # Get or create a DuckDB connection --
   con <- .dd_duckdb_open_conn()
 
-  # -- 2) Build the CTE snippet for scope materials --
-  cte_scope_materials <- .get_cte_scope_materials(
+  # Build the CTE snippet for scope materials --
+  cte_scope_materials <- .dd_matl_scope_cte_get(
     .scope_matl = .scope_matl,
     .con        = con
   )
 
-  # -- 3) Build the WHERE clause according to the given parameters --
+  # Build the WHERE clause according to the given parameters --
   where_clause <- .dd_where_clause_get(
     .vtype      = .vtype,
     .ftype      = .ftype,
