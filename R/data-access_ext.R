@@ -65,7 +65,7 @@ pa_md_mat_get <- function(
   )
 
   # Retrieve configuration for the query
-  components_ <- .da_duckdb_components_get(
+  ddb_comp- .da_duckdb_components_get(
     .material    = .material,
     .salesorg    = .salesorg,
     .scope_matl  = .scope_matl,
@@ -233,7 +233,7 @@ pa_td_sap_get <-
   ){
 
     # Get DuckDB components, conn, whereclasue and CTE
-    components_ <- .da_duckdb_components_get(
+    ddb_comp- .da_duckdb_components_get(
       .material   = .material,
       .salesorg   = .salesorg,
       .scope_matl = .scope_matl,
