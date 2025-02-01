@@ -52,6 +52,7 @@
       SALESORG,
       PLANT,
       MATERIAL,
+   -- SOLDTO,
       STEP,
       CALMONTH,
       VERSMON,
