@@ -51,10 +51,15 @@
 pa_model_accuracy <- function(
     .tab,
     .act_ftype = 1,
-    .fct_ftype = 2) {
+    .fct_ftype = 2
+) {
 
   # Ensure `.tab` is a data.table
   stopifnot(data.table::is.data.table(.tab))
+
+  if(!("MODEL" %chin% names(.tab))) {
+    .tab[, MODEL := NA_character_]
+  }
 
   # --- 1) Subset for ACT (where VTYPE = "010") ---
   ACT <- .tab[
@@ -65,7 +70,7 @@ pa_model_accuracy <- function(
   # --- 2) Subset for FCT (where VTYPE = "060") ---
   FCT <- .tab[
     VTYPE == "060" & FTYPE == .fct_ftype,
-    .(SALESORG, PLANT, MATERIAL, CALMONTH, FTYPE, STEP, FCT = Q)
+    .(SALESORG, PLANT, MATERIAL, CALMONTH, FTYPE, STEP, MODEL, FCT = Q)
   ]
 
   # --- 3) Merge both (full outer join) ---
@@ -91,7 +96,7 @@ pa_model_accuracy <- function(
     APA = 100 - APE
     EPE = 100 * (AE / ifelse(FCT == 0, NA, FCT))
     EPA = 100 - EPE
-    .(SALESORG, PLANT, MATERIAL, CALMONTH, STEP, # FTYPE,
+    .(SALESORG, PLANT, MATERIAL, CALMONTH, STEP, MODEL, # FTYPE,
       ACT, FCT, E, E2, AE, APE, APA, EPE, EPA)
   }]
 
