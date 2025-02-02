@@ -18,8 +18,8 @@
   if (interactive()) { # Only display the message in interactive sessions
     packageStartupMessage(
       green(paste0(
-        "\n\nWelcome to `Pythia's Advice - Data science Tooling` (a.k.a PADT)\n",
-        "This package is designed during the data science program of EAISI@tue.nl\n"
+        "\n\nWelcome to `Pythia's Advice - Decision Tooling`\n",
+        "This package results from the final module of the MD&AI program of EAISI at www.tue.nl\n"
       ))
     )
   }

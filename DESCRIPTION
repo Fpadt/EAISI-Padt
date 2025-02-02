@@ -1,6 +1,6 @@
 Type: Package
 Package: padt
-Title: Pythia's Advice - Datascience Tooling
+Title: Pythia's Advice - Decision Tooling
 Version: 0.2.0
 Authors@R: 
     person("Floris", "Padt", , "floris@smart-r.nl", role = c("aut", "cre"),
