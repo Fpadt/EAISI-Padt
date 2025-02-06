@@ -11,13 +11,15 @@
 #'
 #' @return A `data.table` containing the merged actual (`ACT`) and forecast (`FCT`) data along with
 #' the following derived columns:
-#' - `E`: Error (`ACT - FCT`)
-#' - `E2`: Squared Error (`E^2`)
-#' - `AE`: Absolute Error (`abs(E)`)
-#' - `APE`: Absolute Percentage Error (`100 * AE / ACT`)
-#' - `APA`: Absolute Percentage Accuracy (`100 - APE`)
-#' - `EPE`: Error Percentage Error (`100 * AE / FCT`)
-#' - `EPA`: Error Percentage Accuracy (`100 - EPE`)
+#' - `E`  : Error (`ACT - FCT`)
+#' - `E2` : Squared Error (`E^2`)
+#' - `AE` : Absolute Error (`abs(E)`)
+#' - `APE`: Academic Percentage Error (`100 * AE / ACT`)
+#' - `APA`: Academic Percentage Accuracy (`100 - APE`)
+#' - `EPE`: Ecotone Percentage Error (`100 * AE / FCT`)
+#' - `EPA`: Ecotone Percentage Accuracy (`100 - EPE`)
+#' - `APB`: Absolute Percentage Bias (`100 * E / ACT`)
+#' - `EPB`: Ecotone Percentage Bias (`100 * E / FCT`)
 #'
 #' @details
 #' The function performs the following steps:
@@ -96,8 +98,10 @@ pa_model_accuracy <- function(
     APA = 100 - APE
     EPE = 100 * (AE / ifelse(FCT == 0, NA, FCT))
     EPA = 100 - EPE
+    APB = 100 * (E / ifelse(ACT == 0, NA, ACT))
+    EPB = 100 * (E / ifelse(FCT == 0, NA, FCT))
     .(SALESORG, PLANT, MATERIAL, CALMONTH, STEP, MODEL, # FTYPE,
-      ACT, FCT, E, E2, AE, APE, APA, EPE, EPA)
+      ACT, FCT, E, E2, AE, APE, APA, EPE, EPA, APB, EPB)
   }]
 
   # MAE  = mean(abs(ACT - FCT), na.rm = TRUE),

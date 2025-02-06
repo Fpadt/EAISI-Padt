@@ -21,6 +21,7 @@ Imports:
     DBI,
     duckdb,
     fs,
+    ggplot2,
     glue,
     lubridate,
     magrittr,
