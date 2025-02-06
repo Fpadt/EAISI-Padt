@@ -60,7 +60,7 @@ pa_model_accuracy <- function(
   stopifnot(data.table::is.data.table(.tab))
 
   if(!("MODEL" %chin% names(.tab))) {
-    .tab[, MODEL := NA_character_]
+    .tab[, `:=` (MODEL = NA_character_)]
   }
 
   # --- 1) Subset for ACT (where VTYPE = "010") ---

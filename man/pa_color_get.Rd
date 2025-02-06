@@ -7,7 +7,7 @@
 pa_color_get(.name_or_index)
 }
 \arguments{
-\item{name_or_index}{Either a string (name of the color) or a numeric index.}
+\item{.name_or_index}{Either a string (name of the color) or a numeric index.}
 }
 \value{
 A string with the color hex code.
