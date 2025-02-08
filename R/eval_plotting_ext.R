@@ -77,7 +77,7 @@ pa_brand_theme <- function() {
 #' \dontrun{
 #' ggplot(data, aes(x, y, color = group)) +
 #'   geom_line() +
-#'   scale_color_brand(labels = c("M-1", "M-2", "M-3"))
+#'   pa_brand_color_scale(labels = c("M-1", "M-2", "M-3"))
 #'   }
 #' @export
 pa_brand_color_scale <- function(labels) {
@@ -103,4 +103,73 @@ pa_brand_color_scale <- function(labels) {
   ggplot2::scale_color_manual(labels = labels, values = selected_colors)
 }
 
+#' Plot a Scaled Time Series as Columns
+#'
+#' Creates a column chart from time series data, scaled by a specified factor,
+#' and optionally padding the y-axis range. This function is designed to display
+#' historical sales data by month with branding colors.
+#'
+#' @param .dtTS A \code{data.table} containing at least:
+#'   \describe{
+#'     \item{y}{Numeric values representing sales or other metric}
+#'     \item{MATERIAL}{A factor or character vector of material codes}
+#'     \item{SALESORG}{A factor or character vector of sales organization codes}
+#'     \item{CALMONTH}{A date or factor representing month/year}
+#'   }
+#' @param .scale A numeric scale factor to divide the \code{y} column by.
+#'   Default is \code{1000}.
+#' @param .padding A numeric value indicating how much vertical padding should
+#'   be added to the plot’s y-axis range. Default is \code{0.1}.
+#'
+#' @return A \code{ggplot} object showing a column plot of the scaled data.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(data.table)
+#' # Example data
+#' dt_example <- data.table(
+#'   CALMONTH = seq(as.Date("2020-01-01"), by = "month", length.out = 12),
+#'   y = round(runif(12, 100, 500)),
+#'   MATERIAL = "MATERIAL_001",
+#'   SALESORG = "ORG01"
+#' )
+#'
+#' # Plot, scaling by 1000
+#' pa_ts_col_plot(dt_example, .scale = 1000, .padding = 0.2)
+#' }
+pa_ts_col_plot <- function(
+    .dtTS,
+    .scale   = 1000,
+    .padding = 0.1
+) {
+  # Scale
+  dtTS <- copy(.dtTS)[, y := y / .scale]
 
+  # Get the min and max values
+  min_value <- min(dtTS$y)
+  max_value <- max(dtTS$y)
+
+  # Get the unique material and sales org
+  matl <- unique(dtTS$MATERIAL)[1] %>% pa_matn1_output()
+  sorg <- unique(dtTS$SALESORG)[1]
+
+  # Plot the data
+  ggplot(
+    data    = dtTS,
+    mapping = aes(x = CALMONTH, y = y)
+  ) +
+    geom_col(
+      color = pa_brand_color_get("neutral1"),
+      fill  = pa_brand_color_get("primary")
+    ) +
+    coord_cartesian(
+      ylim = c(min_value - .padding, max_value + .padding)
+    ) +
+    labs(
+      title    = "Historical Sales",
+      subtitle = paste(matl, "for", sorg),
+      x        = "Month/Year",
+      y        = paste0("Sales ('x", .scale, "')")
+    )
+}

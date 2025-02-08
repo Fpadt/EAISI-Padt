@@ -252,12 +252,12 @@ theme:
     neutral1:  '#ffffff' # white
     neutral2:  '#f5f5f5' #
     neutral3:  '#333333' # Jet Black
-    neutral4:  '#000000' # black
+    neutral4:  '#000000' # Black
   color_palette:
-  - '#FFFFFF'
-  - '#fff200'
-  - '#38e56d'
-  - '#089b35'
-  - '#0f5e3c'
-  - '#333333'
-  - '#000000'
+  - '#FFFFFF' # white
+  - '#fff200' # yellow
+  - '#38e56d' # Light Green
+  - '#089b35' # Forest Green
+  - '#0f5e3c' # Castleton Green
+  - '#333333' # Jet Black
+  - '#000000' # Black

@@ -20,6 +20,6 @@ and applies them to ggplot2's scale_color_manual() based on the number of labels
 \dontrun{
 ggplot(data, aes(x, y, color = group)) +
   geom_line() +
-  scale_color_brand(labels = c("M-1", "M-2", "M-3"))
+  pa_brand_color_scale(labels = c("M-1", "M-2", "M-3"))
   }
 }
