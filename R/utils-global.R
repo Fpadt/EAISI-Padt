@@ -11,7 +11,8 @@ utils::globalVariables(
     "SRC", "OHDEST", "POSIT", "AREA",
     "WHERE_CLAUSE", "SCOPE_MATL",
     "vtype", "ftype", "fname",
-    "VTYPE", "FTYPE", "SALESORG", "PLANT", "MATERIAL", "CALMONTH", "Q", "STEP"
+    "VTYPE", "FTYPE", "SALESORG", "PLANT", "MATERIAL", "CALMONTH", "Q", "STEP",
+    "aes", "coord_cartesian", "geom_col", "ggplot", "labs", "y"
     )
   )
 
