@@ -9,3 +9,6 @@
 ^dev$
 ^_config$
 ^sample_data$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

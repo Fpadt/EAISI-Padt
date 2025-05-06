@@ -1,0 +1,11 @@
+url: ~
+template:
+  bootstrap: 5
+
+navbar:
+  title: "EAISI-Padt"
+  left:
+    - text: "Reference"
+      href: reference/index.html
+    - text: "Articles"
+      href: articles/index.html
