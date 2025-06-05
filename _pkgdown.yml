@@ -1,0 +1,38 @@
+url: https://fpadt.github.io/EAISI-Padt/
+template:
+  logo: man/figures/logo.png
+  favicon: man/figures/favicon.ico
+  bootstrap: 5
+  bootswatch: flatly   # Or try "lux", "minty", "simplex"
+  bslib:
+    primary: "#323e4e" # BioBalance green
+
+home:
+  title: "EAISI-PADT"
+  description: "Tools and helpers for the Pythia forecasting project."
+
+
+pkgdown:
+  version: 2.0.7
+  navbar:
+    structure:
+      left:
+      - home
+      - reference
+      - articles
+      - news
+      right:
+      - search
+      - github
+  toc:
+    collapse: true
+    scroll_highlight: true
+  search:
+    type: default
+    use_search_index: true
+  extra_dependencies:
+    - bootstrap-icons
+    - jquery
+    - popper.js
+
+

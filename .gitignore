@@ -35,3 +35,5 @@ po/*~
 rsconnect/
 _config
 demo
+inst/doc
+docs

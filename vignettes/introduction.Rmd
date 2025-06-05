@@ -1,0 +1,90 @@
+---
+title: "Introduction to EAISI-Padt"
+subtitle: "Pythia's Advice - Data Science Tooling"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Introduction to EAISI-Padt}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(padt)
+```
+
+## Overview
+
+EAISI-Padt — *Pythia's Advice Datascience Tooling* — is a collection of modular R functions designed to support demand planners in time-series forecasting and data preparation. It is developed as part of the **Pythia’s Advice** project, within the final module of the [MDAI program](https://www.tue.nl/en/research/institutes/eindhoven-artificial-intelligence-systems-institute/ai-education/professional-education/programs-voor-professionals/mastering-data-ai-mdai) at [EAISI](https://www.tue.nl/en/research/institutes/eindhoven-artificial-intelligence-systems-institute).
+
+The tools facilitate working with CSV-based datasets, which are transformed into high-performance **Parquet** files using [DuckDB](https://duckdb.org/). All processing is optimized for rapid access and integration with Quarto reporting.
+
+<img src="https://raw.githubusercontent.com/Fpadt/EAISI-Padt/main/man/figures/padt_wtxt.png" width="300" style="margin-top:1em;margin-bottom:1em;"/>
+
+## Installation
+
+The development version of EAISI-Padt can be installed from GitHub:
+
+```r
+# Install from GitHub
+remotes::install_github("Fpadt/EAISI-Padt")
+```
+
+### Prerequisites
+
+Ensure the following are installed:
+
+1. [R (latest)](https://cran.r-project.org/)
+2. [DuckDB](https://duckdb.org/) (via `duckdb` package)
+3. A project-specific config file (`./padt_config/`) must be maintained.
+
+## Features
+
+* 🔁 Reproducible data pipelines
+* 📦 Integration with `data.table`, `arrow`, and `duckdb`
+* 📊 Forecast data extraction from QAD/SAP sources
+* 🔍 Hierarchical filtering and summary tools
+* 🧪 Designed for scientific forecasting evaluation
+
+## Example Usage
+
+Here is an example showing how to retrieve forecast data for one product:
+
+```{r eval=FALSE}
+library(padt)
+
+IPM <- pa_td_sap_get(
+  .ftype      = 6,        # 5 = rtp, 6 = ipm  
+  .material   = "10023",  # Optional material
+  .salesorg   = "FR30",   # Optional sales org
+  .scope_matl = TRUE,
+  .scope_sorg = TRUE,
+  .cm_min     = "202101",
+  .cm_max     = "202506",
+  .n          = Inf
+)
+```
+
+This retrieves scoped forecast data in alignment with the Pythia’s Advice modeling specifications.
+
+## Documentation
+
+Visit the [pkgdown reference site](../reference/index.html) for full documentation of all available functions.
+
+## About
+
+EAISI-Padt is maintained by [smart-R](https://www.smart-r.net) and used in the *BioBalance* forecasting research project.
+
+---
+
+
