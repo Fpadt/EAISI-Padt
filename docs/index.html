@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 <title>EAISI-PADT • padt</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
@@ -51,64 +52,8 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="pythias-advice---datascience-tooling-">Pythia’s Advice - Datascience Tooling <a href="https://www.smart-r.net" target="_blank" rel="noopener noreferrer" class="external-link"><img src="reference/figures/padt_wtxt.png" align="right" height="138"></a>
-<a class="anchor" aria-label="anchor" href="#pythias-advice---datascience-tooling-"></a>
-</h1></div>
-<p><em>Under Development</em></p>
-<!-- badges: start -->
-
-<div class="section level2">
-<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
-</h2>
-<div class="section level3">
-<h3 id="eaisi-padt">EAISI-Padt<a class="anchor" aria-label="anchor" href="#eaisi-padt"></a>
-</h3>
-<p>Pythia’s Advice - Datascience Tooling (padt) is a collection of tools and functions that are used in the context of the Pythia’s Advice project. This project is the final module representing the pinnacle of the program <a href="https://www.tue.nl/en/research/institutes/eindhoven-artificial-intelligence-systems-institute/ai-education/professional-education/programs-voor-professionals/mastering-data-ai-mdai" class="external-link">Master Data &amp; AI</a> at <a href="https://www.tue.nl/en/research/institutes/eindhoven-artificial-intelligence-systems-institute" class="external-link">EAISI</a>.</p>
-<p>The project aims to provide a set of tools and functions to demand planners to perform data analysis and time-series forecasting on data sets in csv format which are tranformed in parquet files using <a href="https://duckdb.org/" class="external-link">Duck DB</a> providing lightning fast data access.</p>
-<p>The project is developed in R and Python and is maintained by <a href="https://www.smart-r.net/" class="external-link">smart-R</a>.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<p>The development version of EAISI-Padt can be installed from GitHub using:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># not released on CRAN yet!!</span></span>
-<span></span>
-<span><span class="co"># the development version from GitHub:</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"Fpadt/EAISI-Padt"</span><span class="op">)</span></span></code></pre></div>
-<div class="section level3">
-<h3 id="prerequisites">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
-<p>The following software needs to be installed as prerequisite (preferably the lastest version):</p>
-<ol style="list-style-type: decimal">
-<li><a href="https://cran.r-project.org/" class="external-link">The R Project for Statistical Computing</a></li>
-<li>Config file maintained!!!, see directory <code>./padt_config</code>
-</li>
-</ol>
-</div>
-</div>
-<div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h2>
-<p>This is a basic example which shows you how to access data:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Fpadt/EAISI-Padt" class="external-link">padt</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">IPM</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="reference/pa_td_sap_get.html">pa_td_sap_get</a></span><span class="op">(</span></span>
-<span>    .ftype        <span class="op">=</span> <span class="fl">6</span>              , <span class="co"># 5 = rtp, 6 = ipm  </span></span>
-<span>    .material     <span class="op">=</span> <span class="st">'10023'</span>        , <span class="co"># Optional user-supplied material</span></span>
-<span>    .salesorg     <span class="op">=</span> <span class="st">'FR30'</span>         , <span class="co"># Optional user-supplied salesorg</span></span>
-<span>    .scope_matl   <span class="op">=</span> <span class="cn">TRUE</span>           , <span class="co"># restrict to Pythia Scope</span></span>
-<span>    .scope_sorg   <span class="op">=</span> <span class="cn">TRUE</span>           , <span class="co"># restrict to Pythia Scope</span></span>
-<span>    .cm_min       <span class="op">=</span> <span class="st">'202101'</span>       , <span class="co"># minimal Cal Month</span></span>
-<span>    .cm_max       <span class="op">=</span> <span class="st">'202506'</span>       , <span class="co"># maximal Cal Month,</span></span>
-<span>    .n            <span class="op">=</span> <span class="cn">Inf</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
-</div>
-</div>
+  <main id="main" class="col-md-9">
+This package provides functions for the EAISI Pythia's Advice project. The project focuses on time series forecasting using exported data. Special functions are included to process SAP data exported via SAP Open Hub. The package leverages the DuckDB package for data ingestion (reading large CSV files), transformation (adding or removing fields and applying simple transformations), and access (reading Parquet files with filters).
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -146,14 +91,7 @@
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://github.com/tidyverse/ggplot2/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/tidyverse/ggplot2/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/Fpadt/padt" class="external-link"><img src="https://codecov.io/gh/Fpadt/padt/branch/main/graph/badge.svg?token=8FXGGC2M8C" alt="codecov"></a></li>
-<li><a href="https://cran.r-project.org/package=padt" class="external-link"><img src="https://www.r-pkg.org/badges/version/padt" alt="CRAN_Status_Badge"></a></li>
-</ul>
-</div>
+
 
   </aside>
 </div>

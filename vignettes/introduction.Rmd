@@ -19,9 +19,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(padt)
-```
+# ```{r setup}
+# library(padt)
+# ```
 
 ## Overview
 
@@ -29,7 +29,7 @@ EAISI-Padt — *Pythia's Advice Datascience Tooling* — is a collection of modu
 
 The tools facilitate working with CSV-based datasets, which are transformed into high-performance **Parquet** files using [DuckDB](https://duckdb.org/). All processing is optimized for rapid access and integration with Quarto reporting.
 
-<img src="https://raw.githubusercontent.com/Fpadt/EAISI-Padt/main/man/figures/padt_wtxt.png" width="300" style="margin-top:1em;margin-bottom:1em;"/>
+<img src="padt_wttxt.png" alt="Pythia's Advice logo" width="300" style="margin-top:1em;margin-bottom:1em;"/>
 
 ## Installation
 

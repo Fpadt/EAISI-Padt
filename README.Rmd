@@ -13,7 +13,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Pythia's Advice - Datascience Tooling <a href="https://www.smart-r.net" target="_blank" rel="noopener noreferrer"><img src="man/figures/padt_wtxt.png" align="right" height="138" /></a>
+# Pythia's Advice - Datascience Tooling 
+
+<a href="https://pythia.smart-r.nl" target="_blank" rel="noopener noreferrer">
+  <img src="man/figures/padt_wttxt.png" alt="Pythia's Advice logo" align="right" height="138" />
+</a>
+
 
 *Under Development*
 
@@ -25,18 +30,10 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-
-
-```{r, echo=FALSE, eval=FALSE}
-#| label      = 'padt',
-#| fig.align  = 'left',
-#| fig.cap    = "padt - Pythia's Advice Data science Tooling",
-#| fig.link   = 'https://raw.githubusercontent.com/Fpadt/EAISI-Padt/main/man/figures/padt_wtxt.png?token=GHSAT0AAAAAACBTLHAXU2VU2NCHXCTHJGA2ZCQ6XGQ',
-#| out.width  = '80%'
-
-knitr::include_graphics("man/figures/padt_wtxt.png")
-
+```markdown
+<img src="man/figures/padt_wttxt.png" alt="Pythia's Advice logo" width="80%" />
 ```
+
 
 ### EAISI-Padt
 
@@ -50,7 +47,7 @@ of tools and functions to demand planners to perform data analysis and
 time-series forecasting on data sets in csv format which are tranformed 
 in parquet files using [Duck DB][DUCKDB] providing lightning fast data access.
 
-The project is developed in R and Python and is maintained by [smart-R][smart-R].
+The project is developed in R and Python.
 
 ## Installation
 

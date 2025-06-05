@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   introduction: introduction.html
-last_built: 2025-06-05T05:36Z
+last_built: 2025-06-05T07:56Z
 urls:
   reference: https://fpadt.github.io/EAISI-Padt/reference
   article: https://fpadt.github.io/EAISI-Padt/articles

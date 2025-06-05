@@ -1,6 +1,6 @@
 url: https://fpadt.github.io/EAISI-Padt/
 template:
-  logo: man/figures/logo.png
+  logo: man/figures/padt_wttxt.png
   favicon: man/figures/favicon.ico
   bootstrap: 5
   bootswatch: flatly   # Or try "lux", "minty", "simplex"
