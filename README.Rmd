@@ -13,12 +13,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Pythia's Advice - Datascience Tooling 
+## **P**ythia's **A**dvice - **D**atascience **T**ool 
 
-<a href="https://pythia.smart-r.nl" target="_blank" rel="noopener noreferrer">
-  <img src="man/figures/padt_wttxt.png" alt="Pythia's Advice logo" align="right" height="138" />
-</a>
-
+<a href="https://fpadt.github.io/EAISI-Padt/"><img src="man/figures/logo.svg" align="right" width="120" alt="padt website" /></a>
 
 *Under Development*
 
@@ -28,16 +25,11 @@ knitr::opts_chunk$set(
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/padt)](https://cran.r-project.org/package=padt)
 <!-- badges: end -->
 
-## Overview
-
-```markdown
-<img src="man/figures/padt_wttxt.png" alt="Pythia's Advice logo" width="80%" />
-```
 
 
-### EAISI-Padt
+## Overview PADT 
 
-Pythia's Advice - Datascience Tooling (padt) is a collection of tools and 
+**P**ythia's **A**dvice - **D**atascience **Tool** is a collection of tools and 
 functions that are used in the context of the Pythia's Advice project. 
 This project is the final module representing the pinnacle of the program 
 [Master Data & AI][MDAI] at [EAISI][EAISI]. 
@@ -47,7 +39,7 @@ of tools and functions to demand planners to perform data analysis and
 time-series forecasting on data sets in csv format which are tranformed 
 in parquet files using [Duck DB][DUCKDB] providing lightning fast data access.
 
-The project is developed in R and Python.
+The project is developed in R and Python and is maintained by [smart-R][smart-R].
 
 ## Installation
 

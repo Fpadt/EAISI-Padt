@@ -19,9 +19,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-# ```{r setup}
-# library(padt)
-# ```
+```{r setup}
+library(padt)
+```
 
 ## Overview
 
